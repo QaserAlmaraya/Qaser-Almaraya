@@ -16,6 +16,7 @@ import { flagSrc } from '../../../../lib/flags';
 import { useProviderReveal } from '../../../../lib/useProviderReveal';
 import Icon from '../../../../components/Icon';
 import { workDaysLabel } from '../../../../lib/destinations';
+import { isVisaService } from '../../../../lib/visaKind';
 
 // Give each visa type its own personality instead of one flat blue box —
 // matched by keyword against the type's Arabic name, since types are
@@ -195,6 +196,7 @@ export default function CountryVisaListPage() {
                   {filtered.map((c) => {
                   const photo = c.image_url || c.card_image_url || '';
                   const theme = getVisaTheme(c.visa_type_name_ar);
+                  const svc = isVisaService(c);
                   return (
                   <div key={c.id} className="qa-card qa-visa-card" style={{ padding: 0, overflow: 'hidden', position: 'relative', display: 'grid', gridTemplateColumns: '140px 1fr', minHeight: 140 }}>
                     <div style={{ position: 'relative', height: '100%', minHeight: 140, background: theme.gradient, overflow: 'hidden' }}>
@@ -250,10 +252,13 @@ export default function CountryVisaListPage() {
                             {c.stay_duration ? <span style={{ ...pillStyleOutline, fontSize: 11, padding: '3px 10px' }}>{nm(c.country_name_ar, c.country_name_en)}</span> : null}
                           </div>
                           <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: 'var(--qs-ink,#1d2733)' }}>
-                            {lang === 'en'
+                            {svc
+                              ? `${nm(c.country_name_ar, c.country_name_en)}${c.stay_duration ? ' — ' + c.stay_duration : ''}`
+                              : lang === 'en'
                               ? `${nm(c.country_name_ar, c.country_name_en)} visa${c.stay_duration ? ' for ' + c.stay_duration + ' stay' : ''}`
                               : `تأشيرة ${nm(c.country_name_ar, c.country_name_en)}${c.stay_duration ? ' لمدة ' + c.stay_duration : ''}`}
                           </h3>
+                          {!svc ? (
                           <button
                             type="button"
                             onClick={() => toggleRequirements(c.id)}
@@ -264,6 +269,7 @@ export default function CountryVisaListPage() {
                               ? `Iraqi passport — you need a visa for ${nm(c.country_name_ar, c.country_name_en)}.`
                               : `بجواز عراقي! تحتاجون تأشيرة لدخول ${nm(c.country_name_ar, c.country_name_en)}.`}
                           </button>
+                          ) : null}
                           <button
                             type="button"
                             onClick={() => toggleRequirements(c.id)}
@@ -283,7 +289,7 @@ export default function CountryVisaListPage() {
                         </div>
 
                         <div className="qa-visa-pricebox" style={{ background: '#f8fbfc', borderRadius: 'var(--tw-radius-sm,10px)', padding: '12px 16px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 4, flex: 'none', minWidth: 168 }}>
-                          <span style={{ fontSize: 10, color: 'var(--qs-ink-2,#5f666e)' }}>{lang === 'en' ? 'Travel visa provided' : 'التأشيرة السياحية متوفرة'}</span>
+                          <span style={{ fontSize: 10, color: 'var(--qs-ink-2,#5f666e)' }}>{svc ? (lang === 'en' ? 'Service available' : 'الخدمة متوفرة') : (lang === 'en' ? 'Travel visa provided' : 'التأشيرة السياحية متوفرة')}</span>
                           <span style={{ fontSize: 12, color: 'var(--qs-body,#3d4650)' }}>{formatPrice(c.child_price, 'IQD', lang)} <span style={{ color: 'var(--qs-ink-2,#5f666e)', fontSize: 10 }}>{lang === 'en' ? '/ per child' : '/ للطفل'}</span></span>
                           <span style={{ fontSize: 18, fontWeight: 800, color: 'var(--qs-ink,#1d2733)' }}>{formatPrice(c.adult_price, 'IQD', lang)}</span>
                           <span style={{ fontSize: 10, color: 'var(--qs-ink-2,#5f666e)', marginTop: -4 }}>{lang === 'en' ? 'Total per adult' : 'الإجمالي للبالغ'}</span>
