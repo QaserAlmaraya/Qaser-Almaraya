@@ -77,6 +77,14 @@ export default function VisaDetailPage() {
   const requiredDocs = (card.documents || []).filter((d) => d.required);
   const optionalDocs = (card.documents || []).filter((d) => !d.required);
 
+  // Standalone services (driving permit, health insurance) store the same text
+  // in both the type and country name — show it once instead of "X — X".
+  const typeLabel = nm(card.visa_type_name_ar, card.visa_type_name_en);
+  const countryLabel = nm(card.country_name_ar, card.country_name_en);
+  const cardTitle = typeLabel && countryLabel && typeLabel.trim() === countryLabel.trim()
+    ? countryLabel
+    : [typeLabel, countryLabel].filter(Boolean).join(' — ');
+
   return (
     <div dir="rtl" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <SiteHeader active="التأشيرات" />
@@ -88,7 +96,7 @@ export default function VisaDetailPage() {
 
           <section className="qa-sec qa-2col qa-detail" style={{ display: 'grid', gridTemplateColumns: 'minmax(240px,320px) 1fr', gap: 28, alignItems: 'flex-start' }}>
             <div className="qa-card qa-visa-side" style={{ position: 'sticky', top: 90, display: 'flex', flexDirection: 'column', gap: 14 }}>
-              <h3 style={{ margin: 0, fontSize: 19 }}>{nm(card.visa_type_name_ar, card.visa_type_name_en)} — {nm(card.country_name_ar, card.country_name_en)}</h3>
+              <h3 style={{ margin: 0, fontSize: 19 }}>{cardTitle}</h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 14 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: 'var(--qs-ink-2,#5f666e)' }}>مدة الإقامة</span><span>{card.stay_duration || '—'}</span></div>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: 'var(--qs-ink-2,#5f666e)' }}>مدة الإصدار</span><span>{workDaysLabel(card.issuing_time_days) || '—'}</span></div>
@@ -123,7 +131,7 @@ export default function VisaDetailPage() {
                 type="button"
                 onClick={() => {
                   const bodyHtml = buildVisaPdfHtml({ cards: [card], lang, fmtPrice: (n) => formatPrice(n, 'IQD', lang), pageUrl: window.location.href });
-                  printDoc(nm(card.visa_type_name_ar, card.visa_type_name_en) + ' — ' + nm(card.country_name_ar, card.country_name_en), bodyHtml, lang);
+                  printDoc(cardTitle, bodyHtml, lang);
                 }}
                 style={{ cursor: 'pointer', border: '1px solid var(--qs-line,#ececed)', borderRadius: 999, padding: '10px 20px', fontSize: 14, fontWeight: 700, fontFamily: 'inherit', background: '#fff', color: 'var(--qs-brand-deep,#036f8c)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
               >
