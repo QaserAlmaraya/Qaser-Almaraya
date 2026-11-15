@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import Icon from '../Icon';
 import HomeFold from './HomeFold';
+import { SHOW_FARES } from '../../lib/flightFares';
 
 // "Why Al Maraya", told as the questions a traveller from Iraq asks before
 // booking and how the company answers each one. Every answer restates a fact
@@ -19,7 +20,8 @@ const POINTS = [
     goAr: 'الباقات السياحية', goEn: 'Holiday packages' },
   { icon: 'banknote', href: '#prices',
     qAr: 'ما الذي يشمله السعر؟', qEn: 'What does the price include?',
-    aAr: 'الباقات بسعر واحد للفرد يشمل الطيران والفندق والجولات، وأسعار التذاكر معروضة بالدينار العراقي من مطار مغادرتك.', aEn: 'Packages come at one price per person covering flights, hotel and tours, and ticket prices are shown in Iraqi dinars from the airport you leave from.',
+    aAr: SHOW_FARES ? 'الباقات بسعر واحد للفرد يشمل الطيران والفندق والجولات، وأسعار التذاكر معروضة بالدينار العراقي من مطار مغادرتك.' : 'الباقات بسعر واحد للفرد يشمل الطيران والفندق والجولات، والأسعار معروضة بالدينار العراقي.',
+    aEn: SHOW_FARES ? 'Packages come at one price per person covering flights, hotel and tours, and ticket prices are shown in Iraqi dinars from the airport you leave from.' : 'Packages come at one price per person covering flights, hotel and tours, and prices are shown in Iraqi dinars.',
     goAr: 'العروض والأسعار', goEn: 'Offers and prices' },
   { icon: 'shield-check', href: '#contact',
     qAr: 'مع من أتعامل، وأين أجده؟', qEn: 'Who am I dealing with, and where do I find them?',

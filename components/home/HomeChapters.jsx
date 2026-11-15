@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import CtaButton from '../CtaButton';
 import HomeFold from './HomeFold';
+import { SHOW_FARES } from '../../lib/flightFares';
 import VisaChecker from '../VisaChecker';
 import TripFinder from '../TripFinder';
 
@@ -20,7 +21,9 @@ export function PricesHead({ lang = 'ar' }) {
           <div>
             <span className="qs-kicker">{en ? 'Prices' : 'الأسعار'}</span>
             <h2 className="qs-h2">{en ? 'Offers and prices' : 'العروض والأسعار'}</h2>
-            <p className="qs-lead">{en ? 'Package offers, the next departures and ticket prices from your airport, in one place.' : 'عروض الباقات، وأقرب مواعيد المغادرة، وأسعار التذاكر من مطارك، في مكان واحد.'}</p>
+            <p className="qs-lead">{SHOW_FARES
+              ? (en ? 'Package offers, the next departures and ticket prices from your airport, in one place.' : 'عروض الباقات، وأقرب مواعيد المغادرة، وأسعار التذاكر من مطارك، في مكان واحد.')
+              : (en ? 'Package offers and the next departures, in one place.' : 'عروض الباقات وأقرب مواعيد المغادرة، في مكان واحد.')}</p>
           </div>
         </div>
       </div>

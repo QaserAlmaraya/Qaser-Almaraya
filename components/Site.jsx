@@ -14,6 +14,7 @@ import HomeInstagram from './home/HomeInstagram';
 import OfferStories from './home/OfferStories';
 import DeparturesBoard from './home/DeparturesBoard';
 import FareBoard from './home/FareBoard';
+import { SHOW_FARES } from '../lib/flightFares';
 import SeasonSpotlight from './SeasonSpotlight';
 import SeasonDecor from './SeasonDecor';
 import SiteNav from './nav/SiteNav';
@@ -919,7 +920,7 @@ function   visaVals(country){
 <HomeOffers lang={st.lang} />
 <HomeOffers lang={st.lang} variant="events" />
 <DeparturesBoard lang={st.lang} />
-<FareBoard lang={st.lang} />
+{SHOW_FARES ? <FareBoard lang={st.lang} /> : null}
 </div>
 
 {/* 6. Closing: the primary action once more, then every way to reach us. */}
@@ -935,7 +936,7 @@ function   visaVals(country){
 <p>قصر المرايا هي الشريك الرسمي لـ Flamingo — كل حجوزات الطيران والفنادق تُتمّ عبر منصة فلامنغو، ويبقى فريقنا معك من أول بحث حتى بطاقة الصعود.</p>
 <div className="qi-intro-actions"><CtaButton href="https://flamingo.iq" external label="احجز الآن" labelEn="Book now" lang={st.lang} /></div>
 </section>
-<FareBoard lang={st.lang} initial={12} link={false} />
+{SHOW_FARES ? <FareBoard lang={st.lang} initial={12} link={false} /> : null}
 <section className="qa-sec" style={{ paddingTop: "20px" }}>
 <div style={{ position: "relative", width: "100vw", marginInline: "calc(50% - 50vw)", overflow: "hidden", background: "var(--tw-band-deep,var(--qs-band,#049dc5))" }} data-partner-band="">
 <div style={{ position: "relative" }}>

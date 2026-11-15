@@ -16,6 +16,9 @@ const securityHeaders = [
 ];
 
 const nextConfig = {
+  // Flight fares board: visible everywhere except the production deployment,
+  // until the Owner asks to publish it. See lib/flightFares.js (SHOW_FARES).
+  env: { NEXT_PUBLIC_SHOW_FARES: process.env.VERCEL_ENV === 'production' ? '' : '1' },
   // Static export removed: the admin dashboard and visa module need real
   // API routes (login, saving content, image uploads, database access),
   // which only run on a server.
