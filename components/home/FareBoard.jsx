@@ -4,14 +4,15 @@ import Link from 'next/link';
 import Icon from '../Icon';
 import { getRate, loadRate } from '../../lib/currency';
 import { waLink } from '../../lib/whatsapp';
-import { ORIGINS, FARES_UPDATED, destinationsFrom, destinationCount, fareIqd } from '../../lib/flightFares';
+import { ORIGINS, FARES_UPDATED, destinationsFrom } from '../../lib/flightFares';
 
-// "Fares from your city": pick the airport you leave from and see the lowest
-// fare to every destination we sell from it, cheapest first. A row opens to
-// show every flight to that destination as the flights sheet lists it: the
-// outbound leg, the return leg and the round-trip fare, each with its time,
-// days and price. Seat availability and business class are not in the sheet,
-// so each flight has a WhatsApp link that asks about them. Prices are dinars.
+// "Fares from your city", laid out the way a customer decides: where am I
+// leaving from, what kind of ticket, where to, then which flight. The three
+// choices sit at the top; the destinations are a list; one destination shows
+// its flights as plain rows (airline, time, days, price, book). On wide
+// screens the flights sit beside the list, on phones they open under the row.
+// Seat availability and business fares are not in the flights sheet, so
+// business reads "on request" and every flight books through WhatsApp.
 //
 // `initial` rows are shown before "show all"; `link` adds the header link to
 // the flights page (used on the homepage only).
@@ -24,18 +25,12 @@ function updatedLabel(ymd, en) {
   } catch { return ymd; }
 }
 
-function bookingMessage({ origin, dest, trip, price, en }) {
+function flightMessage({ origin, dest, carrier, trip, cabin, price, en }) {
+  const biz = cabin === 'biz';
   const tripText = trip === 'round' ? (en ? 'Round trip' : 'ذهاب وعودة') : (en ? 'One way' : 'ذهاب فقط');
   return en
-    ? ['Hello, I would like to book a flight:', '✈️ ' + origin.en + ' to ' + dest.en, 'Trip: ' + tripText, 'Website price: from IQD ' + num(price)].join('\n')
-    : ['مرحباً، أرغب بحجز تذكرة طيران:', '✈️ من ' + origin.ar + ' إلى ' + dest.ar, 'نوع الرحلة: ' + tripText, 'السعر في الموقع: يبدأ من ' + num(price) + ' د.ع'].join('\n');
-}
-
-function askMessage({ origin, dest, carrier, cabin, en }) {
-  const biz = cabin === 'biz';
-  return en
-    ? ['Hello, I would like to ask about this flight:', '✈️ ' + origin.en + ' to ' + dest.en + ' with ' + carrier.en, 'Class: ' + (biz ? 'Business' : 'Economy'), 'Which dates have seats, and what is the fare?'].join('\n')
-    : ['مرحباً، أرغب بالاستفسار عن هذه الرحلة:', '✈️ من ' + origin.ar + ' إلى ' + dest.ar + ' على ' + carrier.ar, 'الدرجة: ' + (biz ? 'رجال الأعمال' : 'السياحية'), 'ما التواريخ المتوفرة وما السعر؟'].join('\n');
+    ? ['Hello, I would like to book this flight:', '✈️ ' + origin.en + ' to ' + dest.en + ' with ' + carrier.en, 'Trip: ' + tripText, 'Class: ' + (biz ? 'Business' : 'Economy'), biz ? 'What is the business fare?' : 'Website price: IQD ' + num(price)].join('\n')
+    : ['مرحباً، أرغب بحجز هذه الرحلة:', '✈️ من ' + origin.ar + ' إلى ' + dest.ar + ' على ' + carrier.ar, 'نوع الرحلة: ' + tripText, 'الدرجة: ' + (biz ? 'رجال الأعمال' : 'السياحية'), biz ? 'كم سعر درجة رجال الأعمال؟' : 'السعر في الموقع: ' + num(price) + ' د.ع'].join('\n');
 }
 
 function Price({ value, en, label }) {
@@ -57,6 +52,65 @@ function clock12(times, en) {
   });
 }
 
+// One destination's flights, cheapest first. Rendered beside the list on wide
+// screens and under the opened row on phones.
+function Flights({ d, from, trip, cabin, rate, en }) {
+  const n = d.offers.length;
+  const biz = cabin === 'biz';
+  const count = en ? n + (n === 1 ? ' flight' : ' flights') : (n === 1 ? 'رحلة واحدة' : n === 2 ? 'رحلتان' : n <= 10 ? n + ' رحلات' : n + ' رحلة');
+  const tripText = trip === 'round' ? (en ? 'Round trip' : 'ذهاب وعودة') : (en ? 'One way' : 'ذهاب فقط');
+  const cabinText = biz ? (en ? 'Business' : 'رجال الأعمال') : (en ? 'Economy' : 'السياحية');
+  return (
+    <div className="qs-fb-flights">
+      <p className="qs-fb-leg">
+        <b>{en ? from.en + ' to ' + d.place.en : 'من ' + from.ar + ' إلى ' + d.place.ar}</b>
+        <span>{[count, tripText, cabinText].join(' · ')}</span>
+      </p>
+      <ul>
+        {d.offers.map((f, k) => {
+          const legs = [{ id: 'go', name: en ? 'Departs' : 'الذهاب', time: f.time, days: en ? f.daysEn : f.daysAr }];
+          if (trip === 'round') legs.push({ id: 'back', name: en ? 'Returns' : 'العودة', time: f.backTime, days: en ? f.backDaysEn : f.backDaysAr });
+          return (
+            <li key={k} className="qs-fb-flight">
+              <div className="qs-fb-fcar">
+                {f.carrier.logo ? (
+                  <span className="qs-fb-mark">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={'/assets/airlines-color/' + f.carrier.logo + '.webp'} alt="" loading="lazy" decoding="async" />
+                  </span>
+                ) : (
+                  <span className="qs-fb-mark qs-fb-tail" aria-hidden="true">{en ? f.carrier.en : (f.carrier.shortAr || f.carrier.ar)}</span>
+                )}
+                <span className="qs-fb-carrier">
+                  <span>{en ? f.carrier.en : f.carrier.ar}</span>
+                  {f.place.airportAr ? <small>{en ? f.place.airportEn : f.place.airportAr}</small> : null}
+                </span>
+              </div>
+              <div className="qs-fb-times">
+                {legs.map((l) => (
+                  <p key={l.id}>
+                    <small>{l.name}</small>
+                    <b>{l.time ? clock12(l.time, en) : (en ? 'Time varies by day' : 'الوقت حسب اليوم')}</b>
+                    {l.days ? <span>{l.days}</span> : null}
+                  </p>
+                ))}
+              </div>
+              {biz
+                ? <span className="qs-fb-price qs-fb-onask"><span className="qs-fb-amount"><b>{en ? 'Price on request' : 'السعر عند الطلب'}</b></span></span>
+                : <Price value={f.price} en={en} label={f.carrier.fixed ? '' : (en ? 'From' : 'يبدأ من')} />}
+              <a className="qs-fb-book" href={waLink(flightMessage({ origin: from, dest: d.place, carrier: f.carrier, trip, cabin, price: f.price, en }))} target="_blank" rel="noopener">
+                <Icon name="message-circle" size={16} strokeWidth={2} />
+                {biz ? (en ? 'Ask for the fare' : 'اطلب السعر') : (en ? 'Book' : 'احجز')}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+      <p className="qs-fb-help">{en ? 'Booking is completed on WhatsApp, or call ' : 'الحجز يكتمل عبر واتساب، أو اتصل على '}<a href="tel:6393">6393</a></p>
+    </div>
+  );
+}
+
 export default function FareBoard({ lang = 'ar', initial = 8, link = true }) {
   const en = lang === 'en';
   const [origin, setOrigin] = useState(ORIGINS[0].code);
@@ -71,9 +125,10 @@ export default function FareBoard({ lang = 'ar', initial = 8, link = true }) {
   const from = ORIGINS.find((o) => o.code === origin) || ORIGINS[0];
   const dests = useMemo(() => destinationsFrom(origin, trip, rate), [origin, trip, rate]);
   const shown = all ? dests : dests.slice(0, initial);
+  // Beside the list there is always a destination on show: the chosen one, or the first.
+  const side = dests.find((d) => d.key === open) || dests[0];
 
   const pickOrigin = (code) => { setOrigin(code); setOpen(''); setAll(false); };
-  const pickTrip = (t) => { setTrip(t); setOpen(''); };
 
   return (
     <section id="fares" className="qs-band qs-fb-band" data-no-i18n="" dir={en ? 'ltr' : 'rtl'}>
@@ -83,122 +138,73 @@ export default function FareBoard({ lang = 'ar', initial = 8, link = true }) {
             <span className="qs-kicker">{en ? 'Flights' : 'الطيران'}</span>
             <h2 className="qs-h2">{en ? 'Ticket prices from your city' : 'أسعار التذاكر من مدينتك'}</h2>
             <p className="qs-lead">{en
-              ? 'Choose the airport you leave from to see the lowest fare to each destination, then open a destination for its flights: times, days and fares.'
-              : 'اختر مطار المغادرة لترى أقل سعر إلى كل وجهة، ثم افتح الوجهة لعرض رحلاتها بالمواعيد والأيام والأسعار.'}</p>
+              ? 'Choose your city and your destination to see the flights, their times and their prices.'
+              : 'اختر مدينتك ثم وجهتك لتشاهد الرحلات وأوقاتها وأسعارها.'}</p>
           </div>
           {link ? <Link href="/flights" className="qs-link">{en ? 'Flight booking' : 'حجز الطيران'}</Link> : null}
         </div>
 
         <div className="qs-fb">
-          <div className="qs-fb-origins" role="tablist" aria-label={en ? 'Departure airport' : 'مطار المغادرة'}>
-            {ORIGINS.map((o) => {
-              const n = destinationCount(o.code);
-              return (
-                <button key={o.code} type="button" role="tab" aria-selected={o.code === origin} className="qs-fb-origin" onClick={() => pickOrigin(o.code)}>
-                  <span className="qs-fb-city">{en ? o.en : o.ar}</span>
-                  <span className="qs-fb-n">{en ? n + (n === 1 ? ' destination' : ' destinations') : (n === 1 ? 'وجهة واحدة' : n === 2 ? 'وجهتان' : n <= 10 ? n + ' وجهات' : n + ' وجهة')}</span>
-                </button>
-              );
-            })}
-          </div>
-
-          <div className="qs-fb-bar">
-            <p className="qs-fb-route">
-              {en ? 'Leaving from ' : 'المغادرة من '}<b>{en ? from.airportEn : from.airportAr}</b>
-            </p>
-            <div className="qs-fb-trip" role="group" aria-label={en ? 'Trip type' : 'نوع الرحلة'}>
-              <button type="button" aria-pressed={trip === 'one'} onClick={() => pickTrip('one')}>{en ? 'One way' : 'ذهاب فقط'}</button>
-              <button type="button" aria-pressed={trip === 'round'} onClick={() => pickTrip('round')}>{en ? 'Round trip' : 'ذهاب وعودة'}</button>
+          <div className="qs-fb-step">
+            <p className="qs-fb-q">{en ? 'Leaving from' : 'المغادرة من'}</p>
+            <div className="qs-fb-origins" role="tablist" aria-label={en ? 'Departure city' : 'مدينة المغادرة'}>
+              {ORIGINS.map((o) => (
+                <button key={o.code} type="button" role="tab" aria-selected={o.code === origin} className="qs-fb-origin" onClick={() => pickOrigin(o.code)}>{en ? o.en : o.ar}</button>
+              ))}
             </div>
           </div>
 
-          <ol className="qs-fb-list" key={origin + trip}>
-            {shown.map((d, i) => {
-              const isOpen = open === d.key;
-              const airlines = d.offers.length;
-              const sub = [en ? d.place.countryEn : d.place.countryAr, airlines > 1 ? (en ? airlines + ' airlines' : airlines === 2 ? 'شركتا طيران' : airlines + ' شركات طيران') : (en ? d.best.carrier.en : d.best.carrier.shortAr)].join(' · ');
-              return (
-                <li key={d.key} className={'qs-fb-item' + (isOpen ? ' open' : '')}>
-                  <button type="button" className="qs-fb-row" aria-expanded={isOpen} onClick={() => setOpen(isOpen ? '' : d.key)} style={{ animationDelay: Math.min(i, 11) * 30 + 'ms' }}>
-                    <span className="qs-fb-dest">
-                      <span className="qs-fb-name">{en ? d.place.en : d.place.ar}</span>
-                      <small>{sub}</small>
-                    </span>
-                    <Price value={d.from} en={en} label={en ? 'From' : 'يبدأ من'} />
-                    <Icon name="chevron-down" size={18} strokeWidth={2} className="qs-fb-chev" />
-                  </button>
-                  <div className="qs-fb-detail" hidden={!isOpen}>
-                    <p className="qs-fb-leg">
-                      <b>{en ? from.en + ' to ' + d.place.en : 'من ' + from.ar + ' إلى ' + d.place.ar}</b>
-                      <span>{en ? airlines + (airlines === 1 ? ' flight available' : ' flights available') : (airlines === 1 ? 'رحلة واحدة متوفرة' : airlines === 2 ? 'رحلتان متوفرتان' : airlines <= 10 ? airlines + ' رحلات متوفرة' : airlines + ' رحلة متوفرة')}</span>
-                    </p>
-                    <div className="qs-fb-cabin" role="group" aria-label={en ? 'Cabin class' : 'درجة السفر'}>
-                      <button type="button" aria-pressed={cabin === 'eco'} onClick={() => setCabin('eco')}>{en ? 'Economy' : 'الدرجة السياحية'}</button>
-                      <button type="button" aria-pressed={cabin === 'biz'} onClick={() => setCabin('biz')}>{en ? 'Business' : 'درجة رجال الأعمال'}</button>
-                    </div>
-                    <ul className="qs-fb-flights">
-                      {d.offers.map((f, k) => {
-                        const label = f.carrier.fixed ? (en ? 'Fare' : 'السعر') : (en ? 'From' : 'يبدأ من');
-                        const when = (time, days) => [time ? (en ? 'Departs ' : 'الإقلاع ') + clock12(time, en) : (en ? 'Time varies by day' : 'الوقت حسب اليوم'), days].filter(Boolean);
-                        const legs = [
-                          { id: 'one', name: en ? 'Outbound' : 'الذهاب', codes: en ? from.en + ' \u2192 ' + d.place.en : from.ar + ' \u2190 ' + d.place.ar, meta: when(f.time, en ? f.daysEn : f.daysAr), price: fareIqd(f.oneWay, f.currency, rate) },
-                          { id: 'back', name: en ? 'Return' : 'العودة', codes: en ? d.place.en + ' \u2192 ' + from.en : d.place.ar + ' \u2190 ' + from.ar, meta: when(f.backTime, en ? f.backDaysEn : f.backDaysAr), price: fareIqd(f.back, f.currency, rate) },
-                          { id: 'round', name: en ? 'Round trip' : 'ذهاب وعودة', codes: (en ? from.en : from.ar) + ' \u21C4 ' + (en ? d.place.en : d.place.ar), meta: [en ? 'Fixed or open return' : 'عودة محددة أو مفتوحة'], price: fareIqd(f.round, f.currency, rate) },
-                        ].filter((l) => l.price > 0);
-                        return (
-                          <li key={k} className="qs-fb-flight">
-                            <div className="qs-fb-fhead">
-                              {f.carrier.logo ? (
-                                <span className="qs-fb-mark">
-                                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                                  <img src={'/assets/airlines-color/' + f.carrier.logo + '.webp'} alt="" loading="lazy" decoding="async" />
-                                </span>
-                              ) : (
-                                <span className="qs-fb-mark qs-fb-tail" aria-hidden="true">{en ? f.carrier.en : (f.carrier.shortAr || f.carrier.ar)}</span>
-                              )}
-                              <span className="qs-fb-carrier">
-                                <span>{en ? f.carrier.en : f.carrier.ar}</span>
-                                {f.place.airportAr ? <small><span>{en ? f.place.airportEn : f.place.airportAr}</span></small> : null}
-                              </span>
-                              <a className="qs-fb-ask" href={waLink(askMessage({ origin: from, dest: d.place, carrier: f.carrier, cabin, en }))} target="_blank" rel="noopener">
-                                <Icon name="message-circle" size={16} strokeWidth={2} />
-                                {cabin === 'biz' ? (en ? 'Ask for the business fare' : 'اسأل عن سعر رجال الأعمال') : (en ? 'Ask about availability' : 'اسأل عن التوفر')}
-                              </a>
-                            </div>
-                            <div className="qs-fb-legs">
-                              {legs.map((l) => (
-                                <div key={l.id} className={'qs-fb-legrow' + (l.id === trip ? ' on' : '')}>
-                                  <b>{l.name}</b>
-                                  <span className="qs-fb-codes">{l.codes}</span>
-                                  <span className="qs-fb-when">{l.meta.map((m, j) => <span key={j}>{m}</span>)}</span>
-                                  {cabin === 'biz'
-                                    ? <span className="qs-fb-price qs-fb-onask"><small>{en ? 'Business class' : 'رجال الأعمال'}</small><span className="qs-fb-amount"><b>{en ? 'On request' : 'السعر عند الطلب'}</b></span></span>
-                                    : <Price value={l.price} en={en} label={label} />}
-                                </div>
-                              ))}
-                            </div>
-                          </li>
-                        );
-                      })}
-                    </ul>
-                    <div className="qs-fb-cta">
-                      <a className="qs-btn qs-btn-pri" href={waLink(bookingMessage({ origin: from, dest: d.place, trip, price: d.from, en }))} target="_blank" rel="noopener">
-                        {en ? 'Book on WhatsApp' : 'احجز عبر واتساب'}
-                      </a>
-                      <a className="qs-fb-call" href="tel:6393">{en ? 'or call 6393' : 'أو اتصل على 6393'}</a>
-                    </div>
-                  </div>
-                </li>
-              );
-            })}
-          </ol>
+          <div className="qs-fb-bar">
+            <div className="qs-fb-opt">
+              <p className="qs-fb-q">{en ? 'Trip' : 'نوع الرحلة'}</p>
+              <div className="qs-fb-seg" role="group" aria-label={en ? 'Trip type' : 'نوع الرحلة'}>
+                <button type="button" aria-pressed={trip === 'one'} onClick={() => setTrip('one')}>{en ? 'One way' : 'ذهاب فقط'}</button>
+                <button type="button" aria-pressed={trip === 'round'} onClick={() => setTrip('round')}>{en ? 'Round trip' : 'ذهاب وعودة'}</button>
+              </div>
+            </div>
+            <div className="qs-fb-opt">
+              <p className="qs-fb-q">{en ? 'Class' : 'الدرجة'}</p>
+              <div className="qs-fb-seg" role="group" aria-label={en ? 'Cabin class' : 'درجة السفر'}>
+                <button type="button" aria-pressed={cabin === 'eco'} onClick={() => setCabin('eco')}>{en ? 'Economy' : 'السياحية'}</button>
+                <button type="button" aria-pressed={cabin === 'biz'} onClick={() => setCabin('biz')}>{en ? 'Business' : 'رجال الأعمال'}</button>
+              </div>
+            </div>
+          </div>
 
-          {dests.length > initial ? (
-            <button type="button" className="qs-fb-more" onClick={() => setAll(!all)} aria-expanded={all}>
-              {all ? (en ? 'Show fewer' : 'عرض أقل') : (en ? 'All ' + dests.length + ' destinations from ' + from.en : 'كل الوجهات من ' + from.ar + ' (' + dests.length + ')')}
-              <Icon name={all ? 'chevron-up' : 'chevron-down'} size={18} strokeWidth={2} />
-            </button>
-          ) : null}
+          <div className="qs-fb-body">
+            <div className="qs-fb-side">
+              <p className="qs-fb-q qs-fb-qlist">{en ? 'Going to' : 'الوجهة'}</p>
+              <ol className="qs-fb-list" key={origin}>
+                {shown.map((d) => {
+                  const isOpen = open === d.key;
+                  const n = d.offers.length;
+                  const sub = [en ? d.place.countryEn : d.place.countryAr, en ? n + (n === 1 ? ' flight' : ' flights') : (n === 1 ? 'رحلة واحدة' : n === 2 ? 'رحلتان' : n <= 10 ? n + ' رحلات' : n + ' رحلة')].join(' · ');
+                  return (
+                    <li key={d.key} className={'qs-fb-item' + (isOpen ? ' open' : '') + (side && side.key === d.key ? ' sel' : '')}>
+                      <button type="button" className="qs-fb-row" aria-expanded={isOpen} onClick={() => setOpen(isOpen ? '' : d.key)}>
+                        <span className="qs-fb-dest">
+                          <span className="qs-fb-name">{en ? d.place.en : d.place.ar}</span>
+                          <small>{sub}</small>
+                        </span>
+                        {cabin === 'biz' ? null : <Price value={d.from} en={en} label={en ? 'From' : 'يبدأ من'} />}
+                        <Icon name="chevron-down" size={18} strokeWidth={2} className="qs-fb-chev" />
+                      </button>
+                      {isOpen ? <div className="qs-fb-inline"><Flights d={d} from={from} trip={trip} cabin={cabin} rate={rate} en={en} /></div> : null}
+                    </li>
+                  );
+                })}
+              </ol>
+              {dests.length > initial ? (
+                <button type="button" className="qs-fb-more" onClick={() => setAll(!all)} aria-expanded={all}>
+                  {all ? (en ? 'Show fewer' : 'عرض أقل') : (en ? 'All ' + dests.length + ' destinations from ' + from.en : 'كل الوجهات من ' + from.ar + ' (' + dests.length + ')')}
+                  <Icon name={all ? 'chevron-up' : 'chevron-down'} size={18} strokeWidth={2} />
+                </button>
+              ) : null}
+            </div>
+            <div className="qs-fb-panel" aria-live="polite">
+              {side ? <Flights key={side.key + trip} d={side} from={from} trip={trip} cabin={cabin} rate={rate} en={en} /> : null}
+            </div>
+          </div>
 
           <p className="qs-fb-note">
             <Icon name="info" size={18} strokeWidth={2} />
