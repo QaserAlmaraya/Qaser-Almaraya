@@ -125,7 +125,14 @@ export default function FareBoard({ lang = 'ar', initial = 8, link = true }) {
                         ].filter(Boolean);
                         return (
                           <li key={k} className="qs-fb-offer">
-                            <span className="qs-fb-tail" dir="ltr" data-keep-dir="" aria-hidden="true">{f.carrier.code}</span>
+                            {f.carrier.logo ? (
+                              <span className="qs-fb-mark">
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img src={'/assets/airlines-color/' + f.carrier.logo + '.webp'} alt="" loading="lazy" decoding="async" />
+                              </span>
+                            ) : (
+                              <span className="qs-fb-mark qs-fb-tail" dir="ltr" data-keep-dir="" aria-hidden="true">{f.carrier.code || f.carrier.en}</span>
+                            )}
                             <span className="qs-fb-carrier">
                               <span>{en ? f.carrier.en : f.carrier.ar}</span>
                               <small>{meta.map((m, j) => <span key={j}>{m}</span>)}</small>
