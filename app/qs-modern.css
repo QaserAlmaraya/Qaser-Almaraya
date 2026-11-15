@@ -1,13 +1,8 @@
 /* ==========================================================================
-   Qasr Al-Maraya — interaction layer for the public site
-   Loads after app/qs.css and adds what that file does not: the header that
-   gains a shadow as the page scrolls, button and card hover lifts, the
-   kicker pill, the destination-guide globe and the /links page.
-   It defines no palette, radius or type scale of its own: those are the
-   tokens in app/qs.css (white + light sky, 8 / 12 / pill radii, the
-   13–32 scale, three neutral shadows). The --qs-glow-*, --qs-sky,
-   --qs-band-grad and --qs-grad-amber names are kept because components use
-   them, but they now resolve to flat colours and neutral shadows.
+   Qasr Al-Maraya — "modern energy" layer (Nov 2026)
+   Loads after app/qs.css and only refines it: bold sans headlines, rounder
+   shapes, flat amber buttons, a glass header, cards that lift, and the
+   Instagram palette (white, light sky, cyan bands, charcoal, amber accent).
    Every rule is scoped to html[data-area=site] so /admin and /staff never
    change. Motion lives only inside prefers-reduced-motion:no-preference.
    Lifts use the independent `translate` property (not `transform`) so they
@@ -15,31 +10,42 @@
    ========================================================================== */
 @property --qs-hk{syntax:'<number>';inherits:false;initial-value:0}
 
-/* ---------- 1. Tokens this layer adds (palette, radii and shadows live in qs.css) ---------- */
+/* ---------- 1. Tokens: sans display face, rounder radii, glow recipes ---------- */
 html[data-area=site]{
-  --qs-display:var(--qs-sans);              /* headlines: the same sans as the text */
-  /* Legacy names, kept for the components that read them; all flat now. */
-  --qs-sky:#f4fbfe;
-  --qs-band-grad:var(--qs-band);
-  --qs-grad-amber:var(--qs-amber);
-  --qs-glow-amber:none;
-  --qs-glow-amber-hi:var(--qs-shadow-2);
-  --qs-glow-cyan:var(--qs-shadow-2);
+  --qs-display:var(--qs-sans);              /* headlines: bold sans, not Naskh */
+  --qs-r-xs:12px;                           /* controls, chips, photos */
+  --qs-r:20px;                              /* cards and panels */
+  /* One identity with the Instagram account (8 Nov, Owner): white and light
+     sky instead of warm sand, cyan bands, charcoal type, amber as the accent. */
+  --qs-paper:#f6fbfd;
+  --qs-sand:#e9f6fb;
+  --qs-line:#dbe8ee;
+  --qs-line-2:#c3d6df;
+  --qs-brand-soft:#e3f5fc;
+  --qs-sky:linear-gradient(180deg,#f4fbfe 0%,#e2f4fb 100%);
+  --qs-band-grad:linear-gradient(150deg,#1fb6ea 0%,#049dc5 72%);
+  /* Owner: «قلل التوهج» — shadows stay neutral and small. */
+  --qs-grad-amber:linear-gradient(0deg,#faab18,#faab18);
+  --qs-glow-amber:0 1px 2px rgba(29,39,51,.14);
+  --qs-glow-amber-hi:0 6px 14px -8px rgba(29,39,51,.32);
+  --qs-glow-cyan:0 6px 14px -8px rgba(29,39,51,.3);
+  --qs-card-rest:0 1px 2px rgba(29,39,51,.04);
+  --qs-card-lift:0 2px 6px rgba(29,39,51,.05),0 18px 36px -22px rgba(29,39,51,.28);
   --qs-spring:cubic-bezier(.22,1,.36,1);
 }
 
-/* ---------- 2. Type: sans headlines on the shared scale ---------- */
-html[data-area=site] :is(h1,h2):not(.qh-title){font-weight:600!important;line-height:1.35!important;text-wrap:balance}
-html[data-area=site] h1:not(.qh-title){font-weight:700!important}
-html[data-area=site][lang=en] :is(h1,h2):not(.qh-title){line-height:1.2!important;letter-spacing:-.01em!important}
-html[data-area=site] .qs-h2{font-size:var(--q-t2);color:var(--qs-ink)}
-html[data-area=site] :is(.qa-offer h3,.qs-dest-copy h3){font-weight:600!important}
-html[data-area=site] .qa-mobilemenu nav a{font-weight:600!important}
-@media (max-width:820px){html[data-area=site] .qs-h2{font-size:var(--q-t2)!important;line-height:1.4!important}}
+/* ---------- 2. Type: heavy sans headlines, a size up ---------- */
+html[data-area=site] :is(h1,h2):not(.qh-title){font-weight:700!important;line-height:1.3!important;text-wrap:balance}
+html[data-area=site][lang=en] :is(h1,h2):not(.qh-title){font-weight:700!important;line-height:1.12!important;letter-spacing:-.02em!important}
+html[data-area=site] .qs-h2{font-size:clamp(30px,3.4vw,46px);color:var(--qs-ink)}
+html[data-area=site] :is(.qa-offer h3,.qs-dest-copy h3){font-weight:700!important}
+html[data-area=site] .qa-mobilemenu nav a{font-weight:700!important}
+@media (max-width:820px){html[data-area=site] .qs-h2{font-size:30px!important;line-height:1.3!important}}
+@media (max-width:380px){html[data-area=site] .qs-h2{font-size:27px!important}}
 
 /* ---------- 3. Kicker: cyan pill with a breathing amber bar ---------- */
-html[data-area=site] .qs-kicker{align-self:flex-start;gap:12px;padding:8px 16px;border-radius:var(--qs-r-pill);background:rgba(4,157,197,.09);color:var(--qs-brand-text);font-size:13px;font-weight:600;line-height:1.6}
-html[data-area=site] .qs-kicker::before{width:24px;height:2px;border-radius:2px;background:var(--qs-amber);transform-origin:0 50%}
+html[data-area=site] .qs-kicker{align-self:flex-start;gap:10px;padding:6px 14px;border-radius:999px;background:rgba(4,157,197,.09);color:var(--qs-brand-deep);font-size:14px;font-weight:700;line-height:1.4}
+html[data-area=site] .qs-kicker::before{width:26px;height:3px;border-radius:3px;background:linear-gradient(90deg,#faab18,#ffc04a);transform-origin:0 50%}
 html[data-area=site] [dir=rtl] .qs-kicker::before,html[data-area=site][dir=rtl] .qs-kicker::before{transform-origin:100% 50%}
 html[data-area=site] [dir=ltr] .qs-kicker::before{transform-origin:0 50%}
 html[data-area=site] :is(.qs-dark,.qs-on-dark) .qs-kicker{background:rgba(255,255,255,.16);color:#fff}
@@ -47,59 +53,62 @@ html[data-area=site] :is(.qs-dark,.qs-on-dark) .qs-kicker{background:rgba(255,25
 
 /* ---------- 4. Buttons: smooth, lift on hover, no glow ---------- */
 html[data-area=site] :is(.qa-btn,.q-btn,.qs-btn){
-  font-weight:600;
+  font-weight:700;
   transition:background-color .2s var(--qs-ease),background-position .45s var(--qs-ease),border-color .2s var(--qs-ease),color .2s var(--qs-ease),box-shadow .3s var(--qs-ease),translate .3s var(--qs-spring)!important}
 /* Primary amber (and the header CTA): flat amber, small neutral shadow. Text stays charcoal. */
 html[data-area=site] :is(.qa-amber,.q-btn-pri,.qs-btn-pri,.qa-headcta){
-  background:var(--qs-amber)!important;border-color:transparent!important;color:var(--qs-ink)!important;box-shadow:var(--qs-glow-amber)!important}
+  background:var(--qs-grad-amber) 0 50%/180% 100%!important;border-color:transparent!important;color:var(--qs-ink)!important;box-shadow:var(--qs-glow-amber)!important}
 html[data-area=site] :is(.qa-amber,.q-btn-pri,.qs-btn-pri,.qa-headcta):hover{
   background:var(--qs-amber-hover)!important;border-color:transparent!important;color:var(--qs-ink)!important;box-shadow:var(--qs-glow-amber-hi)!important}
 /* Cyan buttons get a soft shadow on hover; line buttons pick up a cyan edge. */
 html[data-area=site] :is(.qa-cyan,.qs-btn-brand):not(.qa-headcta):hover{box-shadow:var(--qs-glow-cyan)!important}
-html[data-area=site] :is(.q-btn-sec,.qs-btn-line):hover{border-color:var(--qs-brand)!important;background:#fff!important;box-shadow:var(--qs-shadow-2)!important}
-html[data-area=site] .qs-btn-light:hover{box-shadow:var(--qs-shadow-2)!important}
+html[data-area=site] :is(.q-btn-sec,.qs-btn-line):hover{border-color:var(--qs-brand)!important;background:#fff!important;box-shadow:0 10px 24px -16px rgba(29,39,51,.35)!important}
+html[data-area=site] .qs-btn-light:hover{box-shadow:0 12px 28px -14px rgba(29,39,51,.45)!important}
 /* Header CTA and language switch become pills. */
-html[data-area=site] .qa-headcta{border-radius:var(--qs-r-pill)!important;padding:0 24px!important;min-height:42px!important}
-html[data-area=site] .qa-langbtn{border-radius:var(--qs-r-pill)!important;transition:border-color .2s var(--qs-ease),background-color .2s var(--qs-ease)}
+html[data-area=site] .qa-headcta{border-radius:999px!important;padding:0 22px!important;min-height:42px!important}
+html[data-area=site] .qa-langbtn{border-radius:999px!important;transition:border-color .2s var(--qs-ease),background-color .2s var(--qs-ease)}
 html[data-area=site] .qa-langbtn:hover{border-color:var(--qs-brand)!important;background:rgba(4,157,197,.06)!important}
-html[data-area=site] .qa-nav::after{height:3px;border-radius:2px;bottom:0}
+html[data-area=site] .qa-nav::after{height:3px;border-radius:3px;bottom:0}
 
 /* ---------- 5. Glass header (shadow fades in once the page scrolls) ---------- */
 html[data-area=site] header:has(.qa-head){
   --qs-hk:1;   /* fallback when scroll timelines are unsupported: always a soft shadow */
   background:rgba(255,255,255,calc(.92 - var(--qs-hk) * .18))!important;
   -webkit-backdrop-filter:saturate(1.8) blur(18px)!important;backdrop-filter:saturate(1.8) blur(18px)!important;
-  border-bottom:1px solid rgba(201,211,219,calc(.7 - var(--qs-hk) * .35))!important;
+  border-bottom:1px solid rgba(207,200,187,calc(.7 - var(--qs-hk) * .35))!important;
   box-shadow:0 1px 0 rgba(255,255,255,.6) inset,0 12px 32px -18px rgba(29,39,51,calc(var(--qs-hk) * .34))!important}
 @keyframes qs-head-k{from{--qs-hk:0}to{--qs-hk:1}}
 @supports (animation-timeline:scroll()){
   html[data-area=site] header:has(.qa-head){animation:qs-head-k linear both;animation-timeline:scroll(root block);animation-range:0 96px}
 }
 
-/* ---------- 6. Cards: the one card from qs.css; here only how it moves on hover ---------- */
+/* ---------- 6. Cards: rounder, soft rest shadow, lift + photo zoom on hover ---------- */
 html[data-area=site] :is(.qa-offer,a.qa-card,.qa-visa-card,.qa-testi-card,.qs-ig-card,.qs-voice,.qa-ticket){
   box-shadow:var(--qs-card-rest)!important;
   transition:translate .4s var(--qs-spring),box-shadow .4s var(--qs-ease),border-color .3s var(--qs-ease)!important}
 html[data-area=site] :is(.qa-offer,a.qa-card,.qa-visa-card,.qa-testi-card,.qs-ig-card,.qs-voice,.qa-ticket):hover{
-  box-shadow:var(--qs-card-lift)!important;border-color:var(--qs-card-line-hover)!important}
+  box-shadow:var(--qs-card-lift)!important;border-color:rgba(4,157,197,.28)!important}
 html[data-area=site] .qa-offer{border-radius:var(--qs-r)!important}
 html[data-area=site] .qs-ig-card:hover{transform:none}   /* qs.css lifts it with transform; we use translate */
-html[data-area=site] .qa-offer-urg{border-radius:var(--qs-r-pill)!important}
+html[data-area=site] .qa-offer-urg{border-radius:999px!important}
 /* Destination tiles: full card radius, a shadow that blooms on hover. */
 html[data-area=site] .qs-dest{border-radius:var(--qs-r);isolation:isolate;transition:translate .4s var(--qs-spring),box-shadow .4s var(--qs-ease)}
-html[data-area=site] .qs-dest:hover{box-shadow:var(--qs-shadow-2)}
+html[data-area=site] .qs-dest:hover{box-shadow:0 26px 50px -26px rgba(29,39,51,.55)}
 html[data-area=site] .qs-why-media .qs-photo{border-radius:var(--qs-r)}
-/* Voices are the same card as everything else (no coloured edge). */
-html[data-area=site] .qs-voice{border-radius:var(--qs-card-r);border:1px solid var(--qs-card-line)}
-html[data-area=site] .qs-voice-wa blockquote{border-radius:var(--qs-r);border-start-start-radius:4px}
+/* Voices: a real card with a coloured top edge (amber; WhatsApp ones cyan). */
+html[data-area=site] .qs-voice{border-radius:var(--qs-r);border:1px solid var(--qs-line);border-top:3px solid var(--qs-amber)}
+html[data-area=site] .qs-voice-wa{border-top-color:var(--qs-brand)}
+html[data-area=site] .qs-voice:hover{border-top-color:var(--qs-amber)!important}
+html[data-area=site] .qs-voice-wa:hover{border-top-color:var(--qs-brand)!important}
+html[data-area=site] .qs-voice-wa blockquote{border-radius:16px;border-start-start-radius:4px}
 /* Service rows: become a floating white tile on hover; the icon fills with cyan. */
 html[data-area=site] .qs-svc-row{padding-inline:16px;border-radius:var(--qs-r-xs);transition:background-color .25s var(--qs-ease),box-shadow .35s var(--qs-ease),translate .35s var(--qs-spring)}
-html[data-area=site] .qs-svc-row:hover{background:#fff;box-shadow:var(--qs-shadow-2)}
+html[data-area=site] .qs-svc-row:hover{background:#fff;box-shadow:0 18px 36px -22px rgba(29,39,51,.35)}
 html[data-area=site] .qs-svc-icon{transition:background-color .25s var(--qs-ease),color .25s var(--qs-ease)}
 html[data-area=site] .qs-svc-row:hover .qs-svc-icon{background:var(--qs-brand);color:#fff}
 html[data-area=site] .qs-svc-row:hover .qs-svc-go{color:var(--qs-brand)}
 
-/* ---------- 7. Bands: flat light sky, flat brand cyan ---------- */
+/* ---------- 7. Bands: light sky like the Instagram posts, cyan brand bands ---------- */
 html[data-area=site] .qs-band.qs-sand{background:var(--qs-sky)}
 html[data-area=site] .qs-dark,html[data-area=site] .qa-tf{background:var(--qs-band-grad)!important}
 
@@ -122,67 +131,67 @@ html[data-area=site] .qs-dark,html[data-area=site] .qa-tf{background:var(--qs-ba
 }
 
 /* ---------- 9. Destination guide globe (components/GuideGlobe.jsx) ---------- */
-html[data-area=site] .qs-globe{display:flex;flex-direction:column;align-items:center;gap:8px;padding:8px 0 4px;border-radius:var(--qs-r);background:transparent}
+html[data-area=site] .qs-globe{display:flex;flex-direction:column;align-items:center;gap:6px;padding:8px 0 4px;border-radius:var(--qs-r);background:radial-gradient(60% 60% at 50% 45%,#e3f5fc 0%,rgba(227,245,252,0) 70%)}
 html[data-area=site] .qs-globe-box{position:relative;width:min(520px,100%);aspect-ratio:1;touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none}
 html[data-area=site] .qs-globe-box:active{cursor:grabbing}
 html[data-area=site] .qs-globe-canvas{display:block;width:100%;height:100%;opacity:0;transition:opacity 1.2s ease}
 html[data-area=site] .qs-globe-pin{position:absolute;left:0;top:0;width:28px;height:28px;margin:-14px 0 0 -14px;display:flex;align-items:center;justify-content:center;text-decoration:none;color:var(--qs-ink);opacity:0;transition:opacity .25s ease;will-change:transform}
-html[data-area=site] .qs-globe-pin i{width:12px;height:12px;border-radius:50%;background:var(--qs-amber);border:2px solid #fff;box-shadow:var(--qs-shadow-1);transition:transform .2s ease}
+html[data-area=site] .qs-globe-pin i{width:12px;height:12px;border-radius:50%;background:var(--qs-amber);border:2px solid #fff;box-shadow:0 1px 3px rgba(29,39,51,.35);transition:transform .2s ease}
 html[data-area=site] .qs-globe-pin.home{z-index:3}
 html[data-area=site] .qs-globe-pin.home i{width:14px;height:14px;background:var(--qs-brand)}
-html[data-area=site] .qs-globe-pin b{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);white-space:nowrap;padding:4px 12px;border-radius:var(--qs-r-pill);background:var(--qs-ink);color:#fff;font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .2s ease}
+html[data-area=site] .qs-globe-pin b{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);white-space:nowrap;padding:4px 10px;border-radius:999px;background:var(--qs-ink);color:#fff;font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .2s ease}
 html[data-area=site] .qs-globe-pin.home b{opacity:1;background:var(--qs-brand);bottom:auto;top:24px}
 html[data-area=site] .qs-globe-pin:is(:hover,:focus-visible,.on) i{transform:scale(1.45)}
 html[data-area=site] .qs-globe-pin:is(:hover,:focus-visible,.on) b{opacity:1}
 html[data-area=site] .qs-globe-pin:is(:hover,:focus-visible,.on){z-index:2}
-html[data-area=site] .qs-globe-hint{margin:0;font-size:15px;color:var(--qs-ink-2)}
+html[data-area=site] .qs-globe-hint{margin:0;font-size:14px;color:var(--qs-ink-2)}
 
 /* ── 10. /links: link-in-bio page for the Instagram profile ──
    Same content as the old carrd card, in the Qasr identity from Instagram:
    light sky, the Q mark, Skylo, amber lightning marks and arcs, a dotted
    flight path, charcoal text with cyan highlighted words. */
-html[data-area=site] body:has(.ql){padding-bottom:0;background:var(--qs-sand)}
-html[data-area=site] .ql{position:relative;min-height:100svh;padding:48px 16px calc(48px + env(safe-area-inset-bottom,0px));background:var(--qs-sand);overflow:hidden;color:#1d2733}
+html[data-area=site] body:has(.ql){padding-bottom:0;background:#dff3fb}
+html[data-area=site] .ql{position:relative;min-height:100svh;padding:48px 16px calc(48px + env(safe-area-inset-bottom,0px));background:linear-gradient(180deg,#f4fbfe 0%,#dff3fb 55%,#bfe8f8 100%);overflow:hidden;color:#1d2733}
 html[data-area=site] .ql::before,html[data-area=site] .ql::after{content:"";position:absolute;border-radius:50%;pointer-events:none;border:14px solid #faab18;border-inline-end-color:transparent;border-bottom-color:transparent}
 html[data-area=site] .ql::before{inset-inline-start:-140px;top:42%;width:420px;height:420px;transform:rotate(-20deg)}
-html[data-area=site] .ql::after{inset-inline-end:-120px;top:6%;width:300px;height:300px;border-width:10px;border-color:var(--qs-brand);border-inline-start-color:transparent;border-top-color:transparent;transform:rotate(-10deg);opacity:.6}
-html[data-area=site] .ql-card{position:relative;max-width:760px;margin:0 auto;background:#fff;border-radius:var(--qs-r);overflow:hidden;box-shadow:var(--qs-shadow-2)}
+html[data-area=site] .ql::after{inset-inline-end:-120px;top:6%;width:300px;height:300px;border-width:10px;border-color:#00b8f8;border-inline-start-color:transparent;border-top-color:transparent;transform:rotate(-10deg);opacity:.6}
+html[data-area=site] .ql-card{position:relative;max-width:760px;margin:0 auto;background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 1px 2px rgba(29,39,51,.05),0 24px 48px -28px rgba(4,84,110,.35)}
 html[data-area=site] .ql h1 span,html[data-area=site] .ql h2 span{color:#049dc5}
 /* hero */
-html[data-area=site] .ql-hero{position:relative;display:grid;grid-template-columns:1.05fr 1fr;align-items:end;gap:8px;padding:36px 40px 0;background:var(--qs-brand-soft);overflow:hidden;isolation:isolate}
+html[data-area=site] .ql-hero{position:relative;display:grid;grid-template-columns:1.05fr 1fr;align-items:end;gap:8px;padding:36px 40px 0;background:linear-gradient(160deg,#e8f6fd 0%,#bfe8f8 70%,#8fd8f4 100%);overflow:hidden;isolation:isolate}
 html[data-area=site] .ql-q{position:absolute;z-index:-1;inset-inline-end:-60px;top:-40px;width:360px;height:auto;opacity:.55}
 html[data-area=site] .ql-path{position:absolute;z-index:-1;inset-inline-start:10%;top:20px;width:70%;height:auto;transform:scaleX(-1)}
 html[data-area=site] .ql-plane{position:absolute;z-index:-1;inset-inline-end:16%;top:22px;color:#049dc5;transform:rotate(-20deg) scaleX(-1)}
 html[data-area=site] .ql-skylo{order:2;width:100%;max-width:360px;height:auto;justify-self:center}
 html[data-area=site] .ql-intro{display:flex;flex-direction:column;align-items:flex-start;padding-bottom:36px}
-html[data-area=site] .ql-logo{width:64px;height:64px;border-radius:50%;padding:12px;box-sizing:border-box;background:#fff}
-html[data-area=site] .ql-slogan{position:relative;margin:16px 0 0;font-size:32px!important;line-height:1.3!important;font-weight:700;color:#1d2733}
+html[data-area=site] .ql-logo{width:64px;height:64px;border-radius:50%;padding:10px;box-sizing:border-box;background:#fff}
+html[data-area=site] .ql-slogan{position:relative;margin:16px 0 0;font-size:38px!important;line-height:1.25!important;font-weight:700;color:#1d2733}
 html[data-area=site] .ql-slogan span{color:#049dc5;box-shadow:inset 0 -8px 0 rgba(250,171,24,.55)}
 html[data-area=site] .ql-spark{position:absolute;inset-inline-start:-28px;top:-18px}
-html[data-area=site] .ql-slogan-en{margin:4px 0 0;text-align:right;font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:15px!important;font-weight:500;color:var(--qs-brand-text)}
-html[data-area=site] .ql h1{margin:20px 0 0;font-size:26px!important;line-height:1.35!important;font-weight:700;color:#1d2733}
-html[data-area=site] .ql-sub{margin:4px 0 0;font-size:15px!important;color:var(--qs-body)}
-html[data-area=site] .ql-motto{margin:8px 0 0;display:inline-flex;padding:8px 16px;border-radius:var(--qs-r-pill);background:#fff;font-size:15px!important;font-weight:600;color:#1d2733}
+html[data-area=site] .ql-slogan-en{margin:4px 0 0;text-align:right;font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:15px!important;font-weight:500;color:#047a99}
+html[data-area=site] .ql h1{margin:20px 0 0;font-size:24px!important;line-height:1.35!important;font-weight:700;color:#1d2733}
+html[data-area=site] .ql-sub{margin:4px 0 0;font-size:15px!important;color:#3d4c57}
+html[data-area=site] .ql-motto{margin:8px 0 0;display:inline-flex;padding:6px 14px;border-radius:999px;background:#fff;font-size:15px!important;font-weight:600;color:#1d2733}
 html[data-area=site] .ql-body{padding:32px 40px;display:flex;flex-direction:column;gap:28px}
 html[data-area=site] .ql-about{display:flex;flex-direction:column;gap:12px}
-html[data-area=site] .ql-about p,html[data-area=site] .ql-more p{margin:0;font-size:15px!important;line-height:1.8!important;color:var(--qs-body)}
+html[data-area=site] .ql-about p,html[data-area=site] .ql-more p{margin:0;font-size:16px!important;line-height:1.85!important;color:#3d4c57}
 html[data-area=site] .ql-sign{display:inline-flex;align-self:flex-start;align-items:center;gap:8px;font-weight:600;color:#1d2733!important}
 html[data-area=site] .ql-sign::before{content:"";width:20px;height:3px;border-radius:2px;background:#faab18}
 /* contact band with Skylo */
-html[data-area=site] .ql-reach{position:relative;display:flex;align-items:center;justify-content:center;gap:24px;padding:16px 24px;border-radius:var(--qs-r);background:var(--qs-band);overflow:hidden}
+html[data-area=site] .ql-reach{position:relative;display:flex;align-items:center;justify-content:center;gap:24px;padding:16px 24px;border-radius:20px;background:linear-gradient(150deg,#1fb6ea 0%,#049dc5 72%);overflow:hidden}
 html[data-area=site] .ql-skylo-2{width:150px;height:auto;margin:-8px 0 -20px}
 html[data-area=site] .ql-contact{position:relative;z-index:1;display:flex;gap:12px}
-html[data-area=site] .ql-contact a{display:grid;place-items:center;width:52px;height:52px;border-radius:50%;background:#fff;color:var(--qs-brand-text);text-decoration:none;transition:background-color .15s ease,color .15s ease}
+html[data-area=site] .ql-contact a{display:grid;place-items:center;width:52px;height:52px;border-radius:50%;background:#fff;color:#047a99;text-decoration:none;transition:background-color .15s ease,color .15s ease}
 html[data-area=site] .ql-contact a svg{width:22px;height:22px}
 html[data-area=site] .ql-contact a:hover{background:#faab18;color:#1d2733}
 /* two short sections */
 html[data-area=site] .ql-more{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-html[data-area=site] .ql-more>div{position:relative;display:flex;flex-direction:column;gap:8px;padding:20px 20px 20px;border-radius:var(--qs-r);background:#f4fbfe;border:1px solid var(--qs-line);border-inline-start:4px solid #049dc5}
-html[data-area=site] .ql h2{margin:0;font-size:20px!important;line-height:1.4!important;font-weight:600;color:#1d2733}
+html[data-area=site] .ql-more>div{position:relative;display:flex;flex-direction:column;gap:8px;padding:20px 20px 20px;border-radius:16px;background:#f4fbfe;border:1px solid #e3edf2;border-inline-start:4px solid #049dc5}
+html[data-area=site] .ql h2{margin:0;font-size:19px!important;line-height:1.4!important;font-weight:700;color:#1d2733}
 html[data-area=site] .ql-more p{font-size:15px!important}
 /* social buttons */
 html[data-area=site] .ql-buttons{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
-html[data-area=site] .ql-buttons a{display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 20px;border-radius:var(--qs-r-pill);border:1px solid var(--qs-line-2);background:#fff;color:#1d2733;font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:15px;font-weight:500;text-decoration:none;transition:background-color .15s ease,border-color .15s ease,color .15s ease}
+html[data-area=site] .ql-buttons a{display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 18px;border-radius:999px;border:1px solid #c3d6df;background:#fff;color:#1d2733;font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:15px;font-weight:500;text-decoration:none;transition:background-color .15s ease,border-color .15s ease,color .15s ease}
 html[data-area=site] .ql-buttons a svg{color:#049dc5}
 html[data-area=site] .ql-buttons a:hover{background:#049dc5;border-color:#049dc5;color:#fff}
 html[data-area=site] .ql-buttons a:hover svg{color:#fff}
@@ -191,7 +200,7 @@ html[data-area=site] .ql a:focus-visible{outline:2px solid #049dc5;outline-offse
   html[data-area=site] .ql{padding:16px 12px calc(32px + env(safe-area-inset-bottom,0px))}
   html[data-area=site] .ql::before{display:none}
   html[data-area=site] .ql::after{display:none}
-  html[data-area=site] .ql-card{border-radius:var(--qs-r)}
+  html[data-area=site] .ql-card{border-radius:20px}
   html[data-area=site] .ql-hero{grid-template-columns:1fr;padding:24px 20px 0;gap:0}
   html[data-area=site] .ql-q{width:240px;inset-inline-end:-50px;top:-30px}
   html[data-area=site] .ql-path{inset-inline-start:0;width:100%;top:290px}
@@ -199,9 +208,9 @@ html[data-area=site] .ql a:focus-visible{outline:2px solid #049dc5;outline-offse
   html[data-area=site] .ql-skylo{order:2;max-width:280px;margin-top:8px}
   html[data-area=site] .ql-intro{align-items:flex-start;text-align:right;padding:0}
   html[data-area=site] .ql-logo{width:56px;height:56px}
-  html[data-area=site] .ql-slogan{font-size:26px!important}
+  html[data-area=site] .ql-slogan{font-size:32px!important}
   html[data-area=site] .ql-spark{inset-inline-start:-24px;top:-16px;width:28px;height:28px}
-  html[data-area=site] .ql h1{font-size:20px!important;margin-top:16px}
+  html[data-area=site] .ql h1{font-size:21px!important;margin-top:16px}
   html[data-area=site] .ql-body{padding:24px 20px;gap:24px}
   html[data-area=site] .ql-about p{font-size:15px!important}
   html[data-area=site] .ql-reach{gap:12px;padding:12px 16px}
@@ -209,5 +218,5 @@ html[data-area=site] .ql a:focus-visible{outline:2px solid #049dc5;outline-offse
   html[data-area=site] .ql-contact{gap:8px}
   html[data-area=site] .ql-contact a{width:46px;height:46px}
   html[data-area=site] .ql-more{grid-template-columns:1fr}
-  html[data-area=site] .ql-buttons a{height:40px;padding:0 16px;font-size:15px}
+  html[data-area=site] .ql-buttons a{height:40px;padding:0 14px;font-size:14px}
 }

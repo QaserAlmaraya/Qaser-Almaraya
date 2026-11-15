@@ -1,5 +1,5 @@
 /* qs-nav.css — public site only: every rule must start with html[data-area=site]. */
-/* Header (components/nav/SiteNav.jsx) and command palette (components/CommandPalette.jsx).
+/* Header (components/nav/SiteNav.jsx) .
    Type: 13 / 15 / 17 / 20 only. Spacing on the 4px grid. One soft shadow, no glow. */
 
 /* ---------- Header row ---------- */
@@ -25,23 +25,14 @@ html[data-area=site] .qn-more-item[aria-current=page]{color:var(--qs-ink);font-w
 html[data-area=site] .qn-more-item:focus-visible{outline-offset:-2px!important}
 @keyframes qn-pop{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
 
-/* ---------- Search widget ---------- */
-html[data-area=site] .qn-search{flex:none;display:inline-flex;align-items:center;gap:var(--qs-s2);height:40px;min-width:148px;padding:0 var(--qs-s3);background:#fff;border:1px solid var(--qs-line);border-radius:12px;color:var(--qs-ink-2);font-family:inherit;font-size:15px;font-weight:400;line-height:1;cursor:pointer;transition:border-color .18s var(--qs-ease),color .18s var(--qs-ease)}
-html[data-area=site] .qn-search:hover{border-color:var(--qs-line-2);color:var(--qs-ink)}
-html[data-area=site] .qn-search svg{flex:none}
-html[data-area=site] .qn-search-text{flex:1;text-align:start}
-html[data-area=site] .qn-kbd,html[data-area=site] .qn-cp kbd,html[data-area=site] .qn-cp-esc{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:24px;padding:0 6px;background:var(--qs-paper);border:1px solid var(--qs-line);border-radius:6px;color:var(--qs-ink-2);font-family:system-ui,-apple-system,'Segoe UI',sans-serif;font-size:13px;font-weight:500;line-height:1;white-space:nowrap}
-
 /* ---------- Language + CTA ---------- */
 html[data-area=site] .qn-lang{height:40px;font-size:13px;font-weight:600;line-height:1}
 html[data-area=site] .qn-header .qn-cta{flex:none;font-size:15px}
 
-/* Laptops: the search widget keeps its shortcut but drops the word; icons leave the links. */
+/* Laptops: tighter gaps; below 1160px the icons leave the links. */
 @media (max-width:1279px){
   html[data-area=site] .qn-head{gap:var(--qs-s4)!important}
   html[data-area=site] .qn-nav{gap:var(--qs-s1) var(--qs-s4)!important}
-  html[data-area=site] .qn-search{min-width:0}
-  html[data-area=site] .qn-search-text{display:none}
 }
 @media (max-width:1159px){
   html[data-area=site] .qn-link .qn-ico{display:none}
@@ -55,10 +46,8 @@ html[data-area=site] .qn-header .qn-cta{flex:none;font-size:15px}
 /* Tablets and phones: links, language and CTA move into the burger menu. */
 @media (max-width:1023px){
   html[data-area=site] .qn-nav,html[data-area=site] .qn-lang,html[data-area=site] .qn-header .qn-cta{display:none!important}
-  html[data-area=site] .qn-head .qa-burger{display:flex!important}
+  html[data-area=site] .qn-head .qa-burger{display:flex!important;margin-inline-start:auto}
   html[data-area=site] .qn-head{gap:var(--qs-s2)!important}
-  html[data-area=site] .qn-search{width:42px;height:42px;padding:0;justify-content:center;margin-inline-start:auto;color:var(--qs-ink)}
-  html[data-area=site] .qn-kbd{display:none}
 }
 @media (max-width:820px){
   html[data-area=site] .qn-head{padding-inline:var(--qs-s4)!important}
@@ -78,51 +67,20 @@ html[data-area=site] .qn-menu-foot{margin-top:auto;display:flex;align-items:cent
 html[data-area=site] .qn-menu-lang{flex:none;display:flex;align-items:center;gap:var(--qs-s2);height:48px;padding:0 var(--qs-s4);background:transparent;border:1px solid var(--qs-line-dark);color:#fff;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer}
 html[data-area=site] .qn-menu .qn-menu-cta{flex:1}
 
-/* ---------- Command palette ---------- */
-html[data-area=site] .qn-cp{position:fixed;inset:0;z-index:2147483640;display:flex;align-items:flex-start;justify-content:center;padding:12vh var(--qs-s4) var(--qs-s4);font-family:var(--qs-sans)}
-html[data-area=site] .qn-cp-backdrop{position:absolute;inset:0;background:rgba(29,39,51,.36);animation:qn-fade .16s linear both}
-html[data-area=site] .qn-cp-panel{position:relative;display:flex;flex-direction:column;width:min(640px,100%);max-height:min(620px,80vh);overflow:hidden;background:#fff;border:1px solid var(--qs-line);border-radius:16px;box-shadow:0 24px 56px -20px rgba(29,39,51,.36);animation:qn-cp-in .18s var(--qs-ease) both}
-html[data-area=site] .qn-cp-top{flex:none;display:flex;align-items:center;gap:var(--qs-s3);height:56px;padding:0 var(--qs-s4);border-bottom:1px solid var(--qs-line);transition:border-color .18s var(--qs-ease)}
-html[data-area=site] .qn-cp-top:focus-within{border-bottom-color:var(--qs-brand)}
-html[data-area=site] .qn-cp-topico{flex:none;color:var(--qs-ink-3)}
-html[data-area=site] .qn-cp .qn-cp-input{flex:1;min-width:0;height:100%;margin:0;padding:0;background:transparent;border:0;border-radius:0;box-shadow:none;color:var(--qs-ink);font-family:inherit;font-size:17px;font-weight:400;line-height:1.5;text-align:start;-webkit-appearance:none;appearance:none}
-html[data-area=site] .qn-cp .qn-cp-input:focus,html[data-area=site] .qn-cp .qn-cp-input:focus-visible{outline:none!important;box-shadow:none}
-html[data-area=site] .qn-cp-input::placeholder{color:var(--qs-ink-3);opacity:1}
-html[data-area=site] .qn-cp-close{flex:none;display:inline-flex;align-items:center;justify-content:center;min-width:32px;height:32px;padding:0;background:none;border:0;border-radius:8px;color:var(--qs-ink-2);cursor:pointer}
-html[data-area=site] .qn-cp-x{display:none}
-html[data-area=site] .qn-cp-list{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:var(--qs-s2)}
-html[data-area=site] .qn-cp-group+.qn-cp-group{margin-top:var(--qs-s2)}
-html[data-area=site] .qn-cp-title{padding:var(--qs-s2) var(--qs-s3) var(--qs-s1);color:var(--qs-ink-3);font-size:13px;font-weight:500;line-height:1.5}
-html[data-area=site] .qn-cp-row{display:flex;align-items:center;gap:var(--qs-s3);min-height:44px;padding:0 var(--qs-s3);border-radius:10px;color:var(--qs-body);font-size:15px;font-weight:500;line-height:1.5;cursor:pointer;scroll-margin-block:var(--qs-s2)}
-html[data-area=site] .qn-cp-ico{flex:none;display:inline-grid;place-items:center;color:var(--qs-ink-3)}
-html[data-area=site] .qn-cp-label{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-html[data-area=site] .qn-cp-hint{flex:none;max-width:40%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--qs-ink-3);font-size:13px;font-weight:400}
-html[data-area=site] .qn-cp-go{flex:none;display:inline-grid;place-items:center;color:var(--qs-ink-3);opacity:0}
-html[data-area=site] .qn-cp-row[data-active=true]{background:var(--qs-brand-soft);color:var(--qs-ink)}
-html[data-area=site] .qn-cp-row[data-active=true] .qn-cp-ico{color:var(--qs-brand)}
-html[data-area=site] .qn-cp-row[data-active=true] .qn-cp-go{opacity:1}
-html[data-area=site] .qn-cp-empty{margin:0;padding:var(--qs-s4) var(--qs-s3) var(--qs-s2);color:var(--qs-ink-2);font-size:15px;line-height:1.6}
-html[data-area=site] .qn-cp-foot{flex:none;display:flex;align-items:center;gap:var(--qs-s5);padding:var(--qs-s2) var(--qs-s4);border-top:1px solid var(--qs-line);color:var(--qs-ink-3);font-size:13px;line-height:1.5}
-html[data-area=site] .qn-cp-foot span{display:inline-flex;align-items:center;gap:var(--qs-s1)}
-html[data-area=site] .qn-cp-foot kbd{margin-inline-end:2px}
 @keyframes qn-fade{from{opacity:0}to{opacity:1}}
-@keyframes qn-cp-in{from{opacity:0;transform:translateY(-8px) scale(.985)}to{opacity:1;transform:none}}
-@keyframes qn-cp-sheet{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:none}}
-
-/* Phones: a full-width sheet from the top, no keyboard hints. */
-@media (max-width:640px){
-  html[data-area=site] .qn-cp{padding:0}
-  html[data-area=site] .qn-cp-panel{width:100%;max-height:min(100dvh,100vh);border-width:0 0 1px;border-radius:0 0 16px 16px;animation-name:qn-cp-sheet}
-  html[data-area=site] .qn-cp-top{height:60px}
-  html[data-area=site] .qn-cp-esc,html[data-area=site] .qn-cp-foot,html[data-area=site] .qn-cp-go{display:none}
-  html[data-area=site] .qn-cp-x{display:block}
-  html[data-area=site] .qn-cp-close{width:40px;height:40px}
-  html[data-area=site] .qn-cp-row{min-height:48px}
-}
-@media (hover:none){
-  html[data-area=site] .qn-cp-foot,html[data-area=site] .qn-cp-go{display:none}
-}
 @media (prefers-reduced-motion:reduce){
-  html[data-area=site] .qn-more-panel,html[data-area=site] .qn-cp-backdrop,html[data-area=site] .qn-cp-panel{animation:none}
+  html[data-area=site] .qn-more-panel{animation:none}
   html[data-area=site] .qn-chev,html[data-area=site] .qn-link .qn-ico{transition:none}
+}
+
+/* Eight links in the row: tighter gaps, and «الرئيسية» is the house icon alone
+   (its text stays for the burger menu and for screen readers via aria-label). */
+html[data-area=site] .qn-nav{gap:var(--qs-s1) 18px!important}
+html[data-area=site] .qn-nav .qn-link{gap:6px}
+html[data-area=site] .qn-nav .qn-home-text{display:none}
+@media (max-width:1279px){
+  html[data-area=site] .qn-nav{gap:var(--qs-s1) 14px!important;font-size:14px!important}
+  html[data-area=site] .qn-nav .qn-link{font-size:14px}
+  html[data-area=site] .qn-nav .qn-link .qn-ico{display:none}
+  html[data-area=site] .qn-nav .qn-link[aria-label] .qn-ico{display:block}
 }

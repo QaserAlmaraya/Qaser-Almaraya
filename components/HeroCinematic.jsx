@@ -106,8 +106,7 @@ export default function HeroCinematic({ slides: allSlides = [], kicker, title, s
 .qh-scrim{position:absolute;inset:0;z-index:2;background:linear-gradient(to top,rgba(13,20,28,.56) 0%,rgba(13,20,28,0) 36%)}
 /* The copy sits on a frosted panel, so the photograph shows through it and
    the charcoal type stays readable over any slide, dark or light. */
-.qh-copy{position:absolute;z-index:4;top:44%;transform:translateY(-50%);inset-inline-start:max(32px,calc((100% - 1240px) / 2));inset-inline-end:auto;box-sizing:border-box;width:min(520px,calc(100% - 64px));padding:32px;display:flex;flex-direction:column;align-items:flex-start;text-align:start;gap:16px;border-radius:20px;border:1px solid rgba(255,255,255,.6);background:rgba(255,255,255,.82);-webkit-backdrop-filter:blur(20px) saturate(1.3);backdrop-filter:blur(20px) saturate(1.3);color:#1d2733}
-@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.qh-copy{background:#fff;border-color:#dbe8ee}}
+.qh-copy{position:absolute;z-index:4;top:44%;transform:translateY(-50%);inset-inline-start:max(32px,calc((100% - 1240px) / 2));inset-inline-end:auto;box-sizing:border-box;width:min(520px,calc(100% - 64px));padding:32px;display:flex;flex-direction:column;align-items:flex-start;text-align:start;gap:16px;border-radius:20px;border:1px solid #dbe8ee;background:#fff;color:#1d2733}
 .qh-copy>*{animation:qh-rise .8s cubic-bezier(.2,.7,.2,1) both}
 .qh-copy>:nth-child(2){animation-delay:.08s}.qh-copy>:nth-child(3){animation-delay:.16s}.qh-copy>:nth-child(4){animation-delay:.24s}.qh-copy>:nth-child(5){animation-delay:.32s}
 @keyframes qh-rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
@@ -131,8 +130,7 @@ html[data-area] .qh .qh-title{margin:0;color:#1d2733;font-family:var(--qs-sans,i
 .qh-foot{position:absolute;z-index:5;inset-inline:0;bottom:24px;display:flex;align-items:center;justify-content:space-between;gap:16px;padding-inline:max(32px,calc((100% - 1240px) / 2))}
 .qh-cap{display:inline-flex;align-items:center;min-height:32px}
 /* Slide caption: a small frosted chip over the photograph. */
-.qh-cap>span{display:inline-flex;align-items:center;gap:8px;padding:4px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.6);background:rgba(255,255,255,.82);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);color:#1d2733;font-size:13px;font-weight:600;line-height:1.7}
-@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.qh-cap>span{background:#fff}}
+.qh-cap>span{display:inline-flex;align-items:center;gap:8px;padding:4px 12px;border-radius:999px;border:1px solid #dbe8ee;background:#fff;color:#1d2733;font-size:13px;font-weight:600;line-height:1.7}
 .qh-bars{display:flex;gap:8px}
 .qh-bar{width:clamp(24px,3vw,44px);height:4px;border-radius:4px;background:rgba(255,255,255,.4);overflow:hidden;cursor:pointer;border:0;padding:0}
 .qh-bar i{display:block;height:100%;width:0;background:#fff}

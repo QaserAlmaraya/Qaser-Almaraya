@@ -156,7 +156,7 @@ const ACHIEVEMENTS=[
    'نواصل التزامنا بدعم رياضتنا ومشجعينا، وسنبقى دائمًا شريككم في كل رحلة انتصار، لنرسم معًا لحظات الفخر ونصنع التاريخ بوقوفنا خلف منتخبنا العظيم!']}];
 
 // Header links (components/nav/SiteNav.jsx). The logo is the home link; `more` items sit under «المزيد».
-const NAV=[{id:'flights',label:'الطيران والفنادق',icon:'plane'},{id:'packages',label:'المجموعات والباقات',icon:'luggage'},{id:'visas',label:'التأشيرات',icon:'id-card'},{id:'guide',label:'دليل الوجهات',icon:'compass'},{id:'jobs',label:'الوظائف',icon:'briefcase',more:true},{id:'faq',label:'الأسئلة الشائعة',icon:'circle-help',more:true},{id:'contact',label:'تواصل معنا',icon:'mail',more:true}];
+const NAV=[{id:'home',label:'الرئيسية',icon:'house'},{id:'flights',label:'الطيران والفنادق',icon:'plane'},{id:'packages',label:'المجموعات والباقات',icon:'luggage'},{id:'visas',label:'التأشيرات',icon:'id-card'},{id:'guide',label:'دليل الوجهات',icon:'compass'},{id:'jobs',label:'الوظائف',icon:'briefcase'},{id:'faq',label:'الأسئلة الشائعة',icon:'circle-help'},{id:'contact',label:'تواصل معنا',icon:'mail'}];
 const GROUPS=['الكل','عائلي','شبابي','رجال أعمال','حج وعمرة'];
 
 export default function Site(props) {
@@ -859,8 +859,7 @@ function   visaVals(country){
   lang={st.lang}
   onToggleLang={toggleLang}
   home={{ href: "/", onClick: goHome }}
-  primary={(navItems || []).filter((item) => !item.more)}
-  more={(navItems || []).filter((item) => item.more)}
+  primary={navItems || []}
   cta={{ label: "تواصل معنا", onClick: goContact }}
   menuOpen={qaMobileMenuOpen}
   setMenuOpen={setQaMobileMenuOpen}

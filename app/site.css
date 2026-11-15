@@ -1,11 +1,3 @@
-/* ==========================================================================
-   site.css — the original stylesheet, loaded on EVERY page including the
-   dashboard (/admin, /staff). Most of its rules are unscoped, so nothing
-   here may be changed for the sake of the public site: public-site
-   corrections (type scale, 4px grid, radii, shadows, palette) live in
-   app/qs.css under html[data-area=site], section "site.css corrections".
-   This header is the only change made in the 15 Nov 2026 cleanup pass.
-   ========================================================================== */
 [data-ach-band] img[src*="logo-mark.webp"]{display:none!important}@media (max-width:1100px){.qa-cover-copy{position:static!important;transform:none!important;width:auto!important;padding:26px 24px 30px;background:#34bbe1}.qa-cover-copy h1{font-size:32px!important}.qa-cover-copy p{font-size:17px!important;color:#3d4650!important}.qa-cover-copy button{font-size:15.5px!important;padding:12px 26px!important;color:#012a37!important}.qa-cover-copy button,.qa-cover-copy .qa-btn{white-space:nowrap!important}.qa-cover-copy{max-height:none!important;gap:14px!important;background:#fff!important;border-top:1px solid #ececed!important;align-items:center!important;text-align:center!important}}
 @keyframes qa-orbit{to{transform:rotate(360deg)}}
 @keyframes qa-dropdown-in{from{opacity:0;transform:scaleY(.96) translateY(-4px)}to{opacity:1;transform:none}}

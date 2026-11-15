@@ -1,8 +1,8 @@
 'use client';
 
-// The public header: logo, four primary links, a «المزيد» menu for the
-// secondary ones, the search widget, the language toggle and one primary CTA.
-// On narrow screens the links fold into the burger menu with the same grouping.
+// The public header: logo, the page links (each with its icon), the language
+// toggle and the contact button. On narrow screens the links fold into the
+// burger menu. `more` is optional and unused today: all links sit in the row.
 //
 // Purely presentational. Both headers feed it:
 //   components/SiteHeader.jsx — route pages, plain links;
@@ -15,13 +15,13 @@ import Link from 'next/link';
 import Icon from '../Icon';
 import CtaButton from '../CtaButton';
 import SeasonDecor from '../SeasonDecor';
-import CommandPalette from '../CommandPalette';
 
 function NavLink({ item, lang, className, children, onAfter, ...rest }) {
   const text = item.labelEn && lang === 'en' ? item.labelEn : item.label;
   const props = {
     className,
     'aria-current': item.on ? 'page' : undefined,
+    'aria-label': item.id === 'home' ? text : undefined,
     'data-i18n-short': item.labelEn ? undefined : '',
     'data-no-i18n': item.labelEn ? '' : undefined,
     ...rest,
@@ -29,7 +29,7 @@ function NavLink({ item, lang, className, children, onAfter, ...rest }) {
   const body = (
     <>
       {item.icon ? <Icon name={item.icon} size={17} strokeWidth={1.8} className="qn-ico" /> : null}
-      <span>{text}</span>
+      <span className={item.id === 'home' ? 'qn-home-text' : undefined}>{text}</span>
       {children}
     </>
   );
@@ -56,32 +56,13 @@ export default function SiteNav({
   const setMenuOpen = controlled ? setMenuOpenProp : setMenuOpenOwn;
 
   const [moreOpen, setMoreOpen] = useState(false);
-  const [paletteOpen, setPaletteOpen] = useState(false);
-  const [kbd, setKbd] = useState(''); // filled after mount: the server cannot know the platform
   const [mounted, setMounted] = useState(false);
   const moreRef = useRef(null);
   const moreBtnRef = useRef(null);
   const menuRef = useRef(null);
   const burgerRef = useRef(null);
 
-  useEffect(() => {
-    setMounted(true);
-    const ua = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || navigator.userAgent || '';
-    setKbd(/mac|iphone|ipad|ipod/i.test(ua) ? '⌘K' : 'Ctrl K');
-  }, []);
-
-  // Cmd+K / Ctrl+K anywhere on the page. e.code keeps it working on an Arabic layout.
-  useEffect(() => {
-    const onKey = (e) => {
-      if (!(e.metaKey || e.ctrlKey) || e.altKey || e.shiftKey) return;
-      if (e.code !== 'KeyK' && String(e.key).toLowerCase() !== 'k') return;
-      e.preventDefault();
-      setMoreOpen(false);
-      setPaletteOpen((v) => !v);
-    };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, []);
+  useEffect(() => { setMounted(true); }, []);
 
   // «المزيد»: a click or a focus move outside closes it.
   useEffect(() => {
@@ -196,26 +177,14 @@ export default function SiteNav({
             ) : null}
           </nav>
 
-          <button
-            type="button"
-            className="qn-search"
-            onClick={() => { setMoreOpen(false); setPaletteOpen(true); }}
-            aria-haspopup="dialog"
-            aria-keyshortcuts="Meta+K Control+K"
-            aria-label={en ? 'Search the site' : 'البحث في الموقع'}
-            data-no-i18n=""
-          >
-            <Icon name="search" size={18} strokeWidth={1.9} />
-            <span className="qn-search-text">{en ? 'Search' : 'بحث'}</span>
-            {kbd ? <kbd className="qn-kbd" dir="ltr" data-keep-dir="">{kbd}</kbd> : null}
-          </button>
-
           <button type="button" onClick={onToggleLang} aria-label="Language" title="Language" data-no-i18n="" className="qa-langbtn qn-lang" style={{ flex: 'none', display: 'flex', alignItems: 'center', gap: 8, fontFamily: 'inherit', cursor: 'pointer' }}>
             <Icon name="globe" size={17} strokeWidth={1.8} />
             <span>{langText}</span>
           </button>
 
-          {cta ? <CtaButton size="sm" className="qn-cta" href={cta.onClick ? undefined : cta.href} onClick={cta.onClick} label={cta.label} labelEn={cta.labelEn} lang={lang} /> : null}
+          {cta ? (cta.onClick
+            ? <button type="button" className="qa-btn qa-cyan qa-headcta qn-cta" style={{ flex: 'none' }} onClick={cta.onClick}>{cta.label}</button>
+            : <Link href={cta.href} className="qa-btn qa-cyan qa-headcta qn-cta" style={{ flex: 'none', textDecoration: 'none' }}>{cta.label}</Link>) : null}
 
           {/* Burger — shown below 1024px via CSS */}
           <button
@@ -269,7 +238,6 @@ export default function SiteNav({
         document.body
       ) : null}
 
-      <CommandPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} lang={lang} onToggleLang={onToggleLang} />
     </>
   );
 }
