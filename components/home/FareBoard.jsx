@@ -49,6 +49,14 @@ function Price({ value, en, label }) {
   );
 }
 
+// The sheet keeps 24-hour times; customers read a 12-hour clock.
+function clock12(times, en) {
+  return String(times).replace(/(\d{1,2}):(\d{2})/g, (_, h, m) => {
+    const hour = Number(h);
+    return (hour % 12 || 12) + ':' + m + ' ' + (hour < 12 ? (en ? 'AM' : 'ص') : (en ? 'PM' : 'م'));
+  });
+}
+
 export default function FareBoard({ lang = 'ar', initial = 8, link = true }) {
   const en = lang === 'en';
   const [origin, setOrigin] = useState(ORIGINS[0].code);
@@ -132,7 +140,7 @@ export default function FareBoard({ lang = 'ar', initial = 8, link = true }) {
                     <ul className="qs-fb-flights">
                       {d.offers.map((f, k) => {
                         const label = f.carrier.fixed ? (en ? 'Fixed fare' : 'سعر ثابت') : (en ? 'From' : 'يبدأ من');
-                        const when = (time, days) => [time ? (en ? 'Departs ' : 'الإقلاع ') + time : (en ? 'Time varies by day' : 'الوقت حسب اليوم'), days].filter(Boolean);
+                        const when = (time, days) => [time ? (en ? 'Departs ' : 'الإقلاع ') + clock12(time, en) : (en ? 'Time varies by day' : 'الوقت حسب اليوم'), days].filter(Boolean);
                         const legs = [
                           { id: 'one', name: en ? 'Outbound' : 'الذهاب', codes: en ? from.en + ' \u2192 ' + d.place.en : from.ar + ' \u2190 ' + d.place.ar, meta: when(f.time, en ? f.daysEn : f.daysAr), price: fareIqd(f.oneWay, f.currency, rate) },
                           { id: 'back', name: en ? 'Return' : 'العودة', codes: en ? d.place.en + ' \u2192 ' + from.en : d.place.ar + ' \u2190 ' + from.ar, meta: when(f.backTime, en ? f.backDaysEn : f.backDaysAr), price: fareIqd(f.back, f.currency, rate) },
