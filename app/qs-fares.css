@@ -46,7 +46,6 @@ html[data-area=site] .qs-fb-tag,html[data-area=site] .qs-fb-tail{font-family:'IB
 html[data-area=site] .qs-fb-dest{display:flex;flex-direction:column;gap:0;min-width:0}
 html[data-area=site] .qs-fb-name{display:flex;align-items:center;gap:8px;font-size:17px;font-weight:600;line-height:1.4;color:var(--qs-ink)}
 html[data-area=site] .qs-fb-dest small{font-size:13px;font-weight:400;line-height:1.6;color:var(--qs-ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-html[data-area=site] .qs-fb-low{font-size:13px;font-weight:500;line-height:24px;padding:0 8px;border-radius:6px;background:#fff1cf;color:#734700;white-space:nowrap}
 html[data-area=site] .qs-fb-price{display:flex;flex-direction:column;align-items:flex-end;gap:0;white-space:nowrap}
 html[data-area=site] .qs-fb-price small{font-size:13px;font-weight:400;line-height:1.6;color:var(--qs-ink-3)}
 html[data-area=site] .qs-fb-amount{display:inline-flex;align-items:baseline;gap:4px}

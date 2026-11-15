@@ -115,14 +115,13 @@ export default function FareBoard({ lang = 'ar', initial = 8, link = true }) {
           <ol className="qs-fb-list" key={origin + trip}>
             {shown.map((d, i) => {
               const isOpen = open === d.key;
-              const best = i === 0 && dests.length > 1;
               const airlines = d.offers.length;
               const sub = [en ? d.place.countryEn : d.place.countryAr, airlines > 1 ? (en ? airlines + ' airlines' : airlines === 2 ? 'شركتا طيران' : airlines + ' شركات طيران') : (en ? d.best.carrier.en : d.best.carrier.shortAr)].join(' · ');
               return (
-                <li key={d.key} className={'qs-fb-item' + (isOpen ? ' open' : '') + (best ? ' best' : '')}>
+                <li key={d.key} className={'qs-fb-item' + (isOpen ? ' open' : '')}>
                   <button type="button" className="qs-fb-row" aria-expanded={isOpen} onClick={() => setOpen(isOpen ? '' : d.key)} style={{ animationDelay: Math.min(i, 11) * 30 + 'ms' }}>
                     <span className="qs-fb-dest">
-                      <span className="qs-fb-name">{en ? d.place.en : d.place.ar}{best ? <span className="qs-fb-low">{en ? 'Lowest fare' : 'أقل سعر'}</span> : null}</span>
+                      <span className="qs-fb-name">{en ? d.place.en : d.place.ar}</span>
                       <small>{sub}</small>
                     </span>
                     <Price value={d.from} en={en} label={en ? 'From' : 'يبدأ من'} />
@@ -139,7 +138,7 @@ export default function FareBoard({ lang = 'ar', initial = 8, link = true }) {
                     </div>
                     <ul className="qs-fb-flights">
                       {d.offers.map((f, k) => {
-                        const label = f.carrier.fixed ? (en ? 'Fixed fare' : 'سعر ثابت') : (en ? 'From' : 'يبدأ من');
+                        const label = f.carrier.fixed ? (en ? 'Fare' : 'السعر') : (en ? 'From' : 'يبدأ من');
                         const when = (time, days) => [time ? (en ? 'Departs ' : 'الإقلاع ') + clock12(time, en) : (en ? 'Time varies by day' : 'الوقت حسب اليوم'), days].filter(Boolean);
                         const legs = [
                           { id: 'one', name: en ? 'Outbound' : 'الذهاب', codes: en ? from.en + ' \u2192 ' + d.place.en : from.ar + ' \u2190 ' + d.place.ar, meta: when(f.time, en ? f.daysEn : f.daysAr), price: fareIqd(f.oneWay, f.currency, rate) },
@@ -204,8 +203,8 @@ export default function FareBoard({ lang = 'ar', initial = 8, link = true }) {
           <p className="qs-fb-note">
             <Icon name="info" size={18} strokeWidth={2} />
             <span>{en
-              ? 'Prices are per adult in Iraqi dinars. Iraqi Airways fares are fixed; other airlines start from the price shown and change with the travel date and seat availability. Last updated ' + updatedLabel(FARES_UPDATED, true) + '.'
-              : 'الأسعار للمسافر البالغ بالدينار العراقي. أسعار الخطوط الجوية العراقية ثابتة، وأسعار بقية الشركات تبدأ من المبلغ المعروض وتتغيّر حسب تاريخ السفر وتوفّر المقاعد. آخر تحديث ' + updatedLabel(FARES_UPDATED, false) + '.'}</span>
+              ? 'Prices are per adult in Iraqi dinars and may change with the travel date and seat availability. Last updated ' + updatedLabel(FARES_UPDATED, true) + '.'
+              : 'الأسعار للمسافر البالغ بالدينار العراقي، وقد تتغيّر حسب تاريخ السفر وتوفّر المقاعد. آخر تحديث ' + updatedLabel(FARES_UPDATED, false) + '.'}</span>
           </p>
         </div>
       </div>
