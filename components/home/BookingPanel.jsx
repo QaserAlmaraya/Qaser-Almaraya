@@ -89,7 +89,7 @@ function CountPicker({ summary, title, rows, values, onChange, chips, chip, onCh
               <div>{chips.map((c) => <button key={c.id} type="button" className={chip === c.id ? 'on' : ''} aria-pressed={chip === c.id} onClick={() => onChip(c.id)}>{en ? c.en : c.ar}</button>)}</div>
             </div>
           ) : null}
-          <button type="button" className="qs-btn qs-btn-pri qs-bp-pop-done" onClick={() => setOpen(false)}>{en ? 'Done' : 'تم'}</button>
+          <button type="button" className="qs-btn qs-btn-brand qs-bp-pop-done" onClick={() => setOpen(false)}>{en ? 'Done' : 'تم'}</button>
         </div>
       )}
     </div>
@@ -199,7 +199,7 @@ export default function BookingPanel({ lang = 'ar' }) {
               {f.trip === 'round' ? <Field label={t('تاريخ العودة', 'Return date')}><input type="date" min={f.dep || today()} value={f.ret} onChange={set('ret')} /></Field> : null}
             </div>
             <div className="qs-bp-actions">
-              <a className="qs-btn qs-btn-pri" href={waLink(flightMsg())} target="_blank" rel="noopener">
+              <a className="qs-btn qs-btn-brand" href={waLink(flightMsg())} target="_blank" rel="noopener">
                 <Icon name="message-circle" size={18} strokeWidth={2} />{t('اطلب السعر عبر واتساب', 'Get a quote on WhatsApp')}
               </a>
               <a className="qs-link" href="https://flamingo.iq" target="_blank" rel="noopener">{t('أو احجز بنفسك على flamingo.iq', 'or book it yourself on flamingo.iq')}<Icon name="arrow-up-right" size={16} /></a>
@@ -233,7 +233,7 @@ export default function BookingPanel({ lang = 'ar' }) {
               {PLACES.map(([ar, e, code]) => <option key={code} value={en ? e : ar} />)}
             </datalist>
             <div className="qs-bp-actions">
-              <a className="qs-btn qs-btn-pri" href={waLink(hotelMsg())} target="_blank" rel="noopener">
+              <a className="qs-btn qs-btn-brand" href={waLink(hotelMsg())} target="_blank" rel="noopener">
                 <Icon name="message-circle" size={18} strokeWidth={2} />{t('اطلب السعر عبر واتساب', 'Get a quote on WhatsApp')}
               </a>
             </div>
@@ -253,7 +253,7 @@ export default function BookingPanel({ lang = 'ar' }) {
               </Field>
             </div>
             <div className="qs-bp-actions">
-              <a className="qs-btn qs-btn-pri" href={pkgHref}><Icon name="search" size={18} strokeWidth={2} />{t('اعرض الباقات', 'Show packages')}</a>
+              <a className="qs-btn qs-btn-brand" href={pkgHref}><Icon name="search" size={18} strokeWidth={2} />{t('اعرض الباقات', 'Show packages')}</a>
               <a className="qs-link" href="/contact?topic=package">{t('أو اطلب باقة مصممة لك', 'or ask for a tailor-made trip')}</a>
             </div>
           </div>
@@ -272,7 +272,7 @@ export default function BookingPanel({ lang = 'ar' }) {
               </Field>
             </div>
             <div className="qs-bp-actions">
-              <a className="qs-btn qs-btn-pri" href={visaHref}><Icon name="file-text" size={18} strokeWidth={2} />{t('المتطلبات والسعر', 'Requirements and price')}</a>
+              <a className="qs-btn qs-btn-brand" href={visaHref}><Icon name="file-text" size={18} strokeWidth={2} />{t('المتطلبات والسعر', 'Requirements and price')}</a>
               <a className="qs-link" href="/visa">{t('كل التأشيرات', 'All visas')}</a>
             </div>
           </div>

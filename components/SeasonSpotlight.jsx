@@ -50,9 +50,9 @@ export default function SeasonSpotlight({ lang = 'ar' }) {
     <section className="qa-sec qa-ss-sec" data-no-i18n="" dir={en ? 'ltr' : 'rtl'}>
       <style>{`
 .qa-ss-sec{padding-bottom:0!important}
-.qa-ss{position:relative;overflow:hidden;border-radius:var(--tw-radius,16px);padding:30px 34px;display:flex;flex-direction:column;gap:18px;animation:qa-ss-in .6s cubic-bezier(.16,1,.3,1) both}
+.qa-ss{position:relative;overflow:hidden;border-radius:var(--tw-radius,16px);padding:32px;display:flex;flex-direction:column;gap:20px;animation:qa-ss-in .6s cubic-bezier(.16,1,.3,1) both}
 @keyframes qa-ss-in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-.qa-ss h2{font-size:34px;font-weight:700;color:inherit}
+.qa-ss h2{font-size:26px;font-weight:600;color:inherit}
 .qa-ss-photo{position:absolute;inset:0;pointer-events:none;overflow:hidden;border-radius:inherit}
 .qa-ss-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:left center;display:block;user-select:none}
 [dir=ltr] .qa-ss-photo img{object-position:right center}
@@ -63,7 +63,7 @@ export default function SeasonSpotlight({ lang = 'ar' }) {
 .qa-ss-card:hover{color:var(--qs-ink,#1d2733);transform:translateY(-2px)}
 .qa-ss-card img{width:84px;flex-shrink:0;object-fit:cover}
 .qa-ss .qa-btn{white-space:nowrap!important;min-height:0!important;line-height:1.3}
-@media (max-width:820px){.qa-ss .qa-btn{padding:10px 20px!important;font-size:14.5px!important}.qa-ss{padding:150px 18px 22px}.qa-ss h2{font-size:23px!important}.qa-ss-photo img{object-position:center 30%}.qa-ss-shade,[dir=ltr] .qa-ss-shade{background:linear-gradient(to bottom,var(--ss-c) 0px,var(--ss-c) 60px,var(--ss-b) 120px,var(--ss-a) 175px)}.qa-ss-grid{display:flex!important;flex-direction:column}}
+@media (max-width:820px){.qa-ss .qa-btn{padding:12px 20px!important;font-size:15px!important}.qa-ss{padding:152px 16px 24px}.qa-ss h2{font-size:20px!important}.qa-ss-photo img{object-position:center 30%}.qa-ss-shade,[dir=ltr] .qa-ss-shade{background:linear-gradient(to bottom,var(--ss-c) 0px,var(--ss-c) 60px,var(--ss-b) 120px,var(--ss-a) 175px)}.qa-ss-grid{display:flex!important;flex-direction:column}}
 @media (prefers-reduced-motion:reduce){.qa-ss{animation:none}}
 `}</style>
       <div className="qa-ss" style={{ background: season.bg, color: season.fg }}>
@@ -71,8 +71,8 @@ export default function SeasonSpotlight({ lang = 'ar' }) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8, position: 'relative', maxWidth: 620 }}>
           <span style={{ alignSelf: 'flex-start', fontSize: 13, fontWeight: 500, padding: '4px 12px', borderRadius: 999, background: 'rgba(255,255,255,.18)', border: '1px solid rgba(255,255,255,.3)' }}>{tx.strip}{active.preview ? (en ? ' · preview' : ' · معاينة') : ''}</span>
           <h2>{soon ? tx.soon + inDays : tx.title}</h2>
-          <p style={{ fontSize: 16, lineHeight: 1.7, opacity: 0.92 }}>{tx.text}</p>
-          <Link href={cta} className="qa-btn" style={{ alignSelf: 'flex-start', marginTop: 6, background: season.accent, color: season.fg === '#fff' ? 'var(--qs-ink,#1d2733)' : season.fg, fontWeight: 700, padding: '12px 24px', fontSize: 15 }}>{tx.cta}</Link>
+          <p style={{ fontSize: 17, lineHeight: 1.7, opacity: 0.92 }}>{tx.text}</p>
+          <Link href={cta} className="qa-btn" style={{ alignSelf: 'flex-start', marginTop: 6, background: season.accent, color: season.fg === '#fff' ? 'var(--qs-ink,#1d2733)' : season.fg, fontWeight: 600, padding: '12px 24px', fontSize: 15 }}>{tx.cta}</Link>
         </div>
         {items.length > 0 && (
           <div className="qa-ss-grid">
@@ -80,10 +80,10 @@ export default function SeasonSpotlight({ lang = 'ar' }) {
               <Link key={p.id} href={'/packages/' + p.id} className="qa-ss-card">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 {p.image_url ? <img {...imgProps(p.image_url, '84px', [384])} alt="" loading="lazy" decoding="async" /> : <span style={{ width: 84, background: 'var(--qs-brand-soft,#e4f5fb)' }} />}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 3, padding: '8px 0', paddingInlineEnd: 12, minWidth: 0, flex: 1 }}>
-                  <b style={{ fontSize: 14, lineHeight: 1.35, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{nm(p.title_ar, p.title_en)}</b>
-                  <span style={{ fontSize: 12, color: 'var(--qs-ink-2,#5f666e)' }}>{[destinationLabel(p, lang), nightsLabel(p, lang)].filter(Boolean).join(' · ')}</span>
-                  <span style={{ marginTop: 'auto', fontSize: 14, fontWeight: 700, color: 'var(--qs-brand-deep,#036f8c)' }}>{formatPrice(p.price, 'IQD', lang)}</span>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 4, padding: '8px 0', paddingInlineEnd: 12, minWidth: 0, flex: 1 }}>
+                  <b style={{ fontSize: 15, fontWeight: 600, lineHeight: 1.5, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{nm(p.title_ar, p.title_en)}</b>
+                  <span style={{ fontSize: 13, color: 'var(--qs-ink-2,#5f666e)' }}>{[destinationLabel(p, lang), nightsLabel(p, lang)].filter(Boolean).join(' · ')}</span>
+                  <span style={{ marginTop: 'auto', fontSize: 15, fontWeight: 600, color: 'var(--qs-ink,#1d2733)' }}>{formatPrice(p.price, 'IQD', lang)}</span>
                 </div>
               </Link>
             ))}

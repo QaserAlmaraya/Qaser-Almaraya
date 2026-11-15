@@ -9,12 +9,12 @@ import { useLangToggle } from '../lib/i18n';
 import { waLink } from '../lib/whatsapp';
 
 const CATS = {
-  news: { ar: 'أخبار الشركة', en: 'Company news', c: '#049dc5' },
-  tips: { ar: 'نصائح السفر', en: 'Travel tips', c: '#1a7f47' },
-  visas: { ar: 'تأشيرات', en: 'Visas', c: '#7b4bd6' },
-  offers: { ar: 'عروض ورحلات', en: 'Offers & trips', c: '#e0364f' },
-  events: { ar: 'فعاليات ومعارض', en: 'Events & expos', c: '#c27a00' },
-  alert: { ar: 'تنبيه للمسافرين', en: 'Travel alerts', c: '#b42318' },
+  news: { ar: 'أخبار الشركة', en: 'Company news' },
+  tips: { ar: 'نصائح السفر', en: 'Travel tips' },
+  visas: { ar: 'تأشيرات', en: 'Visas' },
+  offers: { ar: 'عروض ورحلات', en: 'Offers & trips' },
+  events: { ar: 'فعاليات ومعارض', en: 'Events & expos' },
+  alert: { ar: 'تنبيه للمسافرين', en: 'Travel alerts' },
 };
 
 const pick = (en, a, b) => (en && b ? b : a || b || '');
@@ -24,44 +24,41 @@ const fmtDate = (d, en) => {
 
 const CSS = `
 .qn-hero{background:var(--tw-band-deep,#049dc5);color:#fff;position:relative;overflow:hidden}
-.qn-hero-in{max-width:1240px;margin:0 auto;padding:46px 32px 40px;position:relative;display:flex;flex-direction:column;gap:12px}
-.qn-kick{font-size:13px;font-weight:700;letter-spacing:.06em;color:#fff3d6}
-.qn-hero h1{margin:0;font-size:clamp(30px,3.6vw,48px);line-height:1.15;color:#fff}
+.qn-hero-in{max-width:1240px;margin:0 auto;padding:48px 32px 40px;position:relative;display:flex;flex-direction:column;gap:12px}
+.qn-kick{font-size:13px;font-weight:500;color:rgba(255,255,255,.92)}
+.qn-hero h1{margin:0;font-size:clamp(26px,3.6vw,32px);line-height:1.15;color:#fff}
 .qn-hero p{margin:0;max-width:640px;font-size:17px;line-height:1.8;color:rgba(255,255,255,.92)}
 .qn-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
-.qn-chip{padding:7px 15px;border-radius:999px;font-size:13.5px;font-weight:700;text-decoration:none;color:#fff;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3)}
+.qn-chip{padding:8px 16px;border-radius:999px;font-size:13px;font-weight:600;text-decoration:none;color:#fff;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3)}
 .qn-chip.on{background:#fff;color:#049dc5}
-.qn-wrap{max-width:1240px;margin:0 auto;padding:36px 32px 70px}
-.qn-feat{display:grid;grid-template-columns:1.25fr 1fr;border-radius:var(--tw-radius,16px);overflow:hidden;background:#fff;border:1px solid #ececed;text-decoration:none;color:inherit;box-shadow:var(--tw-card-shadow,0 1px 3px rgba(29,39,51,.06));margin-bottom:28px;transition:transform .2s,box-shadow .2s}
-.qn-feat:hover{transform:translateY(-2px);box-shadow:var(--tw-lift-shadow,0 8px 22px rgba(29,39,51,.12))}
+.qn-wrap{max-width:1240px;margin:0 auto;padding:32px 32px 72px}
+.qn-feat{display:grid;grid-template-columns:1.25fr 1fr;border-radius:var(--tw-radius,16px);overflow:hidden;background:#fff;border:1px solid #ececed;text-decoration:none;color:inherit;margin-bottom:24px}
 .qn-feat .img{min-height:320px;background:#dff3fa center/cover}
-.qn-feat .txt{padding:30px;display:flex;flex-direction:column;gap:12px;justify-content:center}
-.qn-feat h2{margin:0;font-size:28px;line-height:1.3}
-.qn-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:22px}
-.qn-card{display:flex;flex-direction:column;border-radius:var(--tw-radius,16px);overflow:hidden;background:#fff;border:1px solid #ececed;text-decoration:none;color:inherit;box-shadow:var(--tw-card-shadow,0 1px 3px rgba(29,39,51,.06));transition:transform .2s,box-shadow .2s}
-.qn-card:hover{transform:translateY(-2px);box-shadow:var(--tw-lift-shadow,0 8px 22px rgba(29,39,51,.12))}
+.qn-feat .txt{padding:32px;display:flex;flex-direction:column;gap:12px;justify-content:center}
+.qn-feat h2{margin:0;font-size:26px;line-height:1.3}
+.qn-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px}
+.qn-card{display:flex;flex-direction:column;border-radius:var(--tw-radius,16px);overflow:hidden;background:#fff;border:1px solid #ececed;text-decoration:none;color:inherit}
 .qn-card .img{aspect-ratio:16/9;background:#dff3fa center/cover}
-.qn-card .txt{padding:18px 20px 20px;display:flex;flex-direction:column;gap:9px;flex:1}
-.qn-card h3{margin:0;font-size:19px;line-height:1.4}
-.qn-ex{margin:0;font-size:14.5px;line-height:1.75;color:#5b646d;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.qn-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:12.5px;color:#5f666e}
-.qn-cat{font-size:12px;font-weight:700;border-radius:999px;padding:2px 10px;color:#fff}
-.qn-more{margin-top:auto;font-size:14px;font-weight:700;color:#049dc5}
+.qn-card .txt{padding:16px 20px 20px;display:flex;flex-direction:column;gap:8px;flex:1}
+.qn-card h3{margin:0;font-size:20px;line-height:1.4}
+.qn-ex{margin:0;font-size:15px;line-height:1.75;color:#5b646d;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.qn-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13px;color:#5f666e}
+.qn-more{margin-top:auto;font-size:15px;font-weight:600;color:#049dc5}
 .qn-empty{text-align:center;padding:60px 20px;color:#5f666e;display:flex;flex-direction:column;align-items:center;gap:10px}
-.qn-art-hero{position:relative;min-height:380px;display:flex;align-items:flex-end;background:linear-gradient(135deg,#1db4e8,#049dc5) center/cover;color:#fff}
+.qn-art-hero{position:relative;min-height:380px;display:flex;align-items:flex-end;background:var(--tw-band-deep,#049dc5) center/cover;color:#fff}
 .qn-art-hero.has-cover:before{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(2,30,40,.88),rgba(2,30,40,.25) 60%,rgba(2,30,40,.1))}
-.qn-art-hero .in{position:relative;max-width:860px;width:100%;margin:0 auto;padding:40px 24px 34px;display:flex;flex-direction:column;gap:12px}
-.qn-art-hero h1{margin:0;font-size:clamp(28px,3.6vw,44px);line-height:1.25;color:#fff}
+.qn-art-hero .in{position:relative;max-width:860px;width:100%;margin:0 auto;padding:40px 24px 32px;display:flex;flex-direction:column;gap:12px}
+.qn-art-hero h1{margin:0;font-size:clamp(26px,3.6vw,32px);line-height:1.25;color:#fff}
 .qn-art-hero .qn-meta{color:rgba(255,255,255,.85)}
-.qn-art{max-width:760px;margin:0 auto;padding:34px 24px 20px}
-.qn-lead{font-size:20px;line-height:1.85;color:#3d4650;margin:0 0 26px;font-weight:500}
-.qn-share{display:flex;gap:8px;flex-wrap:wrap;align-items:center;border-top:1px solid #ececed;padding-top:18px;margin-top:10px;font-size:14px;color:#5f666e}
-.qn-share a,.qn-share button{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:8px 14px;font-weight:700;font-size:13.5px;text-decoration:none;cursor:pointer;font-family:inherit;border:1px solid #ececed;background:#fff;color:#1d2733}
+.qn-art{max-width:760px;margin:0 auto;padding:32px 24px 20px}
+.qn-lead{font-size:20px;line-height:1.85;color:#3d4650;margin:0 0 24px;font-weight:500}
+.qn-share{display:flex;gap:8px;flex-wrap:wrap;align-items:center;border-top:1px solid #ececed;padding-top:16px;margin-top:12px;font-size:15px;color:#5f666e}
+.qn-share a,.qn-share button{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:8px 14px;font-weight:600;font-size:13px;text-decoration:none;cursor:pointer;font-family:inherit;border:1px solid #ececed;background:#fff;color:#1d2733}
 .qn-share .wa{background:#25d366;border-color:#25d366;color:#fff}
-.qn-cta{margin:30px 0 0;border-radius:var(--tw-radius,16px);padding:22px;background:#eaf8fd;border:1px solid #bfe9f6;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
-.qn-cta b{font-size:18px}
-.qn-rel{max-width:1240px;margin:0 auto;padding:10px 32px 70px}
-.qn-rel h2{font-size:24px;margin:0 0 16px}
+.qn-cta{margin:32px 0 0;border-radius:var(--tw-radius,16px);padding:24px;background:var(--qs-brand-soft,#eaf8fd);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.qn-cta b{font-size:17px}
+.qn-rel{max-width:1240px;margin:0 auto;padding:8px 32px 72px}
+.qn-rel h2{font-size:26px;margin:0 0 16px}
 @media(max-width:820px){.qn-feat{grid-template-columns:1fr}.qn-feat .img{min-height:210px}.qn-hero-in,.qn-wrap,.qn-rel{padding-inline:16px}.qn-art-hero{min-height:300px}}
 ${NEWS_BODY_CSS}
 `;
@@ -72,7 +69,7 @@ function Card({ p, en }) {
     <Link href={'/news/' + encodeURIComponent(p.slug)} className="qn-card">
       <div className="img" style={{ backgroundImage: p.cover_url ? `url("${p.cover_url}")` : 'var(--tw-band-deep,#049dc5)' }} />
       <div className="txt">
-        <div className="qn-meta"><span className="qn-cat" style={{ background: cat.c }}>{en ? cat.en : cat.ar}</span><span>{fmtDate(p.published_at, en)}</span><span>· {p.minutes} {en ? 'min read' : 'دقائق قراءة'}</span></div>
+        <div className="qn-meta"><span className={'qn-cat' + (p.category === 'alert' ? ' is-alert' : '')}>{en ? cat.en : cat.ar}</span><span>{fmtDate(p.published_at, en)}</span><span>· {p.minutes} {en ? 'min read' : 'دقائق قراءة'}</span></div>
         <h3>{pick(en, p.title_ar, p.title_en)}</h3>
         <p className="qn-ex">{pick(en, p.excerpt_ar, p.excerpt_en)}</p>
         <span className="qn-more">{en ? 'Read more →' : 'اقرأ المزيد ←'}</span>
@@ -109,7 +106,7 @@ export function NewsIndexView({ posts, category }) {
           {!posts.length && (
             <div className="qn-empty">
               <Icon name="newspaper" size={44} strokeWidth={1.4} style={{ color: 'var(--qs-brand-deep,#049dc5)' }} />
-              <b style={{ fontSize: 18, color: 'var(--qs-ink,#1d2733)' }}>{en ? 'No posts here yet' : 'لا توجد مقالات هنا بعد'}</b>
+              <b style={{ fontSize: 17, color: 'var(--qs-ink,#1d2733)' }}>{en ? 'No posts here yet' : 'لا توجد مقالات هنا بعد'}</b>
               <span>{en ? 'Check back soon.' : 'تابعنا قريباً.'}</span>
             </div>
           )}
@@ -117,9 +114,9 @@ export function NewsIndexView({ posts, category }) {
             <Link href={'/news/' + encodeURIComponent(first.slug)} className="qn-feat">
               <div className="img" style={{ backgroundImage: first.cover_url ? `url("${first.cover_url}")` : 'var(--tw-band-deep,#049dc5)' }} />
               <div className="txt">
-                <div className="qn-meta"><span className="qn-cat" style={{ background: (CATS[first.category] || CATS.news).c }}>{en ? (CATS[first.category] || CATS.news).en : (CATS[first.category] || CATS.news).ar}</span><span>{fmtDate(first.published_at, en)}</span><span>· {first.minutes} {en ? 'min read' : 'دقائق قراءة'}</span></div>
+                <div className="qn-meta"><span className={'qn-cat' + (first.category === 'alert' ? ' is-alert' : '')}>{en ? (CATS[first.category] || CATS.news).en : (CATS[first.category] || CATS.news).ar}</span><span>{fmtDate(first.published_at, en)}</span><span>· {first.minutes} {en ? 'min read' : 'دقائق قراءة'}</span></div>
                 <h2>{pick(en, first.title_ar, first.title_en)}</h2>
-                <p className="qn-ex" style={{ WebkitLineClamp: 4, fontSize: 16 }}>{pick(en, first.excerpt_ar, first.excerpt_en)}</p>
+                <p className="qn-ex" style={{ WebkitLineClamp: 4, fontSize: 17 }}>{pick(en, first.excerpt_ar, first.excerpt_en)}</p>
                 <span className="qn-more">{en ? 'Read the article →' : 'اقرأ المقال ←'}</span>
               </div>
             </Link>
@@ -148,8 +145,8 @@ export function NewsArticleView({ post, related }) {
       <main style={{ flex: 1 }} data-no-i18n="">
         <section className={post.cover_url ? 'qn-art-hero has-cover' : 'qn-art-hero'} style={{ backgroundImage: post.cover_url ? `url("${post.cover_url}")` : undefined }}>
           <div className="in">
-            <Link href="/news" style={{ color: 'rgba(255,255,255,.85)', fontSize: 14, fontWeight: 600, textDecoration: 'none' }}>{en ? '← All posts' : '← كل المقالات'}</Link>
-            <div className="qn-meta"><span className="qn-cat" style={{ background: cat.c }}>{en ? cat.en : cat.ar}</span><span>{fmtDate(post.published_at, en)}</span><span>· {post.minutes} {en ? 'min read' : 'دقائق قراءة'}</span></div>
+            <Link href="/news" style={{ color: 'rgba(255,255,255,.85)', fontSize: 15, fontWeight: 600, textDecoration: 'none' }}>{en ? '← All posts' : '← كل المقالات'}</Link>
+            <div className="qn-meta"><span className={'qn-cat' + (post.category === 'alert' ? ' is-alert' : '')}>{en ? cat.en : cat.ar}</span><span>{fmtDate(post.published_at, en)}</span><span>· {post.minutes} {en ? 'min read' : 'دقائق قراءة'}</span></div>
             <h1>{title}</h1>
           </div>
         </section>
@@ -163,7 +160,7 @@ export function NewsArticleView({ post, related }) {
             <button type="button" onClick={() => { navigator.clipboard?.writeText(url); setCopied(true); setTimeout(() => setCopied(false), 1800); }}>{copied ? (en ? '✓ Copied' : '✓ تم النسخ') : (en ? 'Copy link' : 'نسخ الرابط')}</button>
           </div>
           <div className="qn-cta">
-            <div><b>{en ? 'Planning a trip?' : 'تخطط لرحلة؟'}</b><div style={{ fontSize: 14, color: '#5b646d', marginTop: 4 }}>{en ? 'Our team handles visas, flights and packages for you.' : 'فريقنا يتولى التأشيرة والطيران والباقة نيابةً عنك.'}</div></div>
+            <div><b>{en ? 'Planning a trip?' : 'تخطط لرحلة؟'}</b><div style={{ fontSize: 15, color: '#5b646d', marginTop: 4 }}>{en ? 'Our team handles visas, flights and packages for you.' : 'فريقنا يتولى التأشيرة والطيران والباقة نيابةً عنك.'}</div></div>
             <a href={waLink((en ? 'Hello, I read "' : 'مرحباً، قرأت مقال "') + title + (en ? '" and would like some help.' : '" وأرغب بالمساعدة.'))} target="_blank" rel="noopener" className="qa-btn" style={{ background: '#25d366', color: '#fff', textDecoration: 'none' }}>{en ? 'Message us on WhatsApp' : 'راسلنا على واتساب'}</a>
           </div>
         </article>

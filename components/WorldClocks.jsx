@@ -65,8 +65,8 @@ export default function WorldClocks({ tz, place, lang = 'ar', flight = null, com
 
   const clock = (label, zone, accent) => (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, padding: '10px 8px', borderRadius: 'var(--tw-radius-sm,10px)', background: accent ? 'var(--qs-brand-soft,#eaf8fd)' : '#f6f7f8' }}>
-      <span style={{ fontSize: 12, color: 'var(--qs-ink-2,#5f666e)' }}>{label}</span>
-      <span data-no-i18n="" style={{ fontSize: compact ? 20 : 24, fontWeight: 700, color: accent ? 'var(--qs-brand-deep,#036f8c)' : 'var(--qs-ink,#1d2733)', fontFamily: "'IBM Plex Sans',sans-serif", direction: 'ltr' }}>{fmtTime(zone, now, 'en')}</span>
+      <span style={{ fontSize: 13, color: 'var(--qs-ink-2,#5f666e)' }}>{label}</span>
+      <span data-no-i18n="" style={{ fontSize: compact ? 20 : 24, fontWeight: 600, color: accent ? 'var(--qs-brand-deep,#036f8c)' : 'var(--qs-ink,#1d2733)', fontFamily: "'IBM Plex Sans',sans-serif", direction: 'ltr' }}>{fmtTime(zone, now, 'en')}</span>
     </div>
   );
 
@@ -91,7 +91,7 @@ export default function WorldClocks({ tz, place, lang = 'ar', flight = null, com
           {dep && (
             <span style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}><Icon name="plane-takeoff" size={15} style={{ color: 'var(--qs-ink-2,#5f666e)', flex: 'none', marginTop: 2 }} /><span>{en ? `Your return leaves at ${flight.depart} ${place} time — ` : `رحلة العودة تغادر ${flight.depart} بتوقيت ${place} — أي `}<b data-no-i18n="">{dep.text}</b>{en ? ' in Baghdad' : ' في بغداد'}{shift(dep.dayShift)}</span></span>
           )}
-          <span style={{ fontSize: 12, color: 'var(--qs-ink-2,#5f666e)' }}>{en ? 'Handy for planning calls with family.' : 'مفيد لترتيب الاتصال مع العائلة.'}</span>
+          <span style={{ fontSize: 13, color: 'var(--qs-ink-2,#5f666e)' }}>{en ? 'Handy for planning calls with family.' : 'مفيد لترتيب الاتصال مع العائلة.'}</span>
         </div>
       )}
     </div>

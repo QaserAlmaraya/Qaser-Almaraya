@@ -69,15 +69,22 @@ const PATHS = {
   'volume-2': ['M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z', 'M16 9a5 5 0 0 1 0 6', 'M19.364 18.364a9 9 0 0 0 0-12.728'],
   'volume-x': ['M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z', 'm22 9-6 6', 'm16 9 6 6'],
   'shield-check': ['M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.79 17 5 19 5a1 1 0 0 1 1 1z', 'm9 12 2 2 4-4'],
+  // Navigation and command palette (NAV pass, 15 Nov 2026)
+  briefcase: ['M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16'],
+  'circle-help': ['M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3', 'M12 17h.01'],
+  mail: ['m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7'],
+  'corner-down-left': ['M20 4v7a4 4 0 0 1-4 4H4', 'm9 10-5 5 5 5'],
 };
 const CIRCLES = {
   instagram: [{ cx: 12, cy: 12, r: 10 }], search: [{ cx: 11, cy: 11, r: 8 }], clock: [{ cx: 12, cy: 12, r: 10 }], info: [{ cx: 12, cy: 12, r: 10 }],
   globe: [{ cx: 12, cy: 12, r: 10 }], luggage: [{ cx: 16, cy: 20, r: 2 }, { cx: 8, cy: 20, r: 2 }], ban: [{ cx: 12, cy: 12, r: 10 }], compass: [{ cx: 12, cy: 12, r: 10 }],
   banknote: [{ cx: 12, cy: 12, r: 2 }], sun: [{ cx: 12, cy: 12, r: 4 }], 'id-card': [{ cx: 9, cy: 11, r: 2 }],
+  'circle-help': [{ cx: 12, cy: 12, r: 10 }],
 };
 const RECTS = {
   instagram: [{ x: 2, y: 2, width: 20, height: 20, rx: 5 }], copy: [{ x: 8, y: 8, width: 14, height: 14, rx: 2, ry: 2 }],
   banknote: [{ x: 2, y: 6, width: 20, height: 12, rx: 2 }], 'id-card': [{ x: 2, y: 5, width: 20, height: 14, rx: 2 }],
+  briefcase: [{ x: 2, y: 6, width: 20, height: 14, rx: 2 }], mail: [{ x: 2, y: 4, width: 20, height: 16, rx: 2 }],
 };
 
 export default function Icon({ name, size = 20, strokeWidth = 2, style, ...rest }) {

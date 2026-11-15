@@ -3,10 +3,11 @@ import Icon from '../../../components/Icon';
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import WhatsAppButton from '../../../components/WhatsAppButton';
 import { buildVisaPdfHtml, findCountryIso } from '../../../lib/visaPdf';
 import WorldClocks, { destinationTz } from '../../../components/WorldClocks';
-import { APPLY_FLOW_ENABLED, visaMessage } from '../../../lib/whatsapp';
+import { APPLY_FLOW_ENABLED, visaMessage, openWhatsApp } from '../../../lib/whatsapp';
+import CtaButton from '../../../components/CtaButton';
+import { Accordion, AccordionItem } from '../../../components/routes/Accordion';
 import SiteHeader from '../../../components/SiteHeader';
 import SiteFooter from '../../../components/SiteFooter';
 import MascotLoader from '../../../components/MascotLoader';
@@ -85,79 +86,65 @@ export default function VisaDetailPage() {
     ? countryLabel
     : [typeLabel, countryLabel].filter(Boolean).join(' — ');
 
+  // The page's one primary action: same destination as before (the application
+  // steps when they are switched on, otherwise the WhatsApp message for this visa).
+  const applyOnWhatsApp = () => openWhatsApp(visaMessage({
+    type: nm(card.visa_type_name_ar, card.visa_type_name_en),
+    country: nm(card.country_name_ar, card.country_name_en),
+    stay: card.stay_duration,
+    issuing: workDaysLabel(card.issuing_time_days),
+    validity: card.validity_before_travel,
+    url: window.location.href,
+  }));
+  const applyCta = (size) => (APPLY_FLOW_ENABLED
+    ? <CtaButton size={size} href={`/visa/${id}/apply`} label="ابدأ الآن" />
+    : <CtaButton size={size} onClick={applyOnWhatsApp} label="تواصل معنا على واتساب للتقديم" />);
+  const downloadPdf = () => {
+    const bodyHtml = buildVisaPdfHtml({ cards: [card], lang, fmtPrice: (n) => formatPrice(n, 'IQD', lang), pageUrl: window.location.href });
+    printDoc(cardTitle, bodyHtml, lang);
+  };
+  const photo = card.image_url || card.card_image_url;
+  const clockTz = (() => {
+    const iso = findCountryIso(card);
+    return iso && iso !== 'iq' ? destinationTz(iso) : null;
+  })();
+  const shownIncluded = included.filter((f) => f.on);
+  const notes = nm(card.booking_notes, card.booking_notes_en);
+
   return (
     <div dir="rtl" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <SiteHeader active="التأشيرات" />
       <main style={{ flex: 1 }}>
         <div className="qa-page">
           <div className="qa-sec" style={{ paddingBottom: 0 }}>
-            <Link href={`/visa/country/${card.country_id}`} style={{ fontSize: 14, fontWeight: 600, color: 'var(--qs-brand-deep,#036f8c)', textDecoration: 'none' }}>← رجوع</Link>
+            <Link href={`/visa/country/${card.country_id}`} style={{ fontSize: 15, fontWeight: 600, color: 'var(--qs-brand-deep,#036f8c)', textDecoration: 'none' }}>← رجوع</Link>
           </div>
 
-          <section className="qa-sec qa-2col qa-detail" style={{ display: 'grid', gridTemplateColumns: 'minmax(240px,320px) 1fr', gap: 28, alignItems: 'flex-start' }}>
-            <div className="qa-card qa-visa-side" style={{ position: 'sticky', top: 90, display: 'flex', flexDirection: 'column', gap: 14 }}>
-              <h3 style={{ margin: 0, fontSize: 19 }}>{cardTitle}</h3>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 14 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: 'var(--qs-ink-2,#5f666e)' }}>مدة الإقامة</span><span>{card.stay_duration || '—'}</span></div>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: 'var(--qs-ink-2,#5f666e)' }}>مدة الإصدار</span><span>{workDaysLabel(card.issuing_time_days) || '—'}</span></div>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: 'var(--qs-ink-2,#5f666e)' }}>صلاحية قبل السفر</span><span>{card.validity_before_travel || '—'}</span></div>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', borderTop: '1px solid var(--qs-line,#ececed)', paddingTop: 12 }}>
+          <section className="qa-sec qa-2col qa-detail qr-vd" style={{ display: 'grid', gridTemplateColumns: 'minmax(260px,340px) 1fr', gap: 32, alignItems: 'flex-start' }}>
+            {/* Price and the apply action */}
+            <div className="qa-card qa-visa-side qr-vd-side" style={{ position: 'sticky', top: 90, display: 'flex', flexDirection: 'column', gap: 16 }}>
+              <h3 style={{ margin: 0, fontSize: 20 }}>{cardTitle}</h3>
+              <div className="qr-vd-prices">
                 <div>
-                  <div style={{ fontSize: 12, color: 'var(--qs-ink-2,#5f666e)' }}>البالغ</div>
-                  <div style={{ fontSize: 20, fontWeight: 700, color: 'var(--qs-brand-deep,#049dc5)' }}>{formatPrice(card.adult_price, 'IQD', lang)}</div>
+                  <span>البالغ</span>
+                  <b>{formatPrice(card.adult_price, 'IQD', lang)}</b>
                 </div>
-                <div style={{ textAlign: 'left' }}>
-                  <div style={{ fontSize: 12, color: 'var(--qs-ink-2,#5f666e)' }}>الطفل</div>
-                  <div style={{ fontSize: 20, fontWeight: 700, color: 'var(--qs-brand-deep,#049dc5)' }}>{formatPrice(card.child_price, 'IQD', lang)}</div>
+                <div>
+                  <span>الطفل</span>
+                  <b>{formatPrice(card.child_price, 'IQD', lang)}</b>
                 </div>
               </div>
-              {APPLY_FLOW_ENABLED ? (
-                <Link href={`/visa/${id}/apply`} className="qa-btn qa-cyan" style={{ textAlign: 'center', textDecoration: 'none' }}>ابدأ الآن</Link>
-              ) : (
-                <WhatsAppButton
-                  label="تواصل معنا على واتساب للتقديم"
-                  getMessage={() => visaMessage({
-                    type: nm(card.visa_type_name_ar, card.visa_type_name_en),
-                    country: nm(card.country_name_ar, card.country_name_en),
-                    stay: card.stay_duration,
-                    issuing: workDaysLabel(card.issuing_time_days),
-                    validity: card.validity_before_travel,
-                    url: window.location.href,
-                  })}
-                />
-              )}
-              <button
-                type="button"
-                onClick={() => {
-                  const bodyHtml = buildVisaPdfHtml({ cards: [card], lang, fmtPrice: (n) => formatPrice(n, 'IQD', lang), pageUrl: window.location.href });
-                  printDoc(cardTitle, bodyHtml, lang);
-                }}
-                style={{ cursor: 'pointer', border: '1px solid var(--qs-line,#ececed)', borderRadius: 999, padding: '10px 20px', fontSize: 14, fontWeight: 700, fontFamily: 'inherit', background: '#fff', color: 'var(--qs-brand-deep,#036f8c)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
-              >
+              {applyCta('md')}
+              <button type="button" onClick={downloadPdf} className="qs-pd-tool qr-vd-pdf">
+                <Icon name="file-text" size={15} />
                 تحميل PDF لهذه التأشيرة
               </button>
-              <span style={{ fontSize: 12, color: 'var(--qs-ink-2,#5f666e)', textAlign: 'center' }}>السعر بالدينار العراقي، ويُثبَّت عند تقديم الطلب.</span>
-
-              {(() => {
-                const iso = findCountryIso(card);
-                const tz = iso && iso !== 'iq' ? destinationTz(iso) : null;
-                return tz ? <WorldClocks tz={tz} place={nm(card.country_name_ar, card.country_name_en)} lang={lang} compact /> : null;
-              })()}
-              <div style={{ background: 'linear-gradient(135deg,#1db4e8,#049dc5)', borderRadius: 'var(--tw-radius-sm,10px)', padding: 16, color: '#fff', display: 'flex', flexDirection: 'column', gap: 10 }}>
-                <h4 style={{ margin: 0, fontSize: 15, color: '#fff' }}>لماذا قصر المرايا؟</h4>
-                {WHY_US.map((w, i) => (
-                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <span style={{ width: 20, height: 20, borderRadius: '50%', background: 'rgba(255,255,255,.2)', fontSize: 11, fontWeight: 500, display: 'grid', placeItems: 'center', flex: 'none' }}>{i + 1}</span>
-                    <span style={{ fontSize: 13, lineHeight: 1.5 }}>{w}</span>
-                  </div>
-                ))}
-              </div>
+              <span style={{ fontSize: 13, color: 'var(--qs-ink-2,#5f666e)', textAlign: 'center' }}>السعر بالدينار العراقي، ويُثبَّت عند تقديم الطلب.</span>
             </div>
 
-            <div className="qa-detail-main" style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-              <div className="qa-detail-hero" style={{ position: 'relative', height: 260, borderRadius: 'var(--tw-radius,16px)', overflow: 'hidden', background: (card.image_url || card.card_image_url) ? `url("${card.image_url || card.card_image_url}") center/cover no-repeat, var(--tw-band-deep,#049dc5)` : 'var(--tw-band-deep,#049dc5)', display: 'flex', alignItems: 'flex-end', padding: 20 }}>
-                {(card.image_url || card.card_image_url) && (
+            <div className="qa-detail-main" style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+              <div className="qa-detail-hero qr-vd-hero" style={{ position: 'relative', height: 260, borderRadius: 'var(--tw-radius,16px)', overflow: 'hidden', background: photo ? `url("${photo}") center/cover no-repeat, var(--tw-band-deep,#049dc5)` : 'var(--tw-band-deep,#049dc5)', display: 'flex', alignItems: 'flex-end', padding: 24 }}>
+                {photo && (
                   <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(1,30,40,.78) 0%, rgba(1,30,40,.25) 55%, rgba(1,30,40,.05) 100%)' }} />
                 )}
                 {providerHints && providerHints[card.id] && (
@@ -168,7 +155,7 @@ export default function VisaDetailPage() {
                       insetInlineStart: 20,
                       insetInlineEnd: 90,
                       zIndex: 2,
-                      fontSize: 12,
+                      fontSize: 13,
                       fontWeight: 500,
                       color: 'var(--qs-brand-deep,#036f8c)',
                       background: 'rgba(255,255,255,.96)',
@@ -195,89 +182,99 @@ export default function VisaDetailPage() {
                   <img
                     src={flagSrc(card.flag_code)}
                     alt=""
-                    style={{ position: 'absolute', top: 20, right: 20, zIndex: 1, width: 52, height: 52, borderRadius: '50%', border: '2px solid #fff', objectFit: 'cover', boxShadow: 'var(--tw-card-shadow,0 1px 3px rgba(29,39,51,.06))' }}
+                    style={{ position: 'absolute', top: 24, right: 24, zIndex: 1, width: 48, height: 48, borderRadius: '50%', border: '2px solid #fff', objectFit: 'cover' }}
                     onError={(e) => { e.currentTarget.style.display = 'none'; }}
                   />
                 ) : null}
                 <div style={{ position: 'relative', zIndex: 1 }}>
-                  <h1 style={{ margin: 0, fontSize: 30, color: '#fff', textShadow: '0 2px 10px rgba(0,0,0,.25)' }}>{nm(card.country_name_ar, card.country_name_en)}</h1>
-                  <span style={{ fontSize: 14, color: 'rgba(255,255,255,.9)' }}>{nm(card.visa_type_name_ar, card.visa_type_name_en)} · إقامة {card.stay_duration || '—'}</span>
+                  <h1 style={{ margin: 0, fontSize: 32, color: '#fff' }}>{nm(card.country_name_ar, card.country_name_en)}</h1>
+                  <span style={{ fontSize: 15, color: 'rgba(255,255,255,.92)' }}>{nm(card.visa_type_name_ar, card.visa_type_name_en)} · إقامة {card.stay_duration || '—'}</span>
                 </div>
               </div>
 
-              <div className="qa-card">
-                <h4 style={{ margin: '0 0 14px' }}>بطاقة التأشيرة</h4>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(160px,1fr))', gap: 12 }}>
+              {/* Durations and dates, read together */}
+              <div className="qr-vd-block">
+                <h2 className="qr-vd-h">بطاقة التأشيرة</h2>
+                <dl className="qr-facts">
                   {[
-                    ['الدولة', nm(card.country_name_ar, card.country_name_en)],
                     ['النوع', nm(card.visa_type_name_ar, card.visa_type_name_en)],
                     ['مدة الإقامة', card.stay_duration || '—'],
-                    ['سعر البالغ', Number(card.adult_price).toLocaleString() + ' د.ع'],
-                    ['صلاحية قبل السفر', card.validity_before_travel || '—'],
                     ['مدة الإصدار', workDaysLabel(card.issuing_time_days) || '—'],
-                    ['سعر الطفل', Number(card.child_price).toLocaleString() + ' د.ع'],
+                    ['صلاحية قبل السفر', card.validity_before_travel || '—'],
                   ].map(([label, value]) => (
-                    <div key={label} style={{ border: '1px solid var(--qs-line,#ececed)', borderRadius: 'var(--tw-radius-sm,10px)', padding: '12px 14px' }}>
-                      <div style={{ fontSize: 12, color: 'var(--qs-ink-2,#5f666e)' }}>{label}</div>
-                      <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--qs-ink,#1d2733)' }}>{value}</div>
-                    </div>
+                    <div key={label}><dt>{label}</dt><dd>{value}</dd></div>
                   ))}
-                </div>
+                </dl>
               </div>
 
-              {(card.booking_notes || card.booking_notes_en) && (
-                <div className="qa-card" style={{ background: '#f8fdfe', border: '1px solid var(--qs-line-2,#bfe9f6)' }}>
-                  <h4 style={{ margin: '0 0 8px' }}>معلومات إضافية</h4>
-                  <p style={{ margin: 0, fontSize: 14, lineHeight: 1.7, color: 'var(--qs-body,#3d4650)', whiteSpace: 'pre-wrap' }}>
-                    {nm(card.booking_notes, card.booking_notes_en)}
-                  </p>
+              {((card.documents || []).length > 0 || shownIncluded.length > 0 || notes || clockTz) && (
+                <div className="qr-vd-block">
+                  <Accordion>
+                    {(card.documents || []).length > 0 && (
+                      <AccordionItem title="المستندات المطلوبة" icon="file-text" meta={card.documents.length} defaultOpen>
+                        <ul className="qr-docs">
+                          {[...requiredDocs, ...optionalDocs].map((d) => (
+                            <li key={d.id} className="qa-doc-row">
+                              <div>
+                                <div className="qr-doc-n">{d.name_ar}</div>
+                                <div className="qr-doc-k">{d.kind === 'file' ? 'رفع ملف' : d.kind === 'photo' ? 'رفع صورة' : 'إجابة'} · {d.audience === 'adults' ? 'البالغين' : d.audience === 'children' ? 'الأطفال' : 'الجميع'}</div>
+                              </div>
+                              <span className={'qr-doc-tag' + (d.required ? ' is-req' : '')}>{d.required ? 'مطلوب' : 'اختياري'}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </AccordionItem>
+                    )}
+
+                    {shownIncluded.length > 0 && (
+                      <AccordionItem title="ما يشمله هذا النوع" icon="shield-check" meta={shownIncluded.length}>
+                        <ul className="qr-list">
+                          {shownIncluded.map((f) => (
+                            <li key={f.label} className="qa-feat-row"><Icon name="check" size={16} className="qr-yes" /><span>{f.label}</span></li>
+                          ))}
+                        </ul>
+                      </AccordionItem>
+                    )}
+
+                    {(card.booking_notes || card.booking_notes_en) && (
+                      <AccordionItem title="معلومات إضافية" icon="info">
+                        <p style={{ margin: 0, fontSize: 15, lineHeight: 1.7, color: 'var(--qs-body,#3d4650)', whiteSpace: 'pre-wrap', maxWidth: 720 }}>
+                          {notes}
+                        </p>
+                      </AccordionItem>
+                    )}
+
+                    {clockTz && (
+                      <AccordionItem title={lang === 'en' ? 'Local time at the destination' : 'التوقيت في بلد الوجهة'} noI18n icon="clock">
+                        <WorldClocks tz={clockTz} place={nm(card.country_name_ar, card.country_name_en)} lang={lang} compact />
+                      </AccordionItem>
+                    )}
+                  </Accordion>
                 </div>
               )}
 
-              {included.some((f) => f.on) && (
-                <div className="qa-card">
-                  <h4 style={{ margin: '0 0 14px' }}>ما يشمله هذا النوع</h4>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                    {included.filter((f) => f.on).map((f) => (
-                      <div key={f.label} className="qa-feat-row" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                        <Icon name="check" size={16} style={{ flex: 'none', color: 'var(--qs-brand-deep,#049dc5)' }} />
-                        <span style={{ fontSize: 14, color: 'var(--qs-ink,#1d2733)' }}>{f.label}</span>
-                      </div>
-                    ))}
-                  </div>
+              <div className="qr-vd-block">
+                <h2 className="qr-vd-h">لماذا قصر المرايا؟</h2>
+                <ol className="qr-why">
+                  {WHY_US.map((w, i) => (
+                    <li key={i}><span data-no-i18n="">{i + 1}</span>{w}</li>
+                  ))}
+                </ol>
+              </div>
+
+              {/* Closing action: the same apply button again, with the price it applies for */}
+              <div className="qr-close">
+                <div className="qr-close-copy">
+                  <h2 className="qr-close-h">{cardTitle}</h2>
+                  <p className="qr-close-p">
+                    <span>البالغ</span>
+                    <b>{formatPrice(card.adult_price, 'IQD', lang)}</b>
+                  </p>
                 </div>
-              )}
-              {(card.documents || []).length > 0 && (
-                <div className="qa-card">
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
-                    <h4 style={{ margin: 0 }}>المستندات المطلوبة</h4>
-                    <span style={{ fontSize: 12, fontWeight: 500, color: 'var(--qs-brand-deep,#036f8c)', background: 'var(--qs-brand-soft,#eaf8fd)', borderRadius: 999, padding: '4px 12px' }}>{card.documents.length} بند</span>
-                  </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                    {[...requiredDocs, ...optionalDocs].map((d) => (
-                      <div key={d.id} className="qa-doc-row" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, borderBottom: '1px solid #f4f4f4', paddingBottom: 10 }}>
-                        <div>
-                          <div style={{ fontSize: 14, color: 'var(--qs-ink,#1d2733)' }}>{d.name_ar}</div>
-                          <div style={{ fontSize: 12, color: 'var(--qs-ink-2,#5f666e)' }}>{d.kind === 'file' ? 'رفع ملف' : d.kind === 'photo' ? 'رفع صورة' : 'إجابة'} · {d.audience === 'adults' ? 'البالغين' : d.audience === 'children' ? 'الأطفال' : 'الجميع'}</div>
-                        </div>
-                        <span
-                          style={{
-                            fontSize: 12,
-                            fontWeight: 500,
-                            borderRadius: 999,
-                            padding: '4px 12px',
-                            color: d.required ? '#a06a00' : 'var(--qs-ink-2,#5f666e)',
-                            background: d.required ? '#fef3dc' : '#f4f4f4',
-                            flex: 'none',
-                          }}
-                        >
-                          {d.required ? 'مطلوب' : 'اختياري'}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
+                <div className="qr-close-act">
+                  {applyCta('lg')}
                 </div>
-              )}
+              </div>
             </div>
           </section>
         </div>

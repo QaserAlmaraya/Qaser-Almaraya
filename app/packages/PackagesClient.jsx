@@ -8,6 +8,7 @@ import SiteHeader from '../../components/SiteHeader';
 import SiteFooter from '../../components/SiteFooter';
 import MascotLoader from '../../components/MascotLoader';
 import PackageCard from '../../components/PackageCard';
+import CtaButton from '../../components/CtaButton';
 
 import Icon from '../../components/Icon';
 import { useLangToggle } from '../../lib/i18n';
@@ -223,11 +224,11 @@ export default function PackagesPage({ initialPackages = null }) {
             <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(1,20,28,.82) 0%, rgba(1,20,28,.42) 55%, rgba(1,20,28,.18) 100%)' }} />
 
             <div style={{ position: 'relative', zIndex: 1, maxWidth: 860, margin: '0 auto', textAlign: 'center', padding: '0 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
-              <span style={{ fontSize: 13, fontWeight: 500, letterSpacing: '.08em', color: 'rgba(255,255,255,.88)' }}>
+              <span style={{ fontSize: 13, fontWeight: 500, letterSpacing: lang === 'en' ? '.08em' : undefined, color: 'rgba(255,255,255,.88)' }}>
                 {t.hero_eyebrow}
               </span>
-              <h1 style={{ margin: 0, fontSize: 'clamp(32px,6vw,58px)', fontWeight: 800, color: '#fff', lineHeight: 1.08, maxWidth: 760 }}>{t.hero_title}</h1>
-              <p style={{ margin: 0, fontSize: 'clamp(14.5px,1.6vw,17px)', lineHeight: 1.7, color: 'rgba(255,255,255,.92)', maxWidth: 620 }}>{t.hero_sub}</p>
+              <h1 style={{ margin: 0, fontSize: 'clamp(26px,5vw,32px)', color: '#fff', maxWidth: 760 }}>{t.hero_title}</h1>
+              <p style={{ margin: 0, fontSize: 'clamp(15px,1.6vw,17px)', lineHeight: 1.7, color: 'rgba(255,255,255,.92)', maxWidth: 620 }}>{t.hero_sub}</p>
             </div>
           </section>
 
@@ -235,7 +236,7 @@ export default function PackagesPage({ initialPackages = null }) {
           <div style={{ maxWidth: 1080, margin: 'clamp(-64px,-8vw,-46px) auto 0', padding: '0 20px', position: 'relative', zIndex: 30 }}>
             <div className="qa-search-bar" style={{ background: '#fff', border: '1px solid var(--qs-line,#ececed)', borderRadius: 'var(--tw-radius,16px)', boxShadow: 'var(--tw-pop-shadow,0 6px 20px rgba(1,42,55,.10))', display: 'flex', flexWrap: 'wrap', alignItems: 'stretch' }}>
               <div className="qa-search-field" style={{ position: 'relative', flex: '1 1 220px', padding: '14px 20px', display: 'flex', flexDirection: 'column', gap: 3, minWidth: 200 }}>
-                <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 500, color: 'var(--qs-ink-2,#5f666e)', textTransform: 'uppercase', letterSpacing: '.03em' }}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 13, fontWeight: 500, color: 'var(--qs-ink-2,#5f666e)', textTransform: lang === 'en' ? 'uppercase' : undefined, letterSpacing: lang === 'en' ? '.03em' : undefined }}>
                   <Icon name="map-pin" size={12} style={{ color: 'var(--qs-brand-deep,#049dc5)' }} />{lang === 'en' ? 'Destination' : 'الوجهة'}
                 </span>
                 <input
@@ -282,7 +283,7 @@ export default function PackagesPage({ initialPackages = null }) {
               <div className="qa-search-divider" />
 
               <div className="qa-search-field" style={{ flex: '1 1 180px', padding: '14px 20px', display: 'flex', flexDirection: 'column', gap: 3, minWidth: 160 }}>
-                <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 500, color: 'var(--qs-ink-2,#5f666e)', textTransform: 'uppercase', letterSpacing: '.03em' }}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 13, fontWeight: 500, color: 'var(--qs-ink-2,#5f666e)', textTransform: lang === 'en' ? 'uppercase' : undefined, letterSpacing: lang === 'en' ? '.03em' : undefined }}>
                   <Icon name="calendar-days" size={12} style={{ color: 'var(--qs-brand-deep,#049dc5)' }} />{t.filter_dates_label}
                 </span>
                 <input
@@ -301,7 +302,7 @@ export default function PackagesPage({ initialPackages = null }) {
                   onClick={() => setShowTravelers((s) => !s)}
                   style={{ width: '100%', height: '100%', cursor: 'pointer', fontFamily: 'inherit', background: 'none', border: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: 3, textAlign: 'start' }}
                 >
-                  <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 500, color: 'var(--qs-ink-2,#5f666e)', textTransform: 'uppercase', letterSpacing: '.03em' }}>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 13, fontWeight: 500, color: 'var(--qs-ink-2,#5f666e)', textTransform: lang === 'en' ? 'uppercase' : undefined, letterSpacing: lang === 'en' ? '.03em' : undefined }}>
                     <Icon name="users" size={12} style={{ color: 'var(--qs-brand-deep,#049dc5)' }} />{lang === 'en' ? 'Guests' : 'المسافرون'}
                   </span>
                   <span style={{ fontSize: 15, fontWeight: 600, color: 'var(--qs-ink,#1d2733)' }}>{travelersTotal} {lang === 'en' ? 'traveler(s)' : 'مسافر'}</span>
@@ -324,12 +325,12 @@ export default function PackagesPage({ initialPackages = null }) {
                     ].map(([key, label, sub, min]) => (
                       <div key={key} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
                         <span style={{ display: 'flex', flexDirection: 'column' }}>
-                          <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--qs-ink,#1d2733)' }}>{label}</span>
-                          {sub ? <span style={{ fontSize: 11, color: 'var(--qs-ink-2,#5f666e)' }}>{sub}</span> : null}
+                          <span style={{ fontSize: 15, fontWeight: 600, color: 'var(--qs-ink,#1d2733)' }}>{label}</span>
+                          {sub ? <span style={{ fontSize: 13, color: 'var(--qs-ink-2,#5f666e)' }}>{sub}</span> : null}
                         </span>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                           <button type="button" onClick={() => setTravelerCount(key, -1, min)} style={{ width: 26, height: 26, borderRadius: '50%', border: '1px solid var(--qs-line-2,#cacbcc)', background: '#fff', cursor: 'pointer' }}>−</button>
-                          <span style={{ minWidth: 16, textAlign: 'center', fontWeight: 700 }}>{travelers[key]}</span>
+                          <span style={{ minWidth: 16, textAlign: 'center', fontWeight: 600 }}>{travelers[key]}</span>
                           <button type="button" onClick={() => setTravelerCount(key, 1)} style={{ width: 26, height: 26, borderRadius: '50%', border: '1px solid var(--qs-line-2,#cacbcc)', background: '#fff', cursor: 'pointer' }}>+</button>
                         </div>
                       </div>
@@ -351,7 +352,7 @@ export default function PackagesPage({ initialPackages = null }) {
                   }}
                 >
                   <Icon name="search" size={20} />
-                  <span className="qa-search-cta-label" style={{ display: 'none', fontSize: 14, fontWeight: 700 }}>{lang === 'en' ? 'Search' : 'بحث'}</span>
+                  <span className="qa-search-cta-label" style={{ display: 'none', fontSize: 15, fontWeight: 600 }}>{lang === 'en' ? 'Search' : 'بحث'}</span>
                 </button>
               </div>
             </div>
@@ -391,7 +392,7 @@ export default function PackagesPage({ initialPackages = null }) {
               <div onClick={() => setDrawerOpen(false)} style={{ position: 'absolute', inset: 0, background: 'rgba(1,20,28,.45)' }} />
               <div className="qa-drawer" style={{ position: 'relative', width: 'min(360px,88vw)', height: '100%', background: '#fff', boxShadow: 'var(--tw-card-shadow,0 1px 3px rgba(29,39,51,.06))', display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 24px', borderBottom: '1px solid var(--qs-line,#ececed)' }}>
-                  <h3 style={{ margin: 0, fontSize: 18 }}>{lang === 'en' ? 'Filters' : 'الفلاتر'}</h3>
+                  <h3 style={{ margin: 0, fontSize: 17 }}>{lang === 'en' ? 'Filters' : 'الفلاتر'}</h3>
                   <button type="button" onClick={() => setDrawerOpen(false)} style={{ border: 'none', background: '#f4f4f4', borderRadius: '50%', width: 34, height: 34, cursor: 'pointer', display: 'grid', placeItems: 'center' }}>
                     <Icon name="x" size={16} />
                   </button>
@@ -408,7 +409,7 @@ export default function PackagesPage({ initialPackages = null }) {
                             type="button"
                             onClick={() => togglePref(p.id)}
                             style={{
-                              padding: '8px 16px', borderRadius: 999, fontSize: 14, fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit',
+                              padding: '8px 16px', borderRadius: 999, fontSize: 15, fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit',
                               background: on ? 'var(--qs-band,#049dc5)' : '#fff', color: on ? '#fff' : 'var(--qs-body,#3d4650)', border: `1px solid ${on ? 'var(--qs-brand-deep,#049dc5)' : 'var(--qs-line-2,#cacbcc)'}`,
                             }}
                           >
@@ -455,7 +456,7 @@ export default function PackagesPage({ initialPackages = null }) {
                   <button
                     type="button"
                     onClick={() => { setPrefs([]); setQuery(''); setBudget('all'); setMonth('all'); setPreferredDates(''); }}
-                    style={{ flex: 1, padding: '12px 16px', borderRadius: 999, border: '1px solid var(--qs-line-2,#cacbcc)', background: '#fff', color: 'var(--qs-body,#3d4650)', fontSize: 14, fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit' }}
+                    style={{ flex: 1, padding: '12px 16px', borderRadius: 999, border: '1px solid var(--qs-line-2,#cacbcc)', background: '#fff', color: 'var(--qs-body,#3d4650)', fontSize: 15, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit' }}
                   >
                     {lang === 'en' ? 'Reset' : 'إعادة تعيين'}
                   </button>
@@ -477,28 +478,27 @@ export default function PackagesPage({ initialPackages = null }) {
             @keyframes qa-showcase-reveal { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
             .qa-hover-lift-sm { transition: transform .2s ease, box-shadow .2s ease; border-radius:var(--tw-radius,16px); }
             .qa-hover-lift-sm:hover { transform: translateY(-2px); }
-            .qa-hover-lift-sm:hover .qa-region-banner { box-shadow:var(--tw-card-shadow,0 1px 3px rgba(29,39,51,.06)); }
             .qa-region-pill { transition: background .15s ease, transform .15s ease; }
             .qa-region-pill:hover { background: rgba(255,255,255,.28) !important; transform: translateY(-1px); }
             .qa-search-divider { width: 1px; background: var(--qs-line,#ececed); margin: 10px 0; }
             .qa-dest-chip {
-              display: inline-flex; align-items: center; gap: 7px; cursor: pointer; font-family: inherit; padding: 7px 13px;
-              border-radius: 999px; border: 1px solid #dcebf0; background: #f4fafc; color: var(--qs-ink,#1d2733); font-size: 13.5px; font-weight: 600;
+              display: inline-flex; align-items: center; gap: 7px; cursor: pointer; font-family: inherit; padding: 8px 12px;
+              border-radius: 999px; border: 1px solid var(--qs-line,#ececed); background: #fff; color: var(--qs-ink,#1d2733); font-size:13px; font-weight: 600;
               transition: border-color .15s ease, background .15s ease;
             }
-            .qa-fchip { padding: 8px 14px; border-radius: 999px; font-size: 13.5px; font-weight: 500; cursor: pointer; font-family: inherit; background: #fff; color: var(--qs-body,#3d4650); border: 1px solid var(--qs-line-2,#cacbcc); display: inline-flex; align-items: center; gap: 6px; }
-            .qa-fchip span { font-size: 12px; opacity: .65; }
+            .qa-fchip { padding: 8px 14px; border-radius: 999px; font-size:13px; font-weight: 500; cursor: pointer; font-family: inherit; background: #fff; color: var(--qs-body,#3d4650); border: 1px solid var(--qs-line-2,#cacbcc); display: inline-flex; align-items: center; gap: 6px; }
+            .qa-fchip span { font-size:13px; opacity: .65; }
             .qa-fchip.on { background: var(--qs-band,#049dc5); border-color: var(--qs-brand-deep,#049dc5); color: #fff; }
             .qa-dest-chip:hover { border-color: var(--qs-brand-deep,#049dc5); background: var(--qs-brand-soft,#eaf8fd); }
-            .qa-dest-chip img { width: 20px; height: 14px; object-fit: cover; border-radius: 2px; box-shadow:var(--tw-card-shadow,0 1px 3px rgba(29,39,51,.06)); }
+            .qa-dest-chip img { width: 20px; height: 14px; object-fit: cover; border-radius: 2px; }
             .qa-pkg-group { display: flex; flex-direction: column; gap: 16px; margin-bottom: 40px; }
-            .qa-pkg-group-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; border-bottom: 1px solid var(--qs-line,#ececed); padding-bottom: 10px; }
-            .qa-pkg-group-head img { width: 28px; height: 20px; object-fit: cover; border-radius: 3px; box-shadow:var(--tw-card-shadow,0 1px 3px rgba(29,39,51,.06)); }
-            .qa-pkg-group-head h3 { margin: 0; font-size: 20px; color: var(--qs-ink,#1d2733); }
-            .qa-pkg-group-head span { font-size: 13px; color: var(--qs-ink-2,#5f666e); }
+            .qa-pkg-group-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; border-bottom: 1px solid var(--qs-line,#ececed); padding-bottom: 12px; }
+            .qa-pkg-group-head img { width: 28px; height: 20px; object-fit: cover; border-radius: 2px; }
+            .qa-pkg-group-head h3 { margin: 0; font-size:20px; color: var(--qs-ink,#1d2733); }
+            .qa-pkg-group-head span { font-size:13px; color: var(--qs-ink-2,#5f666e); }
             .qa-pkg-group-head button {
               margin-inline-start: auto; cursor: pointer; font-family: inherit; border: 0; background: none; color: var(--qs-brand-deep,#036f8c);
-              font-size: 14px; font-weight: 700; padding: 4px 0;
+              font-size:15px; font-weight:600; padding: 4px 0;
             }
             .qa-pkg-group-head button:hover { text-decoration: underline; }
             .qa-pkg-row, .qa-pkg-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
@@ -510,12 +510,12 @@ export default function PackagesPage({ initialPackages = null }) {
               .qa-pkg-row > :global(*) { flex: 0 0 84%; scroll-snap-align: start; }
               .qa-pkg-group-head button { margin-inline-start: 0; width: 100%; text-align: start; }
             }
-:global(.qa-upc-row) { display: flex; align-items: center; gap: 10px; color: #fff; font-size: 13.5px; padding: 7px 10px; border-radius:var(--tw-radius-sm,10px); background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.28); text-decoration: none; transition: background .15s; min-width: 0; }
+:global(.qa-upc-row) { display: flex; align-items: center; gap: 10px; color: #fff; font-size:13px; padding: 7px 10px; border-radius:var(--tw-radius-sm,10px); background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.28); text-decoration: none; transition: background .15s; min-width: 0; }
             :global(.qa-upc-row:hover) { background: rgba(255,255,255,.26); color: #fff; }
-            :global(.qa-upc-date) { flex-shrink: 0; font-weight: 700; color: #fff; min-width: 92px; }
+            :global(.qa-upc-date) { flex-shrink: 0; font-weight:600; color: #fff; min-width: 92px; }
             .qa-pill {
-              flex: none; cursor: pointer; font-family: inherit; white-space: nowrap; padding: 9px 16px; border-radius: 999px;
-              border: 1px solid var(--qs-line,#ececed); background: #fff; color: var(--qs-body,#3d4650); font-size: 13.5px; font-weight: 600;
+              flex: none; cursor: pointer; font-family: inherit; white-space: nowrap; padding: 8px 16px; border-radius: 999px;
+              border: 1px solid var(--qs-line,#ececed); background: #fff; color: var(--qs-body,#3d4650); font-size:13px; font-weight: 600;
               transition: background .15s ease, border-color .15s ease, color .15s ease, transform .15s ease;
             }
             .qa-pill:hover { border-color: var(--qs-brand-deep,#049dc5); transform: translateY(-1px); }
@@ -523,13 +523,13 @@ export default function PackagesPage({ initialPackages = null }) {
             .qa-pill-scroll::-webkit-scrollbar { display: none; }
             .qa-filters-btn {
               flex: none; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; font-family: inherit;
-              padding: 10px 18px; border-radius: 999px; border: 1px solid var(--qs-line-2,#cacbcc); background: #fff; color: var(--qs-ink,#1d2733);
-              font-size: 13.5px; font-weight: 700; position: relative; transition: border-color .15s ease, transform .15s ease;
+              padding: 8px 16px; border-radius: 999px; border: 1px solid var(--qs-line-2,#cacbcc); background: #fff; color: var(--qs-ink,#1d2733);
+              font-size:13px; font-weight:600; position: relative; transition: border-color .15s ease, transform .15s ease;
             }
             .qa-filters-btn:hover { border-color: var(--qs-brand-deep,#049dc5); transform: translateY(-1px); }
             .qa-filters-badge {
               display: inline-grid; place-items: center; min-width: 18px; height: 18px; border-radius: 999px;
-              background: #d2324f; color: #fff; font-size: 10.5px; font-weight: 800; padding: 0 4px;
+              background: #d2324f; color: #fff; font-size:13px; font-weight:600; padding: 0 4px;
             }
             .qa-search-cta { transition: transform .15s ease, box-shadow .15s ease; }
             .qa-search-cta:hover { transform: translateY(-1px); }
@@ -545,7 +545,7 @@ export default function PackagesPage({ initialPackages = null }) {
 
           {/* Results */}
           <section id="qa-pkg-results" className="qa-sec" style={{ maxWidth: 1240, margin: '0 auto', padding: '40px 24px 88px' }}>
-            <h2 style={{ fontSize: 22, marginBottom: 4 }}>{t.packages_title}</h2>
+            <h2 style={{ fontSize: 20, marginBottom: 4 }}>{t.packages_title}</h2>
             <p style={{ color: 'var(--qs-ink-2,#5f666e)', marginBottom: 24 }}>{t.packages_sub}</p>
 
             {error && <p style={{ color: '#d2324f', background: '#fdecef', border: '1px solid #f7c3cc', borderRadius: 'var(--tw-radius-sm,10px)', padding: '14px 20px' }}>{error}</p>}
@@ -558,7 +558,7 @@ export default function PackagesPage({ initialPackages = null }) {
 
             {(budget !== 'all' || month !== 'all') && (
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 16 }}>
-                <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--qs-ink,#1d2733)' }}>{nm('النتائج', 'Results')} · {filtered.length}</span>
+                <span style={{ fontSize: 15, fontWeight: 600, color: 'var(--qs-ink,#1d2733)' }}>{nm('النتائج', 'Results')} · {filtered.length}</span>
                 {budget !== 'all' && (
                   <button type="button" onClick={() => setBudget('all')} className="qa-dest-chip" style={{ background: '#fff' }}>
                     <Icon name="x" size={13} /> {nm(BUDGETS.find((b) => b.id === budget).ar, BUDGETS.find((b) => b.id === budget).en)}
@@ -574,7 +574,7 @@ export default function PackagesPage({ initialPackages = null }) {
 
             {country !== 'all' && (
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 16 }}>
-                <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--qs-ink,#1d2733)' }}>
+                <span style={{ fontSize: 15, fontWeight: 600, color: 'var(--qs-ink,#1d2733)' }}>
                   {nm('باقات', 'Packages in')} {nm((countryInfo(country) || {}).ar, (countryInfo(country) || {}).en)} · {filtered.length}
                 </span>
                 <button type="button" onClick={() => setCountry('all')} className="qa-dest-chip" style={{ background: '#fff' }}>
@@ -612,7 +612,6 @@ export default function PackagesPage({ initialPackages = null }) {
                       hotels={p.hotels || []}
                       flights={p.flights || []}
                       lang={lang}
-                      rating={p.rating || 4.8}
                       urgency={siteUrgency(p, lang)}
                       onDetails={() => router.push(`/packages/${p.id}`)}
                     />
@@ -624,15 +623,15 @@ export default function PackagesPage({ initialPackages = null }) {
 
           {/* Discover all destinations */}
           <section className="qa-sec" style={{ maxWidth: 1240, margin: '0 auto', padding: '8px 24px 8px' }}>
-            <div style={{ background: 'linear-gradient(135deg,#1db4e8,#049dc5)', borderRadius: 'var(--tw-radius,16px)', overflow: 'hidden' }}>
+            <div style={{ background: 'var(--qs-band,#049dc5)', borderRadius: 'var(--tw-radius,16px)', overflow: 'hidden' }}>
               <div style={{ padding: 'clamp(26px,4vw,40px)', display: 'flex', flexDirection: 'column', gap: 14, color: '#fff' }}>
-                <span style={{ fontSize: 12, fontWeight: 500, letterSpacing: '.08em', color: 'rgba(255,255,255,.9)' }}>
+                <span style={{ fontSize: 13, fontWeight: 500, letterSpacing: lang === 'en' ? '.08em' : undefined, color: 'rgba(255,255,255,.9)' }}>
                   {lang === 'en' ? 'EXPLORE THE WORLD' : 'استكشف العالم'}
                 </span>
-                <h2 style={{ margin: 0, fontSize: 'clamp(22px,3vw,30px)', color: '#fff' }}>
+                <h2 style={{ margin: 0, fontSize: 'clamp(20px,3vw,26px)', color: '#fff' }}>
                   {lang === 'en' ? 'Discover all destinations' : 'اكتشف كل الوجهات'}
                 </h2>
-                <p style={{ margin: 0, fontSize: 14, lineHeight: 1.8, color: 'rgba(255,255,255,.95)', maxWidth: 620 }}>
+                <p style={{ margin: 0, fontSize: 15, lineHeight: 1.8, color: 'rgba(255,255,255,.95)', maxWidth: 620 }}>
                   {lang === 'en'
                     ? 'Every country we travel to, in one place: pick a destination below and its packages appear.'
                     : 'كل الدول التي نسافر إليها في مكان واحد: اختر وجهتك من الأسفل وتظهر باقاتها.'}
@@ -664,11 +663,11 @@ export default function PackagesPage({ initialPackages = null }) {
           {regionGroups.length > 0 && (
             <section className="qa-sec" style={{ maxWidth: 1240, margin: '0 auto', padding: '32px 24px 56px' }}>
               <h2 style={{ fontSize: 'clamp(20px,3vw,26px)', margin: '0 0 6px' }}>{lang === 'en' ? 'Destinations by region' : 'الوجهات حسب المنطقة'}</h2>
-              <p style={{ margin: '0 0 22px', color: 'var(--qs-ink-2,#5f666e)', fontSize: 14 }}>{lang === 'en' ? 'Pick a country to see its packages.' : 'اختر الدولة لتظهر باقاتها.'}</p>
+              <p style={{ margin: '0 0 22px', color: 'var(--qs-ink-2,#5f666e)', fontSize: 15 }}>{lang === 'en' ? 'Pick a country to see its packages.' : 'اختر الدولة لتظهر باقاتها.'}</p>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))', gap: 16 }}>
                 {regionGroups.map((g) => (
                   <div key={g.id} className="qa-card" style={{ display: 'flex', flexDirection: 'column', gap: 12, padding: 20 }}>
-                    <span style={{ fontSize: 16, fontWeight: 800, color: 'var(--qs-brand-deep,#036f8c)' }}>{nm(g.ar, g.en)}</span>
+                    <span style={{ fontSize: 17, fontWeight: 600, color: 'var(--qs-brand-deep,#036f8c)' }}>{nm(g.ar, g.en)}</span>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
                       {g.list.map((c) => (
                         <button key={c.iso} type="button" onClick={() => pickCountry(c.iso)} className="qa-dest-chip">
@@ -689,8 +688,8 @@ export default function PackagesPage({ initialPackages = null }) {
             <section style={{ background: 'var(--qs-paper,#f8f7f8)', padding: '48px clamp(16px,4vw,32px)' }}>
               <div style={{ maxWidth: 1240, margin: '0 auto', display: 'grid', gridTemplateColumns: 'minmax(280px,1fr) minmax(260px,1fr)', gap: 24, alignItems: 'stretch' }}>
                 <div style={{ background: 'var(--qs-brand-soft,#eaf8fd)', borderRadius: 'var(--tw-radius,16px)', padding: 'clamp(28px,4vw,44px)', display: 'flex', flexDirection: 'column', gap: 16, position: 'relative', overflow: 'hidden' }}>
-                  <span style={{ fontSize: 12, fontWeight: 500, color: 'var(--qs-ink-2,#5f666e)' }}>{lang === 'en' ? 'Our testimonials' : 'آراء عملائنا'}</span>
-                  <h2 style={{ margin: 0, fontSize: 'clamp(20px,3vw,28px)', color: 'var(--qs-ink,#1d2733)' }}>{lang === 'en' ? 'What our customers say' : 'ماذا يقول عملاؤنا عنا'}</h2>
+                  <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--qs-ink-2,#5f666e)' }}>{lang === 'en' ? 'Our testimonials' : 'آراء عملائنا'}</span>
+                  <h2 style={{ margin: 0, fontSize: 'clamp(20px,3vw,26px)', color: 'var(--qs-ink,#1d2733)' }}>{lang === 'en' ? 'What our customers say' : 'ماذا يقول عملاؤنا عنا'}</h2>
                   <div style={{ display: 'flex', gap: 2 }}>
                     {Array.from({ length: 5 }).map((_, i) => (
                       <Icon key={i} name="star" size={16} style={{ color: i < Math.round(currentReview.rating || 5) ? '#faab18' : '#dcdfe2' }} />
@@ -701,11 +700,11 @@ export default function PackagesPage({ initialPackages = null }) {
                     {currentReview.image_url ? (
                       <img src={currentReview.image_url} alt="" style={{ width: 44, height: 44, borderRadius: '50%', objectFit: 'cover', flex: 'none' }} />
                     ) : (
-                      <span style={{ width: 44, height: 44, borderRadius: '50%', background: '#fff', display: 'grid', placeItems: 'center', color: 'var(--qs-brand-deep,#049dc5)', fontWeight: 700, flex: 'none' }}>
+                      <span style={{ width: 44, height: 44, borderRadius: '50%', background: '#fff', display: 'grid', placeItems: 'center', color: 'var(--qs-brand-deep,#049dc5)', fontWeight: 600, flex: 'none' }}>
                         {(nm(currentReview.name_ar, currentReview.name_en) || '?').charAt(0)}
                       </span>
                     )}
-                    <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--qs-ink,#1d2733)' }}>{nm(currentReview.name_ar, currentReview.name_en)}</span>
+                    <span style={{ fontSize: 15, fontWeight: 600, color: 'var(--qs-ink,#1d2733)' }}>{nm(currentReview.name_ar, currentReview.name_en)}</span>
                   </div>
                   {reviews.length > 1 && (
                     <div style={{ display: 'flex', gap: 6 }}>
@@ -720,7 +719,6 @@ export default function PackagesPage({ initialPackages = null }) {
                       ))}
                     </div>
                   )}
-                  <span style={{ position: 'absolute', bottom: 14, insetInlineEnd: 28, fontSize: 56, fontWeight: 800, color: 'rgba(4,157,197,.15)', lineHeight: 1, fontFamily: 'Georgia, serif' }}>”</span>
                 </div>
                 <div style={{ borderRadius: 'var(--tw-radius,16px)', overflow: 'hidden', minHeight: 260, background: 'var(--qs-brand-soft,#eaf8fd)' }}>
                   {currentReview.photo_url ? (
@@ -747,7 +745,7 @@ export default function PackagesPage({ initialPackages = null }) {
                     <Icon name={s.icon} size={22} style={{ color: 'var(--qs-brand-deep,#049dc5)' }} />
                   </span>
                   <div>
-                    <div style={{ fontSize: 17, fontWeight: 800, color: 'var(--qs-ink,#1d2733)' }}>{s.value} <span style={{ fontWeight: 600, fontSize: 14, color: 'var(--qs-body,#3d4650)' }}>{s.label}</span></div>
+                    <div style={{ fontSize: 17, fontWeight: 600, color: 'var(--qs-ink,#1d2733)' }}>{s.value} <span style={{ fontWeight: 600, fontSize: 15, color: 'var(--qs-body,#3d4650)' }}>{s.label}</span></div>
                     <div style={{ fontSize: 13, color: 'var(--qs-ink-2,#5f666e)', marginTop: 3 }}>{s.sub}</div>
                   </div>
                 </div>
@@ -758,9 +756,9 @@ export default function PackagesPage({ initialPackages = null }) {
           {/* Custom package CTA */}
           <section style={{ background: 'var(--qs-paper,#f8f7f8)', padding: '56px clamp(16px,4vw,32px)' }}>
             <div style={{ maxWidth: 700, margin: '0 auto', textAlign: 'center', display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'center' }}>
-              <h3 style={{ margin: 0, fontSize: 22 }}>{t.custom_title}</h3>
+              <h3 style={{ margin: 0, fontSize: 20 }}>{t.custom_title}</h3>
               <p style={{ margin: 0, color: 'var(--qs-ink-2,#5f666e)', lineHeight: 1.7 }}>{t.custom_body}</p>
-              <a href="/contact?topic=package" className="qa-btn qa-cyan" style={{ textDecoration: 'none', marginTop: 8 }}>{t.custom_cta}</a>
+              <CtaButton href="/contact?topic=package" label={t.custom_cta} style={{ marginTop: 8 }} />
             </div>
           </section>
         </div>

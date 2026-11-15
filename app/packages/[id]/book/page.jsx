@@ -16,7 +16,7 @@ const inputStyle = {
   width: '100%', boxSizing: 'border-box', padding: '10px 12px', borderRadius: 'var(--tw-radius-xs,8px)',
   border: '1px solid #ececed', fontSize: 15, fontFamily: 'inherit',
 };
-const labelStyle = { display: 'flex', flexDirection: 'column', gap: 6, fontSize: 14, fontWeight: 600, color: '#3d4650' };
+const labelStyle = { display: 'flex', flexDirection: 'column', gap: 6, fontSize: 15, fontWeight: 600, color: '#3d4650' };
 
 function sanitizeName(value) {
   return value.replace(/[0-9\u0660-\u0669]/g, '');
@@ -150,17 +150,17 @@ function ArchivedPackageBookingPage() {
       <main style={{ flex: 1 }}>
         <div className="qa-page">
           <div className="qa-sec" style={{ paddingBottom: 0 }}>
-            <Link href={`/packages/${id}`} style={{ fontSize: 14, fontWeight: 600, color: 'var(--qs-brand-deep,#036f8c)', textDecoration: 'none' }}>{t.back_to_detail}</Link>
+            <Link href={`/packages/${id}`} style={{ fontSize: 15, fontWeight: 600, color: 'var(--qs-brand-deep,#036f8c)', textDecoration: 'none' }}>{t.back_to_detail}</Link>
           </div>
 
           <section className="qa-sec qa-2col" style={{ display: 'grid', gridTemplateColumns: 'minmax(240px,320px) 1fr', gap: 28, alignItems: 'flex-start' }}>
             <div className="qa-card" style={{ position: 'sticky', top: 90, display: 'flex', flexDirection: 'column', gap: 10 }}>
               <h3 style={{ margin: 0, fontSize: 17 }}>{nm(pkg.title_ar, pkg.title_en)}</h3>
               <span style={{ fontSize: 13, color: 'var(--qs-ink-2,#5f666e)' }}>{destinationLabel(pkg, lang)} · {nightsLabel(pkg, lang)}</span>
-              {hotel && <div style={{ fontSize: 14, borderTop: '1px solid var(--qs-line,#ececed)', paddingTop: 10 }}><b>{t.hotel_title}:</b> {nm(hotel.nameAr, hotel.nameEn)}</div>}
-              {flight && <div style={{ fontSize: 14 }}><b>{t.flight_title}:</b> {nm(flight.nameAr, flight.nameEn)}</div>}
-              <div style={{ fontSize: 14 }}>{t.detail_adults}: {adultCount} · {t.detail_children}: {childCount}</div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', borderTop: '1px solid var(--qs-line,#ececed)', paddingTop: 10, fontSize: 16, fontWeight: 700 }}>
+              {hotel && <div style={{ fontSize: 15, borderTop: '1px solid var(--qs-line,#ececed)', paddingTop: 10 }}><b>{t.hotel_title}:</b> {nm(hotel.nameAr, hotel.nameEn)}</div>}
+              {flight && <div style={{ fontSize: 15 }}><b>{t.flight_title}:</b> {nm(flight.nameAr, flight.nameEn)}</div>}
+              <div style={{ fontSize: 15 }}>{t.detail_adults}: {adultCount} · {t.detail_children}: {childCount}</div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', borderTop: '1px solid var(--qs-line,#ececed)', paddingTop: 10, fontSize: 17, fontWeight: 600 }}>
                 <span>{t.detail_total}</span>
                 <span style={{ color: 'var(--qs-brand-deep,#049dc5)' }}>{formatPrice(grandTotal, 'IQD', lang)}</span>
               </div>
@@ -242,7 +242,7 @@ function ArchivedPackageBookingPage() {
                       >
                         {t.booking_cta}
                       </button>
-                      {validationMsg && <p style={{ margin: 0, fontSize: 14, color: '#d2324f' }}>{validationMsg}</p>}
+                      {validationMsg && <p style={{ margin: 0, fontSize: 15, color: '#d2324f' }}>{validationMsg}</p>}
                     </div>
                   )}
 
@@ -261,7 +261,7 @@ function ArchivedPackageBookingPage() {
                 <div className="qa-card" style={{ alignItems: 'center', textAlign: 'center', gap: 14 }}>
                   <h3 style={{ margin: 0, color: 'var(--qs-brand-deep,#049dc5)' }}>{t.booking_done_title}</h3>
                   <p style={{ margin: 0, color: 'var(--qs-body,#3d4650)' }}>{t.booking_done_body}</p>
-                  <p style={{ margin: 0, fontWeight: 700 }}>{t.booking_order_no}: {orderNo}</p>
+                  <p style={{ margin: 0, fontWeight: 600 }}>{t.booking_order_no}: {orderNo}</p>
                   <Link href="/packages" className="qa-btn qa-cyan" style={{ textDecoration: 'none' }}>{t.back_to_results}</Link>
                 </div>
               )}
