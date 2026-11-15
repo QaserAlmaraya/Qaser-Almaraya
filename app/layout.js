@@ -6,6 +6,7 @@ import './qs-cta.css';
 import './qs-nav.css';
 import './qs-home.css';
 import './qs-inner.css';
+import './qs-routes.css';
 import AreaMark from '../components/AreaMark';
 import MobileBottomBar from '../components/MobileBottomBar';
 import LiveChat from '../components/LiveChat';
