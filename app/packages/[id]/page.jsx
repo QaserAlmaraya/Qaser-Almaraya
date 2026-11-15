@@ -11,7 +11,10 @@ import { T, catLabel } from '../../../lib/packagesData';
 import { formatPrice, formatSignedPrice } from '../../../lib/currency';
 import { printDoc, copyText } from '../../../lib/printDoc';
 import WhatsAppButton, { WA_ICON } from '../../../components/WhatsAppButton';
-import { APPLY_FLOW_ENABLED, packageMessage } from '../../../lib/whatsapp';
+import { APPLY_FLOW_ENABLED, packageMessage, openWhatsApp } from '../../../lib/whatsapp';
+import CtaButton from '../../../components/CtaButton';
+import { Accordion, AccordionItem } from '../../../components/routes/Accordion';
+import { guideFor } from '../../../lib/destinationGuide';
 import { buildPackageVoucherHtml, stripFlags } from '../../../lib/packagePdf';
 import UrgencyPanel from '../../../components/UrgencyPanel';
 import { TRAVELLER_TYPES, computeTotals, unitPrice, durationLabel, tripDays, returnDate } from '../../../lib/packagePricing';
@@ -24,8 +27,8 @@ import { nextDeparture } from '../../../lib/packageUrgency';
 import { imgProps } from '../../../lib/img';
 
 const optStyle = (on) => ({
-  display: 'flex', alignItems: 'center', gap: 14, padding: '14px 16px', borderRadius: 'var(--tw-radius-sm,10px)',
-  border: `1.5px solid ${on ? '#049dc5' : '#ececed'}`, cursor: 'pointer', background: on ? '#eaf8fd' : '#fff',
+  display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', borderRadius: 'var(--tw-radius-sm,10px)',
+  border: `1px solid ${on ? 'var(--qs-brand,#049dc5)' : 'var(--qs-line,#ececed)'}`, cursor: 'pointer', background: on ? 'var(--qs-brand-soft,#eaf8fd)' : '#fff',
 });
 
 // "12 Dec 2026" / "12 كانون الأول 2026" for the departure–return line.
@@ -224,6 +227,35 @@ export default function PackageDetailPage() {
     }, lang);
   };
 
+  // Destination clock and the short travel guide (folded, in the main column).
+  const clockProps = (() => {
+    if (!pkg) return null;
+    const cs = Array.isArray(pkg.countries) ? pkg.countries : [];
+    const iso = cs[0] ? String(cs[0]).toLowerCase() : null;
+    const tz = destinationTz(iso, cs.length === 1 ? destinationLabel(pkg, lang) + ' ' + (hotels[hotelIdx]?.location || '') : '');
+    if (!tz || iso === 'iq') return null;
+    const g = COUNTRY_GEO[iso];
+    const place = cs.length === 1 ? destinationLabel(pkg, lang) : g ? (lang === 'en' ? g[4] : g[3]) : destinationLabel(pkg, lang);
+    const f = flights[flightIdx];
+    return { tz, place, flight: f ? { arrive: f.outArriveTime, depart: f.retDepartTime } : null };
+  })();
+  const guideIso = (() => { if (!pkg) return null; const iso = packageCountries(pkg)[0]; return iso && guideFor(iso, lang) ? iso : null; })();
+  const guideMonth = (() => {
+    if (!pkg) return null;
+    const d = (selectedDate && String(selectedDate.date || '')) || nextDeparture(pkg);
+    return /^\d{4}-\d{2}/.test(d || '') ? Number(d.slice(5, 7)) - 1 : null;
+  })();
+
+  // The page's one primary action: same destination as before (the booking
+  // steps when they are switched on, otherwise the WhatsApp booking message).
+  const bookNow = APPLY_FLOW_ENABLED ? goBook : () => openWhatsApp(waMessage());
+  const bookLabel = APPLY_FLOW_ENABLED
+    ? { label: T.ar.detail_cta, labelEn: T.en.detail_cta }
+    : { label: 'احجز هذه الباقة عبر واتساب', labelEn: 'Book this package on WhatsApp' };
+  const bookLabelShort = APPLY_FLOW_ENABLED
+    ? bookLabel
+    : { label: 'احجز عبر واتساب', labelEn: 'Book on WhatsApp' };
+
   if (error) {
     return (
       <div dir={lang === 'en' ? 'ltr' : 'rtl'} style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -266,6 +298,7 @@ export default function PackageDetailPage() {
                 <span className="qs-pd-cat">{catLabel(pkg.cat, lang)}</span>
                 <h1 className="qs-pd-title">{nm(pkg.title_ar, pkg.title_en)}</h1>
                 <span className="qs-pd-sub">{destinationLabel(pkg, lang)} · {nightsLabel(pkg, lang)}</span>
+                <CtaButton className="qr-hero-cta" onClick={bookNow} disabled={noAdults} lang={lang} {...bookLabelShort} />
               </div>
             </div>
           </section>
@@ -289,7 +322,7 @@ export default function PackageDetailPage() {
                 <span>{t.detail_total_pp}</span>
                 <b>{formatPrice(totalPerAdult, 'IQD', lang)}</b>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 14 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 15 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: 'var(--qs-ink-2,#5f666e)' }}>{t.detail_base}</span><span>{formatPrice(Number(pkg.price) || 0, 'IQD', lang)}</span></div>
                 {upgrade !== 0 && (
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: 'var(--qs-ink-2,#5f666e)' }}>{t.detail_upgrade}</span><span>{formatSignedPrice(upgrade, 'IQD', lang)}</span></div>
@@ -298,18 +331,18 @@ export default function PackageDetailPage() {
 
               {availableDates.length > 0 && (
                 <div style={{ borderTop: '1px solid var(--qs-line,#ececed)', paddingTop: 14, display: 'flex', flexDirection: 'column', gap: 8 }}>
-                  <span style={{ fontSize: 14, fontWeight: 700 }}>{lang === 'en' ? 'Choose a departure date' : 'اختر تاريخ الانطلاق'}</span>
+                  <span style={{ fontSize: 15, fontWeight: 600 }}>{lang === 'en' ? 'Choose a departure date' : 'اختر تاريخ الانطلاق'}</span>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
                     {availableDates.map((d, i) => (
                       <button key={d.date} type="button" onClick={() => setDateIdx(i)}
-                        style={{ borderRadius: 'var(--tw-radius-sm,10px)', padding: '8px 12px', cursor: 'pointer', fontFamily: 'inherit', fontSize: 14, fontWeight: 700, border: i === dateIdx ? '2px solid var(--qs-brand-deep,#049dc5)' : '1px solid var(--qs-line,#ececed)', background: i === dateIdx ? 'var(--qs-brand-soft,#eaf8fd)' : '#fff', color: 'var(--qs-ink,#1d2733)' }}>
+                        style={{ borderRadius: 'var(--tw-radius-sm,10px)', padding: '8px 12px', cursor: 'pointer', fontFamily: 'inherit', fontSize: 15, fontWeight: 600, border: i === dateIdx ? '2px solid var(--qs-brand-deep,#049dc5)' : '1px solid var(--qs-line,#ececed)', background: i === dateIdx ? 'var(--qs-brand-soft,#eaf8fd)' : '#fff', color: 'var(--qs-ink,#1d2733)' }}>
                         <span dir="ltr">{new Date(d.date).toLocaleDateString(lang === 'en' ? 'en-GB' : 'ar-IQ-u-nu-latn', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
-                        {d.adjust ? <span style={{ display: 'block', fontSize: 11, color: d.adjust > 0 ? '#c27a00' : '#1a7f47' }}>{formatSignedPrice(d.adjust, 'IQD', lang)}</span> : null}
+                        {d.adjust ? <span style={{ display: 'block', fontSize: 13, color: d.adjust > 0 ? '#c27a00' : '#1a7f47' }}>{formatSignedPrice(d.adjust, 'IQD', lang)}</span> : null}
                       </button>
                     ))}
                   </div>
                   {selectedDate && returnDate(pkg, selectedDate.date) && (
-                    <div data-no-i18n="" style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', fontSize: 14, background: '#f3fafc', border: '1px solid #d9e9ef', borderRadius: 'var(--tw-radius-sm,10px)', padding: '8px 12px' }}>
+                    <div data-no-i18n="" style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', fontSize: 15, background: '#f3fafc', border: '1px solid #d9e9ef', borderRadius: 'var(--tw-radius-sm,10px)', padding: '8px 12px' }}>
                       <Icon name="calendar-days" size={16} style={{ color: 'var(--qs-brand-deep,#036f8c)', flex: 'none' }} />
                       <span>{lang === 'en' ? 'Departure' : 'الانطلاق'} <b dir="ltr">{fmtTripDate(selectedDate.date, lang)}</b></span>
                       <span style={{ color: '#b0b6bb' }}>·</span>
@@ -321,16 +354,16 @@ export default function PackageDetailPage() {
               )}
 
               <div style={{ borderTop: '1px solid var(--qs-line,#ececed)', paddingTop: 14, display: 'flex', flexDirection: 'column', gap: 10 }}>
-                <span style={{ fontSize: 14, fontWeight: 700 }}>{lang === 'en' ? 'Travellers' : 'المسافرون'}</span>
+                <span style={{ fontSize: 15, fontWeight: 600 }}>{lang === 'en' ? 'Travellers' : 'المسافرون'}</span>
                 {TRAVELLER_TYPES.map((tt) => {
                   const label = lang === 'en' ? tt.en : tt.ar;
                   const hint = lang === 'en' ? tt.hintEn : tt.hintAr;
                   const unit = totals.units ? totals.units[tt.key] : unitPrice(pkg, tt, upgrade);
                   return (
                     <div key={tt.key} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
-                      <span style={{ fontSize: 14, color: unit == null ? '#b0b6bb' : 'var(--qs-ink,#1d2733)' }}>{label}{hint ? <span style={{ fontSize: 12, color: 'var(--qs-ink-2,#5f666e)' }}> ({hint})</span> : null}
-                        {unit == null ? <span style={{ display: 'block', fontSize: 12, color: '#b0b6bb' }}>{lang === 'en' ? 'Not available for this hotel' : 'غير متاح لهذا الفندق'}</span>
-                          : counts[tt.key] > 0 && <span style={{ display: 'block', fontSize: 12, color: 'var(--qs-ink-2,#5f666e)' }}>{formatPrice(unit, 'IQD', lang)}</span>}
+                      <span style={{ fontSize: 15, color: unit == null ? '#b0b6bb' : 'var(--qs-ink,#1d2733)' }}>{label}{hint ? <span style={{ fontSize: 13, color: 'var(--qs-ink-2,#5f666e)' }}> ({hint})</span> : null}
+                        {unit == null ? <span style={{ display: 'block', fontSize: 13, color: '#b0b6bb' }}>{lang === 'en' ? 'Not available for this hotel' : 'غير متاح لهذا الفندق'}</span>
+                          : counts[tt.key] > 0 && <span style={{ display: 'block', fontSize: 13, color: 'var(--qs-ink-2,#5f666e)' }}>{formatPrice(unit, 'IQD', lang)}</span>}
                       </span>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                         <button type="button" disabled={counts[tt.key] <= 0} onClick={() => setCounts((c) => ({ ...c, [tt.key]: Math.max(0, c[tt.key] - 1) }))} style={{ width: 28, height: 28, borderRadius: '50%', border: '1px solid var(--qs-line-2,#cacbcc)', background: '#fff', cursor: counts[tt.key] <= 0 ? 'not-allowed' : 'pointer', opacity: counts[tt.key] <= 0 ? 0.4 : 1 }}>−</button>
@@ -352,7 +385,7 @@ export default function PackageDetailPage() {
                     <span>{formatPrice(l.subtotal, 'IQD', lang)}</span>
                   </div>
                 ))}
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 17, fontWeight: 700, marginTop: 4 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 17, fontWeight: 600, marginTop: 4 }}>
                   <span>{t.detail_total}</span>
                   <span style={{ color: 'var(--qs-brand-deep,#049dc5)' }}>{formatPrice(grandTotal, 'IQD', lang)}</span>
                 </div>
@@ -361,7 +394,7 @@ export default function PackageDetailPage() {
               <UrgencyPanel pkg={pkg} lang={lang} />
               {staffMode && (
                 <div style={{ border: '2px dashed #faab18', background: '#fffaf0', borderRadius: 'var(--tw-radius-sm,10px)', padding: 12, display: 'flex', flexDirection: 'column', gap: 8 }}>
-                  <b style={{ fontSize: 14, color: '#8a5a00' }}>عرض سعر مخصص (وضع الموظفين)</b>
+                  <b style={{ fontSize: 15, color: '#8a5a00' }}>عرض سعر مخصص (وضع الموظفين)</b>
                   <input style={{ padding: '8px 10px', borderRadius: 'var(--tw-radius-xs,8px)', border: '1px solid var(--qs-line,#ececed)', fontFamily: 'inherit' }} placeholder="اسم العميل — مثال: أحمد علي" value={quote.customer} onChange={(e) => setQuote({ ...quote, customer: e.target.value })} />
                   <div style={{ display: 'flex', gap: 6 }}>
                     <select style={{ padding: '8px', borderRadius: 'var(--tw-radius-xs,8px)', border: '1px solid var(--qs-line,#ececed)', fontFamily: 'inherit' }} value={quote.discountType} onChange={(e) => setQuote({ ...quote, discountType: e.target.value })}>
@@ -370,35 +403,20 @@ export default function PackageDetailPage() {
                     </select>
                     <input type="number" min="0" style={{ flex: 1, minWidth: 0, padding: '8px 10px', borderRadius: 'var(--tw-radius-xs,8px)', border: '1px solid var(--qs-line,#ececed)', fontFamily: 'inherit' }} placeholder={quote.discountType === 'percent' ? 'مثال 10' : 'مثال 100000'} value={quote.discount} onChange={(e) => setQuote({ ...quote, discount: e.target.value })} />
                   </div>
-                  <label style={{ display: 'flex', flexDirection: 'column', gap: 4, fontSize: 12, color: 'var(--qs-ink-2,#5f666e)' }}>العرض صالح حتى (اختياري)
+                  <label style={{ display: 'flex', flexDirection: 'column', gap: 4, fontSize: 13, color: 'var(--qs-ink-2,#5f666e)' }}>العرض صالح حتى (اختياري)
                     <input type="date" style={{ padding: '8px 10px', borderRadius: 'var(--tw-radius-xs,8px)', border: '1px solid var(--qs-line,#ececed)', fontFamily: 'inherit' }} value={quote.validUntil} onChange={(e) => setQuote({ ...quote, validUntil: e.target.value })} />
                   </label>
                   <textarea style={{ padding: '8px 10px', borderRadius: 'var(--tw-radius-xs,8px)', border: '1px solid var(--qs-line,#ececed)', fontFamily: 'inherit', minHeight: 56 }} placeholder="ملاحظة خاصة للعميل (اختياري)" value={quote.note} onChange={(e) => setQuote({ ...quote, note: e.target.value })} />
                   {quoteDiscount() > 0 && (
                     <span style={{ fontSize: 13 }}>الإجمالي بعد الخصم: <b data-no-i18n="">{formatPrice(grandTotal - quoteDiscount(), 'IQD', lang)}</b> <s data-no-i18n="" style={{ color: 'var(--qs-ink-2,#5f666e)' }}>{formatPrice(grandTotal, 'IQD', lang)}</s></span>
                   )}
-                  <span style={{ fontSize: 12, color: 'var(--qs-ink-2,#5f666e)' }}>يظهر اسم العميل والخصم في ملف PDF فقط — لا يراه أحد غيرك على الموقع.</span>
+                  <span style={{ fontSize: 13, color: 'var(--qs-ink-2,#5f666e)' }}>يظهر اسم العميل والخصم في ملف PDF فقط — لا يراه أحد غيرك على الموقع.</span>
                 </div>
               )}
-              {APPLY_FLOW_ENABLED ? (
-                <button type="button" onClick={goBook} disabled={noAdults} className="qa-btn qa-cyan" style={{ textAlign: 'center', opacity: noAdults ? 0.5 : 1, cursor: noAdults ? 'not-allowed' : 'pointer' }}>{t.detail_cta}</button>
-              ) : (
-                <div ref={ctaRef} style={{ display: 'flex', flexDirection: 'column' }}>
-                {noAdults ? (
-                  <button type="button" disabled className="qa-btn" style={{ width: '100%', boxSizing: 'border-box', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, background: '#25d366', color: '#fff', border: 0, fontWeight: 700, opacity: 0.5, cursor: 'not-allowed' }}>
-                    {WA_ICON}
-                    <span>{lang === 'en' ? 'Contact us on WhatsApp to book' : 'تواصل معنا على واتساب للحجز'}</span>
-                  </button>
-                ) : (
-                <WhatsAppButton
-                  label={lang === 'en' ? 'Book this package on WhatsApp' : 'احجز هذه الباقة عبر واتساب'}
-                  getMessage={waMessage}
-                  style={{ width: '100%', boxSizing: 'border-box', minHeight: 54, fontSize: 16 }}
-                />
-                )}
-                <a href="tel:6393" className="qs-pd-call" data-no-i18n="">{lang === 'en' ? 'or call the hotline 6393' : 'أو اتصل على الخط الساخن 6393'}</a>
-                </div>
-              )}
+              <div ref={ctaRef} className="qr-book-cta">
+                <CtaButton onClick={bookNow} disabled={noAdults} lang={lang} {...bookLabel} />
+                {!APPLY_FLOW_ENABLED && <a href="tel:6393" className="qs-pd-call" data-no-i18n="">{lang === 'en' ? 'or call the hotline 6393' : 'أو اتصل على الخط الساخن 6393'}</a>}
+              </div>
 
               <div style={{ display: 'flex', gap: 8 }}>
                 <button
@@ -423,87 +441,18 @@ export default function PackageDetailPage() {
                 onClick={handleShare}
                 className="qa-share-btn qs-pd-tool"
               >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" /><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4" /></svg>
+                <Icon name="send" size={15} />
                 {lang === 'en' ? 'Share this package with family & friends' : 'شارك الباقة مع أهلك وأصدقائك'}
               </button>
               {toast && (
                 <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--qs-brand-deep,#036f8c)', background: 'var(--qs-brand-soft,#eaf8fd)', border: '1px solid var(--qs-line-2,#bfe9f6)', borderRadius: 'var(--tw-radius-xs,8px)', padding: '6px 10px', textAlign: 'center' }}>{toast}</span>
               )}
 
-              <span style={{ fontSize: 12, color: 'var(--qs-ink-2,#5f666e)', textAlign: 'center' }}>{t.detail_note}</span>
-              {(() => {
-                const cs = Array.isArray(pkg.countries) ? pkg.countries : [];
-                const iso = cs[0] ? String(cs[0]).toLowerCase() : null;
-                const tz = destinationTz(iso, cs.length === 1 ? destinationLabel(pkg, lang) + ' ' + (hotels[hotelIdx]?.location || '') : '');
-                if (!tz || iso === 'iq') return null;
-                const g = COUNTRY_GEO[iso];
-                const place = cs.length === 1 ? destinationLabel(pkg, lang) : g ? (lang === 'en' ? g[4] : g[3]) : destinationLabel(pkg, lang);
-                const f = flights[flightIdx];
-                return <WorldClocks tz={tz} place={place} lang={lang} compact flight={f ? { arrive: f.outArriveTime, depart: f.retDepartTime } : null} />;
-              })()}
-              {(() => {
-                const iso = packageCountries(pkg)[0];
-                const d = (selectedDate && String(selectedDate.date || '')) || nextDeparture(pkg);
-                const m = /^\d{4}-\d{2}/.test(d || '') ? Number(d.slice(5, 7)) - 1 : null;
-                return iso ? <GuideCompact iso={iso} lang={lang} month={m} /> : null;
-              })()}
+              <span style={{ fontSize: 13, color: 'var(--qs-ink-2,#5f666e)', textAlign: 'center' }}>{t.detail_note}</span>
             </div>
 
-            {/* Main content */}
+            {/* Main content: choose the hotel and flight, then the folded detail, then the closing action */}
             <div className="qa-detail-main qs-pd-main" style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
-              {generalNotes.length > 0 && (
-                <div className="qs-pd-block qs-pd-note">
-                  <h2 className="qs-pd-h">{lang === 'en' ? 'Important notes' : 'ملاحظات مهمة'}</h2>
-                  <ul style={{ margin: 0, paddingInlineStart: 20, display: 'flex', flexDirection: 'column', gap: 6 }}>
-                    {generalNotes.map((l, i) => <li key={i} style={{ fontSize: 14, color: 'var(--qs-body,#3d4650)', lineHeight: 1.7 }}>{l}</li>)}
-                  </ul>
-                </div>
-              )}
-
-              {(includes.length > 0 || excludes.length > 0) && (
-                <div className="qs-pd-block">
-                  <h2 className="qs-pd-h">{lang === 'en' ? 'What the price covers' : 'ماذا يشمل السعر'}</h2>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: 14 }}>
-                    {includes.length > 0 && (
-                      <div style={{ background: '#eefaf3', border: '1px solid #cdebd9', borderRadius: 'var(--tw-radius-sm,10px)', padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: 8 }}>
-                        <span style={{ fontWeight: 700, color: '#1a7f47' }}>{lang === 'en' ? 'Price includes' : 'السعر يشمل'}</span>
-                        {includes.map((i, idx) => (
-                          <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                            <Icon name="check" size={16} style={{ color: '#1a7f47', flex: 'none' }} />
-                            <span style={{ fontSize: 14, color: 'var(--qs-ink,#1d2733)' }}>{i}</span>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                    {excludes.length > 0 && (
-                      <div style={{ background: '#fdf1f3', border: '1px solid #f4d3da', borderRadius: 'var(--tw-radius-sm,10px)', padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: 8 }}>
-                        <span style={{ fontWeight: 700, color: '#c02643' }}>{lang === 'en' ? 'Not included' : 'السعر لا يشمل'}</span>
-                        {excludes.map((i, idx) => (
-                          <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                            <Icon name="x" size={15} style={{ color: '#c02643', flex: 'none' }} />
-                            <span style={{ fontSize: 14, color: 'var(--qs-ink,#1d2733)' }}>{i}</span>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {days.length > 0 && (
-                <div className="qs-pd-block">
-                  <h2 className="qs-pd-h">{t.calendar_title}</h2>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-                    {days.map((d, idx) => (
-                      <div key={idx} style={{ borderInlineStart: '3px solid var(--qs-brand-deep,#049dc5)', paddingInlineStart: 14 }}>
-                        <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--qs-ink,#1d2733)' }}>{stripFlags(nm(d.titleAr, d.titleEn))}</div>
-                        <div style={{ fontSize: 14, color: 'var(--qs-ink-2,#5f666e)', lineHeight: 1.6, marginTop: 2 }}>{stripFlags(nm(d.descAr, d.descEn))}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
               {hotels.length > 0 && (
                 <div className="qs-pd-block">
                   <h2 className="qs-pd-h">{t.hotel_title}</h2>
@@ -514,17 +463,17 @@ export default function PackageDetailPage() {
                         {h.imageUrl ? (
                           <img {...imgProps(h.imageUrl, '44px', [384])} alt="" loading="lazy" style={{ width: 44, height: 44, borderRadius: 'var(--tw-radius-xs,8px)', objectFit: 'cover', flex: 'none' }} />
                         ) : null}
-                        <span className="qa-opt-name" style={{ flex: 1, fontSize: 14, color: 'var(--qs-ink,#1d2733)' }}>
+                        <span className="qa-opt-name" style={{ flex: 1, fontSize: 15, color: 'var(--qs-ink,#1d2733)' }}>
                           {nm(h.nameAr, h.nameEn)}
                           {(h.notesAr || h.notesEn) && <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 13, color: '#1a7f47', fontWeight: 600, marginTop: 2 }}><Icon name="utensils" size={12} style={{ flex: 'none' }} />{nm(h.notesAr, h.notesEn)}</span>}
                         </span>
-                        <span className="qa-opt-price" style={{ fontSize: 14, fontWeight: 700, color: (h.extras?.adult ?? h.diff) ? 'var(--qs-brand-deep,#049dc5)' : 'var(--qs-ink-2,#5f666e)' }}>{(h.extras?.adult ?? h.diff) ? formatSignedPrice(h.extras?.adult ?? h.diff, 'IQD', lang) : (lang === 'en' ? 'Included' : 'مشمول')}</span>
+                        <span className="qa-opt-price" style={{ fontSize: 15, fontWeight: 600, color: (h.extras?.adult ?? h.diff) ? 'var(--qs-brand-deep,#049dc5)' : 'var(--qs-ink-2,#5f666e)' }}>{(h.extras?.adult ?? h.diff) ? formatSignedPrice(h.extras?.adult ?? h.diff, 'IQD', lang) : (lang === 'en' ? 'Included' : 'مشمول')}</span>
                       </div>
                     ))}
                   </div>
 
                   {hotels[hotelIdx]?.locationUrl ? (
-                    <a href={hotels[hotelIdx].locationUrl} target="_blank" rel="noopener noreferrer" style={{ marginTop: 12, display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 14, fontWeight: 700, color: 'var(--qs-brand-deep,#049dc5)', textDecoration: 'none' }}>
+                    <a href={hotels[hotelIdx].locationUrl} target="_blank" rel="noopener noreferrer" style={{ marginTop: 12, display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 15, fontWeight: 600, color: 'var(--qs-brand-deep,#049dc5)', textDecoration: 'none' }}>
                       <Icon name="map-pin" size={16} /> {lang === 'en' ? 'View hotel location' : 'موقع الفندق على الخريطة'}
                     </a>
                   ) : null}
@@ -580,29 +529,108 @@ export default function PackageDetailPage() {
                     {flights.map((f, idx) => (
                       <div key={idx} style={optStyle(flightIdx === idx)} onClick={() => setFlightIdx(idx)}>
                         <input type="radio" checked={flightIdx === idx} onChange={() => setFlightIdx(idx)} style={{ flex: 'none' }} />
-                        <span style={{ flex: 1, fontSize: 14, color: 'var(--qs-ink,#1d2733)' }}>{nm(f.nameAr, f.nameEn)}</span>
-                        <span style={{ fontSize: 14, fontWeight: 700, color: f.diff ? 'var(--qs-brand-deep,#049dc5)' : 'var(--qs-ink-2,#5f666e)' }}>{f.diff ? formatSignedPrice(f.diff, 'IQD', lang) : (lang === 'en' ? 'Included' : 'مشمول')}</span>
+                        <span style={{ flex: 1, fontSize: 15, color: 'var(--qs-ink,#1d2733)' }}>{nm(f.nameAr, f.nameEn)}</span>
+                        <span style={{ fontSize: 15, fontWeight: 600, color: f.diff ? 'var(--qs-brand-deep,#049dc5)' : 'var(--qs-ink-2,#5f666e)' }}>{f.diff ? formatSignedPrice(f.diff, 'IQD', lang) : (lang === 'en' ? 'Included' : 'مشمول')}</span>
                       </div>
                     ))}
                   </div>
                 </div>
               )}
+
+              {(includes.length > 0 || excludes.length > 0 || days.length > 0 || generalNotes.length > 0 || clockProps || guideIso) && (
+                <div className="qs-pd-block">
+                  <h2 className="qs-pd-h" data-no-i18n="">{lang === 'en' ? 'Package details' : 'تفاصيل الباقة'}</h2>
+                  <Accordion>
+                    {(includes.length > 0 || excludes.length > 0) && (
+                      <AccordionItem title={lang === 'en' ? 'What the price covers' : 'ماذا يشمل السعر'} noI18n icon="receipt" defaultOpen>
+                        <div className="qr-cover">
+                          {includes.length > 0 && (
+                            <div className="qr-cover-col">
+                              <span className="qr-cover-h">{lang === 'en' ? 'Price includes' : 'السعر يشمل'}</span>
+                              <ul className="qr-list">
+                                {includes.map((i, idx) => (
+                                  <li key={idx}><Icon name="check" size={16} className="qr-yes" /><span>{i}</span></li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+                          {excludes.length > 0 && (
+                            <div className="qr-cover-col">
+                              <span className="qr-cover-h">{lang === 'en' ? 'Not included' : 'السعر لا يشمل'}</span>
+                              <ul className="qr-list">
+                                {excludes.map((i, idx) => (
+                                  <li key={idx}><Icon name="x" size={16} className="qr-no" /><span>{i}</span></li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+                        </div>
+                      </AccordionItem>
+                    )}
+
+                    {days.length > 0 && (
+                      <AccordionItem title={t.calendar_title} icon="calendar-days" meta={days.length}>
+                        <ol className="qr-days">
+                          {days.map((d, idx) => (
+                            <li key={idx}>
+                              <span className="qr-day-t">{stripFlags(nm(d.titleAr, d.titleEn))}</span>
+                              <span className="qr-day-d">{stripFlags(nm(d.descAr, d.descEn))}</span>
+                            </li>
+                          ))}
+                        </ol>
+                      </AccordionItem>
+                    )}
+
+                    {generalNotes.length > 0 && (
+                      <AccordionItem title={lang === 'en' ? 'Important notes' : 'ملاحظات مهمة'} noI18n icon="info" meta={generalNotes.length}>
+                        <ul className="qr-notes">
+                          {generalNotes.map((l, i) => <li key={i}>{l}</li>)}
+                        </ul>
+                      </AccordionItem>
+                    )}
+
+                    {(clockProps || guideIso) && (
+                      <AccordionItem title={lang === 'en' ? 'Before you travel: time, weather and money' : 'قبل السفر: التوقيت والطقس والعملة'} noI18n icon="compass">
+                        <div className="qr-before">
+                          {clockProps ? <WorldClocks {...clockProps} lang={lang} compact /> : null}
+                          {guideIso ? <GuideCompact iso={guideIso} lang={lang} month={guideMonth} bare /> : null}
+                        </div>
+                      </AccordionItem>
+                    )}
+                  </Accordion>
+                </div>
+              )}
+
+              {/* Closing action: the same booking button again, with the total it books */}
+              <div className="qr-close" data-no-i18n="">
+                <div className="qr-close-copy">
+                  <h2 className="qr-close-h">{lang === 'en' ? 'Book your place on this trip' : 'احجز مكانك في هذه الرحلة'}</h2>
+                  <p className="qr-close-p">
+                    {grandTotal > 0 ? (lang === 'en' ? 'Total' : 'المجموع') + ' · ' + travellerSummary(lang === 'en') : t.detail_total_pp}
+                    <b>{formatPrice(grandTotal > 0 ? grandTotal : totalPerAdult, 'IQD', lang)}</b>
+                  </p>
+                </div>
+                <div className="qr-close-act">
+                  <CtaButton size="lg" onClick={bookNow} disabled={noAdults} lang={lang} {...bookLabel} />
+                  {!APPLY_FLOW_ENABLED && <a href="tel:6393" className="qs-pd-call">{lang === 'en' ? 'or call the hotline 6393' : 'أو اتصل على الخط الساخن 6393'}</a>}
+                </div>
+              </div>
             </div>
           </section>
         </div>
         {!APPLY_FLOW_ENABLED && (
           <div className={'qa-pkg-mbar' + (showBar ? ' on' : '')} data-no-i18n="" aria-hidden={!showBar}>
             <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0, lineHeight: 1.25 }}>
-              <span style={{ fontSize: 12, color: 'var(--qs-ink-2,#5f666e)' }}>{grandTotal > 0 ? (lang === 'en' ? 'Total' : 'المجموع') + ' · ' + travellerSummary(lang === 'en') : t.detail_total_pp}</span>
-              <b style={{ fontSize: 16, color: 'var(--qs-brand-deep,#036f8c)', whiteSpace: 'nowrap' }}>{formatPrice(grandTotal > 0 ? grandTotal : totalPerAdult, 'IQD', lang)}</b>
+              <span style={{ fontSize: 13, color: 'var(--qs-ink-2,#5f666e)' }}>{grandTotal > 0 ? (lang === 'en' ? 'Total' : 'المجموع') + ' · ' + travellerSummary(lang === 'en') : t.detail_total_pp}</span>
+              <b style={{ fontSize: 17, color: 'var(--qs-brand-deep,#036f8c)', whiteSpace: 'nowrap' }}>{formatPrice(grandTotal > 0 ? grandTotal : totalPerAdult, 'IQD', lang)}</b>
             </div>
             {noAdults ? (
-              <button type="button" disabled className="qa-btn" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, background: '#25d366', color: '#fff', border: 0, fontWeight: 700, padding: '10px 16px', fontSize: 14, minHeight: 0, whiteSpace: 'nowrap', flexShrink: 0, opacity: 0.5, cursor: 'not-allowed' }}>
+              <button type="button" disabled className="qa-btn" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, background: '#25d366', color: '#fff', border: 0, fontWeight: 600, padding: '10px 16px', fontSize: 15, minHeight: 0, whiteSpace: 'nowrap', flexShrink: 0, opacity: 0.5, cursor: 'not-allowed' }}>
                 {WA_ICON}
                 <span>{lang === 'en' ? 'Book on WhatsApp' : 'احجز عبر واتساب'}</span>
               </button>
             ) : (
-            <WhatsAppButton label={lang === 'en' ? 'Book on WhatsApp' : 'احجز عبر واتساب'} getMessage={waMessage} style={{ padding: '10px 16px', fontSize: 14, minHeight: 0, whiteSpace: 'nowrap', flexShrink: 0 }} />
+            <WhatsAppButton label={lang === 'en' ? 'Book on WhatsApp' : 'احجز عبر واتساب'} getMessage={waMessage} style={{ padding: '10px 16px', fontSize: 15, minHeight: 0, whiteSpace: 'nowrap', flexShrink: 0 }} />
             )}
           </div>
         )}

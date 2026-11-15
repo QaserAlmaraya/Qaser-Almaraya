@@ -49,10 +49,10 @@ export default function UrgencyPanel({ pkg, lang = 'ar' }) {
 @keyframes qa-urg-pulse{0%{box-shadow:none}100%{box-shadow:none}}
 .qa-urg-box{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;border-radius:var(--tw-radius-sm,10px);padding:6px 2px}
 .qa-urg-box b{font-size:20px;line-height:1.1;font-variant-numeric:tabular-nums}
-.qa-urg-box span{font-size:11px;font-weight:600;opacity:.8}
+.qa-urg-box span{font-size:13px;font-weight:600;opacity:.8}
 @media (prefers-reduced-motion:reduce){.qa-urg-hot .qa-urg-dot{animation:none}}
 `}</style>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontWeight: 700, fontSize: 14 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontWeight: 600, fontSize: 15 }}>
         {u.soldOut ? <Icon name="ban" size={16} style={{ flex: 'none' }} /> : <span className="qa-urg-dot" aria-hidden="true" />}
         <span>
           {c && !u.soldOut ? dateLabel(u.date, en) : u.label}

@@ -70,25 +70,26 @@ export default function CountryHero({ country, count, fastestDays, lang = 'ar', 
   if (fastestDays) chips.push(['zap', en ? 'Fastest processing' : 'أسرع إصدار', workDaysLabel(fastestDays, lang)]);
 
   return (
-    <section className="qch" style={{ backgroundImage: photo ? `url("${photo}")` : undefined }}>
+    <section className={photo ? 'qch' : 'qch qch-plain'} style={{ backgroundImage: photo ? `url("${photo}")` : undefined }}>
       <style>{`
 .qch{position:relative;width:100%;min-height:340px;background:var(--qs-brand-deep,#036f8c) center/cover no-repeat;color:#fff;overflow:hidden;isolation:isolate}
 .qch:before{content:"";position:absolute;inset:0;z-index:0;background:linear-gradient(90deg,rgba(2,40,54,.92) 0%,rgba(2,40,54,.78) 45%,rgba(2,40,54,.35) 100%),linear-gradient(to top,rgba(2,40,54,.55),transparent 60%)}
 [dir=ltr] .qch:before{background:linear-gradient(270deg,rgba(2,40,54,.92) 0%,rgba(2,40,54,.78) 45%,rgba(2,40,54,.35) 100%),linear-gradient(to top,rgba(2,40,54,.55),transparent 60%)}
 .qch-in{position:relative;z-index:2;max-width:1320px;margin:0 auto;padding:28px clamp(18px,4vw,48px) 34px;display:grid;grid-template-columns:1.1fr .9fr;gap:24px;align-items:center}
-.qch-map{position:absolute;z-index:1;inset-inline-end:0;top:0;height:100%;width:58%;opacity:.95;-webkit-mask-image:linear-gradient(to left,#000 55%,transparent);mask-image:linear-gradient(to left,#000 55%,transparent)}
+.qch-map{position:absolute;z-index:1;inset-inline-end:0;top:0;height:100%;width:44%;opacity:.95;-webkit-mask-image:linear-gradient(to left,#000 55%,transparent);mask-image:linear-gradient(to left,#000 55%,transparent)}
 [dir=ltr] .qch-map{-webkit-mask-image:linear-gradient(to right,#000 55%,transparent);mask-image:linear-gradient(to right,#000 55%,transparent)}
-.qch-copy{display:flex;flex-direction:column;gap:14px}
-.qch-back{color:rgba(255,255,255,.85);font-size:13.5px;font-weight:600;text-decoration:none;align-self:flex-start}
-.qch-title{display:flex;align-items:center;gap:14px}
-.qch-flag{width:58px;height:58px;border-radius:50%;object-fit:cover;border:3px solid #fff;box-shadow:var(--tw-card-shadow,0 1px 3px rgba(29,39,51,.06));flex:none}
-.qch h1{margin:0;font-size:clamp(26px,3.2vw,44px);line-height:1.15;color:#fff}
-.qch-sub{font-size:14px;color:rgba(255,255,255,.8)}
+.qch-plain:before{display:none}
+.qch-copy{display:flex;flex-direction:column;gap:16px;min-width:0}
+.qch-back{color:rgba(255,255,255,.85);font-size:13px;font-weight:600;text-decoration:none;align-self:flex-start}
+.qch-title{display:flex;align-items:center;gap:16px}
+.qch-flag{width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid #fff;flex:none}
+.qch h1{margin:0;font-size:clamp(26px,3.2vw,32px);line-height:1.15;color:#fff}
+.qch-sub{font-size:15px;color:rgba(255,255,255,.8)}
 .qch-chips{display:flex;flex-wrap:wrap;gap:8px}
-.qch-chip{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);border-radius:var(--tw-radius-sm,10px);padding:8px 12px}
-.qch-chip span{font-size:11px;color:rgba(255,255,255,.75);display:block}
-.qch-chip b{font-size:14px;display:block;white-space:nowrap}
-.qch-pdf{align-self:flex-start;display:inline-flex;align-items:center;gap:8px;background:#fff;color:var(--qs-brand-deep,#036f8c);border:0;border-radius:999px;padding:11px 20px;font-weight:700;font-size:14px;cursor:pointer;font-family:inherit}
+.qch-chip{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);border-radius:var(--tw-radius-sm,10px);padding:8px 12px}
+.qch-chip span{font-size:13px;color:rgba(255,255,255,.75);display:block}
+.qch-chip b{font-size:15px;display:block;white-space:nowrap}
+.qch-pdf{align-self:flex-start;display:inline-flex;align-items:center;gap:8px;background:#fff;color:var(--qs-brand-deep,#036f8c);border:0;border-radius:999px;padding:12px 20px;font-weight:600;font-size:15px;cursor:pointer;font-family:inherit}
 @media (max-width:860px){.qch-in{grid-template-columns:1fr}.qch-map{width:100%;opacity:.45}}
 `}</style>
       {info && <div dangerouslySetInnerHTML={{ __html: info.map }} style={{ display: 'contents' }} />}
