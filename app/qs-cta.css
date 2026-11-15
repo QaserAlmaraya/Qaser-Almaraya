@@ -2,9 +2,9 @@
    The primary call to action (components/CtaButton.jsx).
    Scoped to the public site; the dashboard never loads these rules' targets.
    ========================================================================== */
-html[data-area=site] .qs-cta{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:10px;overflow:hidden;white-space:nowrap;font-weight:600;border-radius:999px!important;transition:background-color .18s var(--qs-ease),box-shadow .18s var(--qs-ease),transform .18s var(--qs-ease)}
-html[data-area=site] .qs-cta-sm{min-height:40px;padding:0 16px!important;font-size:14px}
-html[data-area=site] .qs-cta-md{min-height:48px;padding:0 24px!important;font-size:16px}
+html[data-area=site] .qs-cta{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:8px;overflow:hidden;white-space:nowrap;font-weight:600;border-radius:999px!important;transition:background-color .18s var(--qs-ease),box-shadow .18s var(--qs-ease),transform .18s var(--qs-ease)}
+html[data-area=site] .qs-cta-sm{min-height:40px;padding:0 16px!important;font-size:15px}
+html[data-area=site] .qs-cta-md{min-height:48px;padding:0 24px!important;font-size:15px}
 html[data-area=site] .qs-cta-lg{min-height:56px;padding:0 32px!important;font-size:17px}
 html[data-area=site] .qs-cta:active{transform:scale(.98)}
 html[data-area=site] .qs-cta:focus-visible{outline:2px solid var(--qs-ink);outline-offset:3px}
