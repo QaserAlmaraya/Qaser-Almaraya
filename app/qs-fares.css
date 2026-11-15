@@ -124,3 +124,39 @@ html[data-area=site] .qs-fb-note svg{flex:none;margin-top:4px;color:var(--qs-ink
 
 /* The palette and the footer jump here; keep the heading clear of the sticky header. */
 html[data-area=site] #fares{scroll-margin-top:96px}
+
+/* ---- Flights of one destination, as the sheet lists them: a card per flight
+   with its outbound leg, return leg and round-trip fare. */
+html[data-area=site] .qs-fb-detail ul.qs-fb-flights{display:flex;flex-direction:column;gap:12px;border-top:0}
+html[data-area=site] .qs-fb-flight{background:#fff;border:1px solid var(--qs-line);border-radius:12px;overflow:hidden}
+html[data-area=site] .qs-fb-fhead{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--qs-line)}
+html[data-area=site] .qs-fb-fhead .qs-fb-carrier{flex:1}
+html[data-area=site] .qs-fb-ask{flex:none;display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 16px;border:1px solid var(--qs-line-2);border-radius:999px;background:#fff;color:var(--qs-ink);font-size:13px;font-weight:500;line-height:1.6;text-decoration:none;transition:border-color .18s var(--qs-ease),color .18s var(--qs-ease)}
+html[data-area=site] .qs-fb-ask:hover{border-color:var(--qs-brand);color:var(--qs-brand-deep)}
+html[data-area=site] .qs-fb-ask svg{flex:none;color:var(--qs-brand)}
+html[data-area=site] .qs-fb-legs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+html[data-area=site] .qs-fb-legrow{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:2px 12px;padding:12px 16px;border-inline-start:1px solid var(--qs-line)}
+html[data-area=site] .qs-fb-legrow:first-child{border-inline-start:0}
+html[data-area=site] .qs-fb-legrow.on{background:#f4fbfe}
+html[data-area=site] .qs-fb-legrow>b{grid-column:1;font-size:15px;font-weight:600;line-height:1.6;color:var(--qs-ink)}
+html[data-area=site] .qs-fb-codes{grid-column:1;justify-self:start;font-size:13px;font-weight:500;line-height:1.6;letter-spacing:.02em;color:var(--qs-ink-2);font-variant-numeric:tabular-nums;text-align:start;unicode-bidi:isolate}
+html[data-area=site] .qs-fb-when{grid-column:1;display:flex;flex-direction:column;min-width:0;font-size:13px;font-weight:400;line-height:1.6;color:var(--qs-ink-2)}
+html[data-area=site] .qs-fb-legrow .qs-fb-price{grid-column:2;grid-row:1 / span 3;align-self:center}
+html[data-area=site] .qs-fb-legrow .qs-fb-amount b{font-size:17px;line-height:1.4}
+html[data-area=site] .qs-fb-onask .qs-fb-amount b{font-size:15px;font-weight:500;color:var(--qs-ink-2)}
+/* Cabin switch at the top of a destination's flights */
+html[data-area=site] .qs-fb-cabin{display:inline-flex;gap:4px;margin:0 0 12px;padding:4px;background:#e3f2f9;border-radius:10px}
+html[data-area=site] .qs-fb-cabin button{min-height:36px;padding:0 16px;border:0;border-radius:7px;background:transparent;color:var(--qs-ink-2);font-family:inherit;font-size:13px;font-weight:500;line-height:1.6;cursor:pointer}
+html[data-area=site] .qs-fb-cabin button[aria-pressed=true]{background:#fff;color:var(--qs-ink);font-weight:600;box-shadow:0 1px 2px rgba(29,39,51,.08)}
+@media (max-width:900px){
+  html[data-area=site] .qs-fb-legs{grid-template-columns:minmax(0,1fr)}
+  html[data-area=site] .qs-fb-legrow{border-inline-start:0;border-top:1px solid var(--qs-line)}
+  html[data-area=site] .qs-fb-legrow:first-child{border-top:0}
+}
+@media (max-width:640px){
+  html[data-area=site] .qs-fb-fhead{flex-wrap:wrap;padding:12px}
+  html[data-area=site] .qs-fb-ask{width:100%;justify-content:center}
+  html[data-area=site] .qs-fb-legrow{padding:12px}
+  html[data-area=site] .qs-fb-cabin{display:flex}
+  html[data-area=site] .qs-fb-cabin button{flex:1}
+}

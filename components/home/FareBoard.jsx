@@ -4,12 +4,14 @@ import Link from 'next/link';
 import Icon from '../Icon';
 import { getRate, loadRate } from '../../lib/currency';
 import { waLink } from '../../lib/whatsapp';
-import { ORIGINS, FARES_UPDATED, destinationsFrom, destinationCount } from '../../lib/flightFares';
+import { ORIGINS, FARES_UPDATED, destinationsFrom, destinationCount, fareIqd } from '../../lib/flightFares';
 
 // "Fares from your city": pick the airport you leave from and see the lowest
 // fare to every destination we sell from it, cheapest first. A row opens to
-// show each airline on that route with its departure time and days, and a
-// WhatsApp button that carries the chosen route. Prices are always dinars.
+// show every flight to that destination as the flights sheet lists it: the
+// outbound leg, the return leg and the round-trip fare, each with its time,
+// days and price. Seat availability and business class are not in the sheet,
+// so each flight has a WhatsApp link that asks about them. Prices are dinars.
 //
 // `initial` rows are shown before "show all"; `link` adds the header link to
 // the flights page (used on the homepage only).
@@ -29,6 +31,13 @@ function bookingMessage({ origin, dest, trip, price, en }) {
     : ['مرحباً، أرغب بحجز تذكرة طيران:', '✈️ من ' + origin.ar + ' إلى ' + dest.ar, 'نوع الرحلة: ' + tripText, 'السعر في الموقع: يبدأ من ' + num(price) + ' د.ع'].join('\n');
 }
 
+function askMessage({ origin, dest, carrier, cabin, en }) {
+  const biz = cabin === 'biz';
+  return en
+    ? ['Hello, I would like to ask about this flight:', '✈️ ' + origin.en + ' to ' + dest.en + ' with ' + carrier.en, 'Class: ' + (biz ? 'Business' : 'Economy'), 'Which dates have seats, and what is the fare?'].join('\n')
+    : ['مرحباً، أرغب بالاستفسار عن هذه الرحلة:', '✈️ من ' + origin.ar + ' إلى ' + dest.ar + ' على ' + carrier.ar, 'الدرجة: ' + (biz ? 'رجال الأعمال' : 'السياحية'), 'ما التواريخ المتوفرة وما السعر؟'].join('\n');
+}
+
 function Price({ value, en, label }) {
   return (
     <span className="qs-fb-price">
@@ -46,6 +55,7 @@ export default function FareBoard({ lang = 'ar', initial = 8, link = true }) {
   const [trip, setTrip] = useState('one');
   const [open, setOpen] = useState('');
   const [all, setAll] = useState(false);
+  const [cabin, setCabin] = useState('eco'); // 'eco' | 'biz'. The sheet has economy fares only.
   const [rate, setRate] = useState(getRate());
 
   useEffect(() => { let alive = true; loadRate().then((r) => { if (alive) setRate(r); }); return () => { alive = false; }; }, []);
@@ -65,8 +75,8 @@ export default function FareBoard({ lang = 'ar', initial = 8, link = true }) {
             <span className="qs-kicker">{en ? 'Flights' : 'الطيران'}</span>
             <h2 className="qs-h2">{en ? 'Ticket prices from your city' : 'أسعار التذاكر من مدينتك'}</h2>
             <p className="qs-lead">{en
-              ? 'Choose the airport you leave from to see the lowest fare to each destination, then open a destination for its airlines and times.'
-              : 'اختر مطار المغادرة لترى أقل سعر إلى كل وجهة، ثم افتح الوجهة لعرض شركات الطيران ومواعيدها.'}</p>
+              ? 'Choose the airport you leave from to see the lowest fare to each destination, then open a destination for its flights: times, days and fares.'
+              : 'اختر مطار المغادرة لترى أقل سعر إلى كل وجهة، ثم افتح الوجهة لعرض رحلاتها بالمواعيد والأيام والأسعار.'}</p>
           </div>
           {link ? <Link href="/flights" className="qs-link">{en ? 'Flight booking' : 'حجز الطيران'}</Link> : null}
         </div>
@@ -115,29 +125,53 @@ export default function FareBoard({ lang = 'ar', initial = 8, link = true }) {
                   <div className="qs-fb-detail" hidden={!isOpen}>
                     <p className="qs-fb-leg">
                       <b>{en ? from.en + ' to ' + d.place.en : 'من ' + from.ar + ' إلى ' + d.place.ar}</b>
-                      <span>{trip === 'round' ? (en ? 'Round trip' : 'ذهاب وعودة') : (en ? 'One way' : 'ذهاب فقط')}</span>
+                      <span>{en ? airlines + (airlines === 1 ? ' flight available' : ' flights available') : (airlines === 1 ? 'رحلة واحدة متوفرة' : airlines === 2 ? 'رحلتان متوفرتان' : airlines <= 10 ? airlines + ' رحلات متوفرة' : airlines + ' رحلة متوفرة')}</span>
                     </p>
-                    <ul className={d.offers.length > 1 ? 'many' : undefined}>
+                    <div className="qs-fb-cabin" role="group" aria-label={en ? 'Cabin class' : 'درجة السفر'}>
+                      <button type="button" aria-pressed={cabin === 'eco'} onClick={() => setCabin('eco')}>{en ? 'Economy' : 'الدرجة السياحية'}</button>
+                      <button type="button" aria-pressed={cabin === 'biz'} onClick={() => setCabin('biz')}>{en ? 'Business' : 'درجة رجال الأعمال'}</button>
+                    </div>
+                    <ul className="qs-fb-flights">
                       {d.offers.map((f, k) => {
-                        const meta = [
-                          [f.place.airportAr ? (en ? f.place.airportEn : f.place.airportAr) : '', f.time ? (en ? 'Departs ' : 'الإقلاع ') + f.time : ''].filter(Boolean).join(' · '),
-                          en ? f.daysEn : f.daysAr,
-                        ].filter(Boolean);
+                        const label = f.carrier.fixed ? (en ? 'Fixed fare' : 'سعر ثابت') : (en ? 'From' : 'يبدأ من');
+                        const when = (time, days) => [time ? (en ? 'Departs ' : 'الإقلاع ') + time : (en ? 'Time varies by day' : 'الوقت حسب اليوم'), days].filter(Boolean);
+                        const legs = [
+                          { id: 'one', name: en ? 'Outbound' : 'الذهاب', codes: f.from + ' \u2192 ' + f.to, meta: when(f.time, en ? f.daysEn : f.daysAr), price: fareIqd(f.oneWay, f.currency, rate) },
+                          { id: 'back', name: en ? 'Return' : 'العودة', codes: f.to + ' \u2192 ' + f.from, meta: when(f.backTime, en ? f.backDaysEn : f.backDaysAr), price: fareIqd(f.back, f.currency, rate) },
+                          { id: 'round', name: en ? 'Round trip' : 'ذهاب وعودة', codes: f.from + ' \u21C4 ' + f.to, meta: [en ? 'Fixed or open return' : 'عودة محددة أو مفتوحة'], price: fareIqd(f.round, f.currency, rate) },
+                        ].filter((l) => l.price > 0);
                         return (
-                          <li key={k} className="qs-fb-offer">
-                            {f.carrier.logo ? (
-                              <span className="qs-fb-mark">
-                                {/* eslint-disable-next-line @next/next/no-img-element */}
-                                <img src={'/assets/airlines-color/' + f.carrier.logo + '.webp'} alt="" loading="lazy" decoding="async" />
+                          <li key={k} className="qs-fb-flight">
+                            <div className="qs-fb-fhead">
+                              {f.carrier.logo ? (
+                                <span className="qs-fb-mark">
+                                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                                  <img src={'/assets/airlines-color/' + f.carrier.logo + '.webp'} alt="" loading="lazy" decoding="async" />
+                                </span>
+                              ) : (
+                                <span className="qs-fb-mark qs-fb-tail" dir="ltr" data-keep-dir="" aria-hidden="true">{f.carrier.code || f.carrier.en}</span>
+                              )}
+                              <span className="qs-fb-carrier">
+                                <span>{en ? f.carrier.en : f.carrier.ar}</span>
+                                {f.place.airportAr ? <small><span>{en ? f.place.airportEn : f.place.airportAr}</span></small> : null}
                               </span>
-                            ) : (
-                              <span className="qs-fb-mark qs-fb-tail" dir="ltr" data-keep-dir="" aria-hidden="true">{f.carrier.code || f.carrier.en}</span>
-                            )}
-                            <span className="qs-fb-carrier">
-                              <span>{en ? f.carrier.en : f.carrier.ar}</span>
-                              <small>{meta.map((m, j) => <span key={j}>{m}</span>)}</small>
-                            </span>
-                            <Price value={f.price} en={en} label={f.carrier.fixed ? (en ? 'Fixed fare' : 'سعر ثابت') : (en ? 'From' : 'يبدأ من')} />
+                              <a className="qs-fb-ask" href={waLink(askMessage({ origin: from, dest: d.place, carrier: f.carrier, cabin, en }))} target="_blank" rel="noopener">
+                                <Icon name="message-circle" size={16} strokeWidth={2} />
+                                {cabin === 'biz' ? (en ? 'Ask for the business fare' : 'اسأل عن سعر رجال الأعمال') : (en ? 'Ask about availability' : 'اسأل عن التوفر')}
+                              </a>
+                            </div>
+                            <div className="qs-fb-legs">
+                              {legs.map((l) => (
+                                <div key={l.id} className={'qs-fb-legrow' + (l.id === trip ? ' on' : '')}>
+                                  <b>{l.name}</b>
+                                  <span className="qs-fb-codes" dir="ltr" data-keep-dir="">{l.codes}</span>
+                                  <span className="qs-fb-when">{l.meta.map((m, j) => <span key={j}>{m}</span>)}</span>
+                                  {cabin === 'biz'
+                                    ? <span className="qs-fb-price qs-fb-onask"><small>{en ? 'Business class' : 'رجال الأعمال'}</small><span className="qs-fb-amount"><b>{en ? 'On request' : 'السعر عند الطلب'}</b></span></span>
+                                    : <Price value={l.price} en={en} label={label} />}
+                                </div>
+                              ))}
+                            </div>
                           </li>
                         );
                       })}
