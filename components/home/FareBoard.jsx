@@ -52,6 +52,55 @@ function clock12(times, en) {
   });
 }
 
+// Live seats and fares for a chosen date are on the Flamingo booking site (the
+// platform our bookings are made on). This builds its search link.
+const ymd = (d) => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+const plusDays = (n) => { const d = new Date(); d.setDate(d.getDate() + n); return ymd(d); };
+function liveSearchUrl({ fromCode, toCode, go, back, trip, cabin }) {
+  const q = new URLSearchParams();
+  q.set('departureAirportCode', fromCode);
+  q.set('arrivalAirportCode', toCode);
+  q.set('departureDate', go + 'T00:00:00.000Z');
+  if (trip === 'round' && back) q.set('returnDate', back + 'T00:00:00.000Z');
+  q.set('flightType', trip === 'round' && back ? 'RoundTrip' : 'OneWay');
+  q.set('cabinType', cabin === 'biz' ? '2' : '1');
+  q.set('passengers', JSON.stringify([{ type: 0, count: 1 }]));
+  return 'https://flamingo.iq/flight-booking?' + q.toString();
+}
+
+function LiveSearch({ d, from, trip, cabin, en }) {
+  const [go, setGo] = useState('');
+  const [back, setBack] = useState('');
+  const [min, setMin] = useState('');
+  // Dates are set after mount so the server and the browser render the same markup.
+  useEffect(() => { setMin(plusDays(0)); setGo(plusDays(7)); setBack(plusDays(14)); }, []);
+  const city = d.key.toUpperCase();
+  const toCode = (d.offers.find((f) => f.to === city) || d.offers[0]).to;
+  const ready = go && (trip !== 'round' || (back && back >= go));
+  const pickGo = (v) => { setGo(v); if (back && v && back < v) setBack(v); };
+  return (
+    <div className="qs-fb-live">
+      <p className="qs-fb-livet">{en ? 'Seats and prices on your travel date' : 'المقاعد والأسعار بتاريخ سفرك'}</p>
+      <div className="qs-fb-liverow">
+        <label>
+          <small>{en ? 'Departure date' : 'تاريخ الذهاب'}</small>
+          <input type="date" value={go} min={min} onChange={(e) => pickGo(e.target.value)} />
+        </label>
+        {trip === 'round' ? (
+          <label>
+            <small>{en ? 'Return date' : 'تاريخ العودة'}</small>
+            <input type="date" value={back} min={go || min} onChange={(e) => setBack(e.target.value)} />
+          </label>
+        ) : null}
+        <a className={'qs-fb-livebtn' + (ready ? '' : ' off')} aria-disabled={!ready} href={ready ? liveSearchUrl({ fromCode: from.code, toCode, go, back, trip, cabin }) : undefined} target="_blank" rel="noopener">
+          {en ? 'Show available flights' : 'اعرض الرحلات المتوفرة'}
+          <Icon name="arrow-up-right" size={16} strokeWidth={2} />
+        </a>
+      </div>
+    </div>
+  );
+}
+
 // One destination's flights, cheapest first. Rendered beside the list on wide
 // screens and under the opened row on phones.
 function Flights({ d, from, trip, cabin, rate, en }) {
@@ -66,6 +115,8 @@ function Flights({ d, from, trip, cabin, rate, en }) {
         <b>{en ? from.en + ' to ' + d.place.en : 'من ' + from.ar + ' إلى ' + d.place.ar}</b>
         <span>{[count, tripText, cabinText].join(' · ')}</span>
       </p>
+      <LiveSearch d={d} from={from} trip={trip} cabin={cabin} en={en} />
+      <p className="qs-fb-listt">{en ? 'Weekly schedule and starting prices' : 'الجدول الأسبوعي والأسعار التقريبية'}</p>
       <ul>
         {d.offers.map((f, k) => {
           const legs = [{ id: 'go', name: en ? 'Departs' : 'الذهاب', time: f.time, days: en ? f.daysEn : f.daysAr }];
