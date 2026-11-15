@@ -1,0 +1,43 @@
+/* ==========================================================================
+   The primary call to action (components/CtaButton.jsx).
+   Scoped to the public site; the dashboard never loads these rules' targets.
+   ========================================================================== */
+html[data-area=site] .qs-cta{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:10px;overflow:hidden;white-space:nowrap;font-weight:600;border-radius:999px!important;transition:background-color .18s var(--qs-ease),box-shadow .18s var(--qs-ease),transform .18s var(--qs-ease)}
+html[data-area=site] .qs-cta-sm{min-height:40px;padding:0 16px!important;font-size:14px}
+html[data-area=site] .qs-cta-md{min-height:48px;padding:0 24px!important;font-size:16px}
+html[data-area=site] .qs-cta-lg{min-height:56px;padding:0 32px!important;font-size:17px}
+html[data-area=site] .qs-cta:active{transform:scale(.98)}
+html[data-area=site] .qs-cta:focus-visible{outline:2px solid var(--qs-ink);outline-offset:3px}
+
+/* Two labels share one grid cell; the cell is as wide as the longer one. */
+html[data-area=site] .qs-cta-labels{display:grid;overflow:hidden;line-height:1.5}
+html[data-area=site] .qs-cta-labels>span{grid-area:1/1;text-align:center;transition:transform .28s var(--qs-ease),opacity .2s var(--qs-ease)}
+html[data-area=site] .qs-cta-hover{transform:translateY(110%);opacity:0}
+html[data-area=site] .qs-cta-ico{display:inline-grid;place-items:center;flex:none}
+/* The plane icon is drawn nose-up-right; turn it to fly the reading way. */
+html[data-area=site] [dir=rtl] .qs-cta-ico svg,html[dir=rtl][data-area=site] .qs-cta-ico svg{transform:scaleX(-1)}
+
+@media (hover:hover){
+  html[data-area=site] .qs-cta:hover .qs-cta-rest,html[data-area=site] .qs-cta:focus-visible .qs-cta-rest{transform:translateY(-110%);opacity:0}
+  html[data-area=site] .qs-cta:hover .qs-cta-hover,html[data-area=site] .qs-cta:focus-visible .qs-cta-hover{transform:none;opacity:1}
+  html[data-area=site] .qs-cta:hover .qs-cta-ico,html[data-area=site] .qs-cta:focus-visible .qs-cta-ico{animation:qs-cta-fly .62s var(--qs-ease) both}
+  html[data-area=site] [dir=rtl] .qs-cta:hover .qs-cta-ico,html[data-area=site] [dir=rtl] .qs-cta:focus-visible .qs-cta-ico{animation-name:qs-cta-fly-rtl}
+}
+/* Out past the far edge, back in from the near one: one loop per hover. */
+@keyframes qs-cta-fly{
+  0%{transform:translate(0,0);opacity:1}
+  45%{transform:translate(180%,-130%);opacity:0}
+  46%{transform:translate(-180%,130%);opacity:0}
+  100%{transform:translate(0,0);opacity:1}
+}
+@keyframes qs-cta-fly-rtl{
+  0%{transform:translate(0,0);opacity:1}
+  45%{transform:translate(-180%,-130%);opacity:0}
+  46%{transform:translate(180%,130%);opacity:0}
+  100%{transform:translate(0,0);opacity:1}
+}
+@media (prefers-reduced-motion:reduce){
+  html[data-area=site] .qs-cta-labels>span{transition:opacity .15s linear}
+  html[data-area=site] .qs-cta:hover .qs-cta-rest,html[data-area=site] .qs-cta:focus-visible .qs-cta-rest,html[data-area=site] .qs-cta-hover{transform:none}
+  html[data-area=site] .qs-cta:hover .qs-cta-ico,html[data-area=site] .qs-cta:focus-visible .qs-cta-ico{animation:none}
+}
