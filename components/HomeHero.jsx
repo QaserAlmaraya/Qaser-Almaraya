@@ -16,7 +16,7 @@ function withSkylo(list) {
   return [...list.slice(0, at), SKYLO_SLIDE, ...list.slice(at)];
 }
 
-export default function HomeHero({ hero, lang = 'ar', onPrimary, jumpHref, children }) {
+export default function HomeHero({ hero, lang = 'ar', onPrimary, children }) {
   const en = lang === 'en';
   const saved = (hero && Array.isArray(hero.slides) ? hero.slides : []).filter((s) => s && s.url);
   const [auto, setAuto] = useState(null);
@@ -53,7 +53,7 @@ export default function HomeHero({ hero, lang = 'ar', onPrimary, jumpHref, child
     : auto || []);
 
   // Placeholder matches the hero's new height so the page does not jump.
-  if (!slides.length) return auto === null && !saved.length ? <div className="qh-ph" style={{ height: 'min(84vh,800px)', minHeight: 600, background: '#0d141c' }} /> : children;
+  if (!slides.length) return auto === null && !saved.length ? <div style={{ height: 'min(78vh,720px)', minHeight: 520, background: '#04161f' }} /> : children;
 
   const h = hero || {};
   return (
@@ -63,9 +63,8 @@ export default function HomeHero({ hero, lang = 'ar', onPrimary, jumpHref, child
       kicker={en ? h.kickerEn || 'Your trusted travel partner' : h.kickerAr || 'شريكك الموثوق في السفر'}
       title={en ? h.titleEn || 'Your journey starts with us' : h.titleAr || 'رحلتك تبدأ معنا'}
       subtitle={en ? h.subtitleEn || 'Your memories begin with us.' : h.subtitleAr || 'نأخذك إلى حيث تتمنى، لنصنع ذكريات لا تُنسى.'}
-      primary={{ label: 'تصفّح الباقات', labelEn: 'Browse packages', onClick: onPrimary }}
-      secondary={{ icon: 'message-circle', label: en ? 'Ask us on WhatsApp' : 'اسألنا على واتساب', href: waLink(en ? 'Hello Qaser Almaraya, I would like some help planning my trip.' : 'مرحباً قصر المرايا، أرغب بالمساعدة في التخطيط لرحلتي.') }}
-      jump={jumpHref ? { href: jumpHref, label: en ? 'Today’s offers and prices' : 'عروض اليوم والأسعار' } : null}
+      primary={{ label: en ? 'Browse packages' : 'تصفّح الباقات', onClick: onPrimary }}
+      secondary={{ label: en ? 'Ask us on WhatsApp' : 'اسألنا على واتساب', href: waLink(en ? 'Hello Qaser Almaraya, I would like some help planning my trip.' : 'مرحباً قصر المرايا، أرغب بالمساعدة في التخطيط لرحلتي.') }}
     />
   );
 }
