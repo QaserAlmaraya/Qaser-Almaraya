@@ -8,6 +8,7 @@ import SiteHeader from '../../components/SiteHeader';
 import SiteFooter from '../../components/SiteFooter';
 import MascotLoader from '../../components/MascotLoader';
 import PackageCard from '../../components/PackageCard';
+import CountUp from '../../components/motion/CountUp';
 import CtaButton from '../../components/CtaButton';
 
 import Icon from '../../components/Icon';
@@ -234,7 +235,7 @@ export default function PackagesPage({ initialPackages = null }) {
 
           {/* Floating search bar — overlaps the hero's bottom edge */}
           <div style={{ maxWidth: 1080, margin: 'clamp(-64px,-8vw,-46px) auto 0', padding: '0 20px', position: 'relative', zIndex: 30 }}>
-            <div className="qa-search-bar" style={{ background: '#fff', border: '1px solid var(--qs-line,#ececed)', borderRadius: 'var(--tw-radius,16px)', boxShadow: 'var(--tw-pop-shadow,0 6px 20px rgba(1,42,55,.10))', display: 'flex', flexWrap: 'wrap', alignItems: 'stretch' }}>
+            <div className="qa-search-bar" style={{ background: 'var(--qd-surface,#fff)', border: '1px solid var(--qs-line,#ececed)', borderRadius: 'var(--tw-radius,16px)', boxShadow: 'var(--tw-pop-shadow,0 6px 20px rgba(1,42,55,.10))', display: 'flex', flexWrap: 'wrap', alignItems: 'stretch' }}>
               <div className="qa-search-field" style={{ position: 'relative', flex: '1 1 220px', padding: '14px 20px', display: 'flex', flexDirection: 'column', gap: 3, minWidth: 200 }}>
                 <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 13, fontWeight: 500, color: 'var(--qs-ink-2,#5f666e)', textTransform: lang === 'en' ? 'uppercase' : undefined, letterSpacing: lang === 'en' ? '.03em' : undefined }}>
                   <Icon name="map-pin" size={12} style={{ color: 'var(--qs-brand-deep,#049dc5)' }} />{lang === 'en' ? 'Destination' : 'الوجهة'}
@@ -252,7 +253,7 @@ export default function PackagesPage({ initialPackages = null }) {
                   <div
                     style={{
                       position: 'absolute', insetInlineStart: 0, insetInlineEnd: 0, top: 'calc(100% + 12px)', zIndex: 20,
-                      background: '#fff', border: '1px solid var(--qs-line,#ececed)', borderRadius: 'var(--tw-radius,16px)', boxShadow: 'var(--tw-card-shadow,0 1px 3px rgba(29,39,51,.06))',
+                      background: 'var(--qd-surface,#fff)', border: '1px solid var(--qs-line,#ececed)', borderRadius: 'var(--tw-radius,16px)', boxShadow: 'var(--tw-card-shadow,0 1px 3px rgba(29,39,51,.06))',
                       padding: 16, display: 'flex', flexDirection: 'column', gap: 14, maxHeight: 360, overflowY: 'auto', textAlign: 'start',
                     }}
                   >
@@ -312,7 +313,7 @@ export default function PackagesPage({ initialPackages = null }) {
                   <div
                     style={{
                       position: 'absolute', insetInlineEnd: 0, top: 'calc(100% + 12px)', zIndex: 20, width: 280, maxWidth: '90vw',
-                      background: '#fff', border: '1px solid var(--qs-line,#ececed)', borderRadius: 'var(--tw-radius,16px)', boxShadow: 'var(--tw-card-shadow,0 1px 3px rgba(29,39,51,.06))',
+                      background: 'var(--qd-surface,#fff)', border: '1px solid var(--qs-line,#ececed)', borderRadius: 'var(--tw-radius,16px)', boxShadow: 'var(--tw-card-shadow,0 1px 3px rgba(29,39,51,.06))',
                       padding: 16, display: 'flex', flexDirection: 'column', gap: 12, textAlign: 'start',
                     }}
                   >
@@ -329,9 +330,9 @@ export default function PackagesPage({ initialPackages = null }) {
                           {sub ? <span style={{ fontSize: 13, color: 'var(--qs-ink-2,#5f666e)' }}>{sub}</span> : null}
                         </span>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                          <button type="button" onClick={() => setTravelerCount(key, -1, min)} style={{ width: 26, height: 26, borderRadius: '50%', border: '1px solid var(--qs-line-2,#cacbcc)', background: '#fff', cursor: 'pointer' }}>−</button>
+                          <button type="button" onClick={() => setTravelerCount(key, -1, min)} style={{ width: 26, height: 26, borderRadius: '50%', border: '1px solid var(--qs-line-2,#cacbcc)', background: 'var(--qd-surface,#fff)', cursor: 'pointer' }}>−</button>
                           <span style={{ minWidth: 16, textAlign: 'center', fontWeight: 600 }}>{travelers[key]}</span>
-                          <button type="button" onClick={() => setTravelerCount(key, 1)} style={{ width: 26, height: 26, borderRadius: '50%', border: '1px solid var(--qs-line-2,#cacbcc)', background: '#fff', cursor: 'pointer' }}>+</button>
+                          <button type="button" onClick={() => setTravelerCount(key, 1)} style={{ width: 26, height: 26, borderRadius: '50%', border: '1px solid var(--qs-line-2,#cacbcc)', background: 'var(--qd-surface,#fff)', cursor: 'pointer' }}>+</button>
                         </div>
                       </div>
                     ))}
@@ -359,7 +360,7 @@ export default function PackagesPage({ initialPackages = null }) {
           </div>
 
           {/* Horizontal filter pills + Filters drawer trigger */}
-          <div className="qa-filter-sticky" style={{ position: 'sticky', top: 0, zIndex: 12, background: '#fff', borderBottom: '1px solid var(--qs-line,#ececed)', marginTop: 'clamp(28px,5vw,44px)' }}>
+          <div className="qa-filter-sticky" style={{ position: 'sticky', top: 0, zIndex: 12, background: 'var(--qd-surface,#fff)', borderBottom: '1px solid var(--qs-line,#ececed)', marginTop: 'clamp(28px,5vw,44px)' }}>
             <div style={{ maxWidth: 1240, margin: '0 auto', padding: '14px 20px', display: 'flex', alignItems: 'center', gap: 12 }}>
               <div className="qa-pill-scroll" style={{ display: 'flex', gap: 8, overflowX: 'auto', flex: 1 }}>
                 <button type="button" onClick={() => { setCountry('all'); setCat('all'); setQuery(''); }} className={`qa-pill${country === 'all' && cat === 'all' && !query ? ' qa-pill-active' : ''}`}>
@@ -390,10 +391,10 @@ export default function PackagesPage({ initialPackages = null }) {
           {drawerOpen && typeof document !== 'undefined' ? createPortal(
             <div dir={lang === 'en' ? 'ltr' : 'rtl'} style={{ position: 'fixed', inset: 0, zIndex: 1000, display: 'flex', justifyContent: 'flex-end' }}>
               <div onClick={() => setDrawerOpen(false)} style={{ position: 'absolute', inset: 0, background: 'rgba(1,20,28,.45)' }} />
-              <div className="qa-drawer" style={{ position: 'relative', width: 'min(360px,88vw)', height: '100%', background: '#fff', boxShadow: 'var(--tw-card-shadow,0 1px 3px rgba(29,39,51,.06))', display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
+              <div className="qa-drawer" style={{ position: 'relative', width: 'min(360px,88vw)', height: '100%', background: 'var(--qd-surface,#fff)', boxShadow: 'var(--tw-card-shadow,0 1px 3px rgba(29,39,51,.06))', display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 24px', borderBottom: '1px solid var(--qs-line,#ececed)' }}>
                   <h3 style={{ margin: 0, fontSize: 17 }}>{lang === 'en' ? 'Filters' : 'الفلاتر'}</h3>
-                  <button type="button" onClick={() => setDrawerOpen(false)} style={{ border: 'none', background: '#f4f4f4', borderRadius: '50%', width: 34, height: 34, cursor: 'pointer', display: 'grid', placeItems: 'center' }}>
+                  <button type="button" onClick={() => setDrawerOpen(false)} style={{ border: 'none', background: 'var(--qd-surface2,#f4f4f4)', borderRadius: '50%', width: 34, height: 34, cursor: 'pointer', display: 'grid', placeItems: 'center' }}>
                     <Icon name="x" size={16} />
                   </button>
                 </div>
@@ -410,7 +411,7 @@ export default function PackagesPage({ initialPackages = null }) {
                             onClick={() => togglePref(p.id)}
                             style={{
                               padding: '8px 16px', borderRadius: 999, fontSize: 15, fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit',
-                              background: on ? 'var(--qs-band,#049dc5)' : '#fff', color: on ? '#fff' : 'var(--qs-body,#3d4650)', border: `1px solid ${on ? 'var(--qs-brand-deep,#049dc5)' : 'var(--qs-line-2,#cacbcc)'}`,
+                              background: on ? 'var(--qs-band,#049dc5)' : 'var(--qd-surface2,#fff)', color: on ? '#fff' : 'var(--qs-body,#3d4650)', border: `1px solid ${on ? 'var(--qs-brand-deep,#049dc5)' : 'var(--qs-line-2,#cacbcc)'}`,
                             }}
                           >
                             {nm(p.ar, p.en)}
@@ -452,11 +453,11 @@ export default function PackagesPage({ initialPackages = null }) {
                     />
                   </div>
                 </div>
-                <div style={{ padding: 24, borderTop: '1px solid var(--qs-line,#ececed)', display: 'flex', gap: 10, position: 'sticky', bottom: 0, background: '#fff' }}>
+                <div style={{ padding: 24, borderTop: '1px solid var(--qs-line,#ececed)', display: 'flex', gap: 10, position: 'sticky', bottom: 0, background: 'var(--qd-surface,#fff)' }}>
                   <button
                     type="button"
                     onClick={() => { setPrefs([]); setQuery(''); setBudget('all'); setMonth('all'); setPreferredDates(''); }}
-                    style={{ flex: 1, padding: '12px 16px', borderRadius: 999, border: '1px solid var(--qs-line-2,#cacbcc)', background: '#fff', color: 'var(--qs-body,#3d4650)', fontSize: 15, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit' }}
+                    style={{ flex: 1, padding: '12px 16px', borderRadius: 999, border: '1px solid var(--qs-line-2,#cacbcc)', background: 'var(--qd-surface,#fff)', color: 'var(--qs-body,#3d4650)', fontSize: 15, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit' }}
                   >
                     {lang === 'en' ? 'Reset' : 'إعادة تعيين'}
                   </button>
@@ -483,10 +484,10 @@ export default function PackagesPage({ initialPackages = null }) {
             .qa-search-divider { width: 1px; background: var(--qs-line,#ececed); margin: 10px 0; }
             .qa-dest-chip {
               display: inline-flex; align-items: center; gap: 7px; cursor: pointer; font-family: inherit; padding: 8px 12px;
-              border-radius: 999px; border: 1px solid var(--qs-line,#ececed); background: #fff; color: var(--qs-ink,#1d2733); font-size:13px; font-weight: 600;
+              border-radius: 999px; border: 1px solid var(--qs-line,#ececed); background: var(--qd-surface2,#fff); color: var(--qs-ink,#1d2733); font-size:13px; font-weight: 600;
               transition: border-color .15s ease, background .15s ease;
             }
-            .qa-fchip { padding: 8px 14px; border-radius: 999px; font-size:13px; font-weight: 500; cursor: pointer; font-family: inherit; background: #fff; color: var(--qs-body,#3d4650); border: 1px solid var(--qs-line-2,#cacbcc); display: inline-flex; align-items: center; gap: 6px; }
+            .qa-fchip { padding: 8px 14px; border-radius: 999px; font-size:13px; font-weight: 500; cursor: pointer; font-family: inherit; background: var(--qd-surface2,#fff); color: var(--qs-body,#3d4650); border: 1px solid var(--qs-line-2,#cacbcc); display: inline-flex; align-items: center; gap: 6px; }
             .qa-fchip span { font-size:13px; opacity: .65; }
             .qa-fchip.on { background: var(--qs-band,#049dc5); border-color: var(--qs-brand-deep,#049dc5); color: #fff; }
             .qa-dest-chip:hover { border-color: var(--qs-brand-deep,#049dc5); background: var(--qs-brand-soft,#eaf8fd); }
@@ -515,7 +516,7 @@ export default function PackagesPage({ initialPackages = null }) {
             :global(.qa-upc-date) { flex-shrink: 0; font-weight:600; color: #fff; min-width: 92px; }
             .qa-pill {
               flex: none; cursor: pointer; font-family: inherit; white-space: nowrap; padding: 8px 16px; border-radius: 999px;
-              border: 1px solid var(--qs-line,#ececed); background: #fff; color: var(--qs-body,#3d4650); font-size:13px; font-weight: 600;
+              border: 1px solid var(--qs-line,#ececed); background: var(--qd-surface2,#fff); color: var(--qs-body,#3d4650); font-size:13px; font-weight: 600;
               transition: background .15s ease, border-color .15s ease, color .15s ease, transform .15s ease;
             }
             .qa-pill:hover { border-color: var(--qs-brand-deep,#049dc5); transform: translateY(-1px); }
@@ -523,7 +524,7 @@ export default function PackagesPage({ initialPackages = null }) {
             .qa-pill-scroll::-webkit-scrollbar { display: none; }
             .qa-filters-btn {
               flex: none; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; font-family: inherit;
-              padding: 8px 16px; border-radius: 999px; border: 1px solid var(--qs-line-2,#cacbcc); background: #fff; color: var(--qs-ink,#1d2733);
+              padding: 8px 16px; border-radius: 999px; border: 1px solid var(--qs-line-2,#cacbcc); background: var(--qd-surface2,#fff); color: var(--qs-ink,#1d2733);
               font-size:13px; font-weight:600; position: relative; transition: border-color .15s ease, transform .15s ease;
             }
             .qa-filters-btn:hover { border-color: var(--qs-brand-deep,#049dc5); transform: translateY(-1px); }
@@ -535,7 +536,7 @@ export default function PackagesPage({ initialPackages = null }) {
             .qa-search-cta:hover { transform: translateY(-1px); }
             @media (max-width: 720px) {
               .qa-search-divider { display: none; }
-              .qa-search-field { border-bottom: 1px solid #f0f0f0; }
+              .qa-search-field { border-bottom: 1px solid var(--qd-line,#f0f0f0); }
               .qa-search-cta-wrap { width: 100%; padding: 6px 10px 14px !important; }
               .qa-search-cta { width: 100% !important; border-radius:var(--tw-radius-sm,10px) !important; display: flex !important; flex-direction: row !important; gap: 8px !important; }
               .qa-search-cta-label { display: inline !important; }
@@ -548,7 +549,7 @@ export default function PackagesPage({ initialPackages = null }) {
             <h2 style={{ fontSize: 20, marginBottom: 4 }}>{t.packages_title}</h2>
             <p style={{ color: 'var(--qs-ink-2,#5f666e)', marginBottom: 24 }}>{t.packages_sub}</p>
 
-            {error && <p style={{ color: '#d2324f', background: '#fdecef', border: '1px solid #f7c3cc', borderRadius: 'var(--tw-radius-sm,10px)', padding: '14px 20px' }}>{error}</p>}
+            {error && <p style={{ color: 'var(--qd-red,#d2324f)', background: 'var(--qd-redbg,#fdecef)', border: '1px solid var(--qd-redline,#f7c3cc)', borderRadius: 'var(--tw-radius-sm,10px)', padding: '14px 20px' }}>{error}</p>}
 
             {!packages && !error && <div style={{ padding: 40 }}><MascotLoader assetBase="/assets" /></div>}
 
@@ -560,12 +561,12 @@ export default function PackagesPage({ initialPackages = null }) {
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 16 }}>
                 <span style={{ fontSize: 15, fontWeight: 600, color: 'var(--qs-ink,#1d2733)' }}>{nm('النتائج', 'Results')} · {filtered.length}</span>
                 {budget !== 'all' && (
-                  <button type="button" onClick={() => setBudget('all')} className="qa-dest-chip" style={{ background: '#fff' }}>
+                  <button type="button" onClick={() => setBudget('all')} className="qa-dest-chip" style={{ background: 'var(--qd-surface,#fff)' }}>
                     <Icon name="x" size={13} /> {nm(BUDGETS.find((b) => b.id === budget).ar, BUDGETS.find((b) => b.id === budget).en)}
                   </button>
                 )}
                 {month !== 'all' && (
-                  <button type="button" onClick={() => { setMonth('all'); setPreferredDates(''); }} className="qa-dest-chip" style={{ background: '#fff' }}>
+                  <button type="button" onClick={() => { setMonth('all'); setPreferredDates(''); }} className="qa-dest-chip" style={{ background: 'var(--qd-surface,#fff)' }}>
                     <Icon name="x" size={13} /> {monthLabel(month, lang === 'en')}
                   </button>
                 )}
@@ -577,7 +578,7 @@ export default function PackagesPage({ initialPackages = null }) {
                 <span style={{ fontSize: 15, fontWeight: 600, color: 'var(--qs-ink,#1d2733)' }}>
                   {nm('باقات', 'Packages in')} {nm((countryInfo(country) || {}).ar, (countryInfo(country) || {}).en)} · {filtered.length}
                 </span>
-                <button type="button" onClick={() => setCountry('all')} className="qa-dest-chip" style={{ background: '#fff' }}>
+                <button type="button" onClick={() => setCountry('all')} className="qa-dest-chip" style={{ background: 'var(--qd-surface,#fff)' }}>
                   <Icon name="x" size={13} /> {nm('كل الوجهات', 'All destinations')}
                 </button>
               </div>
@@ -692,7 +693,7 @@ export default function PackagesPage({ initialPackages = null }) {
                   <h2 style={{ margin: 0, fontSize: 'clamp(20px,3vw,26px)', color: 'var(--qs-ink,#1d2733)' }}>{lang === 'en' ? 'What our customers say' : 'ماذا يقول عملاؤنا عنا'}</h2>
                   <div style={{ display: 'flex', gap: 2 }}>
                     {Array.from({ length: 5 }).map((_, i) => (
-                      <Icon key={i} name="star" size={16} style={{ color: i < Math.round(currentReview.rating || 5) ? '#faab18' : '#dcdfe2' }} />
+                      <Icon key={i} name="star" size={16} style={{ color: i < Math.round(currentReview.rating || 5) ? '#faab18' : 'var(--qd-linecyan,#dcdfe2)' }} />
                     ))}
                   </div>
                   <p style={{ margin: 0, fontSize: 15, lineHeight: 1.8, color: 'var(--qs-body,#3d4650)' }}>{nm(currentReview.text_ar, currentReview.text_en)}</p>
@@ -700,7 +701,7 @@ export default function PackagesPage({ initialPackages = null }) {
                     {currentReview.image_url ? (
                       <img src={currentReview.image_url} alt="" style={{ width: 44, height: 44, borderRadius: '50%', objectFit: 'cover', flex: 'none' }} />
                     ) : (
-                      <span style={{ width: 44, height: 44, borderRadius: '50%', background: '#fff', display: 'grid', placeItems: 'center', color: 'var(--qs-brand-deep,#049dc5)', fontWeight: 600, flex: 'none' }}>
+                      <span style={{ width: 44, height: 44, borderRadius: '50%', background: 'var(--qd-surface,#fff)', display: 'grid', placeItems: 'center', color: 'var(--qs-brand-deep,#049dc5)', fontWeight: 600, flex: 'none' }}>
                         {(nm(currentReview.name_ar, currentReview.name_en) || '?').charAt(0)}
                       </span>
                     )}
@@ -714,7 +715,7 @@ export default function PackagesPage({ initialPackages = null }) {
                           type="button"
                           onClick={() => setReviewIndex(i)}
                           aria-label={`review-${i}`}
-                          style={{ width: 8, height: 8, padding: 0, borderRadius: '50%', border: 'none', cursor: 'pointer', background: i === reviewIndex ? 'var(--qs-band,#049dc5)' : '#c7dee6' }}
+                          style={{ width: 8, height: 8, padding: 0, borderRadius: '50%', border: 'none', cursor: 'pointer', background: i === reviewIndex ? 'var(--qs-band,#049dc5)' : 'var(--qd-linecyan,#c7dee6)' }}
                         />
                       ))}
                     </div>
@@ -733,19 +734,19 @@ export default function PackagesPage({ initialPackages = null }) {
             </section>
           )}
 
-          {/* Highlights: inventory numbers */}
+          {/* Highlights: inventory numbers. They count up once when scrolled into view (components/motion/CountUp.jsx). */}
           <section style={{ background: 'var(--qs-brand-soft,#eaf8fd)', padding: 'clamp(28px,4vw,40px) clamp(16px,4vw,32px)' }}>
             <div style={{ maxWidth: 1240, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(240px,1fr))', gap: 28 }}>
               {[
-                { icon: 'building-2', value: lang === 'en' ? '+1,000,000' : '+1,000,000', label: lang === 'en' ? 'Hotels' : 'فندق', sub: lang === 'en' ? 'In our booking inventory, across every destination' : 'ضمن مخزوننا من الفنادق حول العالم' },
-                { icon: 'plane', value: lang === 'en' ? '+150' : '+150', label: lang === 'en' ? 'Tours & package types' : 'جولة ونوع باقة', sub: lang === 'en' ? 'For every kind of traveller and group' : 'تناسب كل أنواع المسافرين والمجموعات' },
+                { icon: 'building-2', count: 1000000, label: lang === 'en' ? 'Hotels' : 'فندق', sub: lang === 'en' ? 'In our booking inventory, across every destination' : 'ضمن مخزوننا من الفنادق حول العالم' },
+                { icon: 'plane', count: 150, label: lang === 'en' ? 'Tours & package types' : 'جولة ونوع باقة', sub: lang === 'en' ? 'For every kind of traveller and group' : 'تناسب كل أنواع المسافرين والمجموعات' },
               ].map((s) => (
                 <div key={s.label} style={{ display: 'flex', alignItems: 'flex-start', gap: 14 }}>
-                  <span style={{ width: 48, height: 48, borderRadius: '50%', background: '#fff', display: 'grid', placeItems: 'center', flex: 'none', border: '1px solid var(--qs-line-2,#bfe9f6)' }}>
+                  <span style={{ width: 48, height: 48, borderRadius: '50%', background: 'var(--qd-surface,#fff)', display: 'grid', placeItems: 'center', flex: 'none', border: '1px solid var(--qs-line-2,#bfe9f6)' }}>
                     <Icon name={s.icon} size={22} style={{ color: 'var(--qs-brand-deep,#049dc5)' }} />
                   </span>
                   <div>
-                    <div style={{ fontSize: 17, fontWeight: 600, color: 'var(--qs-ink,#1d2733)' }}>{s.value} <span style={{ fontWeight: 600, fontSize: 15, color: 'var(--qs-body,#3d4650)' }}>{s.label}</span></div>
+                    <div style={{ fontSize: 17, fontWeight: 600, color: 'var(--qs-ink,#1d2733)' }}><CountUp value={s.count} prefix="+" /> <span style={{ fontWeight: 600, fontSize: 15, color: 'var(--qs-body,#3d4650)' }}>{s.label}</span></div>
                     <div style={{ fontSize: 13, color: 'var(--qs-ink-2,#5f666e)', marginTop: 3 }}>{s.sub}</div>
                   </div>
                 </div>

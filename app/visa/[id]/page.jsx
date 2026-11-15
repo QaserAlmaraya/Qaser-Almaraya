@@ -48,7 +48,7 @@ export default function VisaDetailPage() {
         <SiteHeader active="التأشيرات" />
         <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 40 }}>
           <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'center' }}>
-            <p style={{ color: '#d2324f', background: '#fdecef', border: '1px solid #f7c3cc', borderRadius: 'var(--tw-radius-sm,10px)', padding: '14px 20px' }}>{error}</p>
+            <p style={{ color: 'var(--qd-red,#d2324f)', background: 'var(--qd-redbg,#fdecef)', border: '1px solid var(--qd-redline,#f7c3cc)', borderRadius: 'var(--tw-radius-sm,10px)', padding: '14px 20px' }}>{error}</p>
             <Link href="/visa" className="qa-btn qa-cyan" style={{ textDecoration: 'none' }}>← رجوع إلى التأشيرات</Link>
           </div>
         </main>

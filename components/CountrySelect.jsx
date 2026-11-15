@@ -140,7 +140,7 @@ export default function CountrySelect({ value, onChange, options, placeholder = 
           fontFamily: 'inherit',
           fontSize: 16,
           fontWeight: 700,
-          color: selected ? '#1d2733' : '#5f666e',
+          color: selected ? 'var(--qd-ink,#1d2733)' : 'var(--qd-ink2,#5f666e)',
           cursor: 'pointer',
           textAlign: 'right',
         }}
@@ -151,7 +151,7 @@ export default function CountrySelect({ value, onChange, options, placeholder = 
           )}
           <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{selected ? selected.label : placeholder}</span>
         </span>
-        <span style={{ color: '#049dc5', fontSize: 12, flex: 'none', transform: open ? 'rotate(180deg)' : 'none', transition: 'transform .2s ease' }}>▾</span>
+        <span style={{ color: 'var(--qd-cyan,#049dc5)', fontSize: 12, flex: 'none', transform: open ? 'rotate(180deg)' : 'none', transition: 'transform .2s ease' }}>▾</span>
       </button>
 
       {open && coords && (
@@ -165,29 +165,29 @@ export default function CountrySelect({ value, onChange, options, placeholder = 
             left: coords.left,
             width: coords.width,
             zIndex: 200,
-            background: '#fff',
+            background: 'var(--qd-surface,#fff)',
             borderRadius: 'var(--tw-radius,16px)',
-            border: '1px solid #ececed',
+            border: '1px solid var(--qd-line,#ececed)',
             boxShadow: 'var(--tw-pop-shadow,0 6px 20px rgba(1,42,55,.10))',
             overflow: 'hidden',
             animation: 'qa-dropdown-in 160ms cubic-bezier(.16,1,.3,1) both',
             transformOrigin: coords.placement === 'below' ? 'top center' : 'bottom center',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 14px', borderBottom: '1px solid #f2f2f3' }}>
-            <Icon name="search" size={15} style={{ color: '#5f666e', flex: 'none' }} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 14px', borderBottom: '1px solid var(--qd-line,#f2f2f3)' }}>
+            <Icon name="search" size={15} style={{ color: 'var(--qd-ink2,#5f666e)', flex: 'none' }} />
             <input
               ref={inputRef}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={onKeyDown}
               placeholder={searchPlaceholder}
-              style={{ flex: 1, border: 0, outline: 'none', fontFamily: 'inherit', fontSize: 14.5, background: 'transparent', color: '#1d2733' }}
+              style={{ flex: 1, border: 0, outline: 'none', fontFamily: 'inherit', fontSize: 14.5, background: 'transparent', color: 'var(--qd-ink,#1d2733)' }}
             />
           </div>
           <div ref={listRef} className="qa-dropdown-scroll" style={{ maxHeight: coords.listMaxHeight, overflowY: 'auto', padding: 6 }}>
             {filtered.length === 0 && (
-              <div style={{ padding: '18px 12px', textAlign: 'center', color: '#5f666e', fontSize: 13.5 }}>
+              <div style={{ padding: '18px 12px', textAlign: 'center', color: 'var(--qd-ink2,#5f666e)', fontSize: 13.5 }}>
                 {options.length === 0 ? '...جارٍ التحميل' : emptyLabel}
               </div>
             )}
@@ -212,19 +212,19 @@ export default function CountrySelect({ value, onChange, options, placeholder = 
                     fontFamily: 'inherit',
                     fontSize: 14.5,
                     fontWeight: isSelected ? 700 : 500,
-                    color: isSelected ? '#036f8c' : '#1d2733',
-                    background: isSelected ? '#eaf8fd' : isHighlighted ? '#f8fdfe' : 'transparent',
+                    color: isSelected ? 'var(--qd-cyan,#036f8c)' : 'var(--qd-ink,#1d2733)',
+                    background: isSelected ? 'var(--qd-soft,#eaf8fd)' : isHighlighted ? 'var(--qd-surface2,#f8fdfe)' : 'transparent',
                     textAlign: 'right',
                     transition: 'background .12s ease',
                   }}
                 >
                   {o.flagCode ? (
-                    <img src={flagSrc(o.flagCode)} alt="" style={{ width: 26, height: 26, borderRadius: '50%', objectFit: 'cover', flex: 'none', border: '1px solid #ececed' }} onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+                    <img src={flagSrc(o.flagCode)} alt="" style={{ width: 26, height: 26, borderRadius: '50%', objectFit: 'cover', flex: 'none', border: '1px solid var(--qd-line,#ececed)' }} onError={(e) => { e.currentTarget.style.display = 'none'; }} />
                   ) : (
-                    <span style={{ width: 26, height: 26, borderRadius: '50%', background: '#f2f2f3', flex: 'none' }} />
+                    <span style={{ width: 26, height: 26, borderRadius: '50%', background: 'var(--qd-line,#f2f2f3)', flex: 'none' }} />
                   )}
                   <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{o.label}</span>
-                  {isSelected && <Icon name="check" size={15} style={{ color: '#049dc5', flex: 'none' }} />}
+                  {isSelected && <Icon name="check" size={15} style={{ color: 'var(--qd-cyan,#049dc5)', flex: 'none' }} />}
                 </button>
               );
             })}

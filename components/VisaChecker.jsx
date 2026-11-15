@@ -88,14 +88,14 @@ export default function VisaChecker({ lang = 'ar', embedded = false }) {
   return (
     <section className={embedded ? 'qa-vc-sec qa-vc-embedded' : 'qa-sec qa-vc-sec'} data-no-i18n="" dir={en ? 'ltr' : 'rtl'}>
       <style>{`
-.qa-vc{border-radius:var(--qs-r,20px);background:#fff;border:1px solid var(--qs-line,#dbe8ee);padding:32px;display:flex;flex-direction:column;gap:20px}
+.qa-vc{border-radius:var(--qs-r,20px);background:var(--qd-surface,#fff);border:1px solid var(--qs-line,#dbe8ee);padding:32px;display:flex;flex-direction:column;gap:20px}
 .qa-vc h2{font-size:26px;font-weight:600}
 .qa-vc-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:12px}
-.qa-vc select{width:100%;box-sizing:border-box;height:48px;font-family:inherit;font-size:15px;padding:0 12px;border-radius:var(--qs-r-xs,12px);border:1px solid var(--qs-line-2,#c3d6df);background:#fff;color:var(--qs-ink,#1d2733)}
+.qa-vc select{width:100%;box-sizing:border-box;height:48px;font-family:inherit;font-size:15px;padding:0 12px;border-radius:var(--qs-r-xs,12px);border:1px solid var(--qs-line-2,#c3d6df);background:var(--qd-surface2,#fff);color:var(--qs-ink,#1d2733)}
 .qa-vc-fixed{display:flex;align-items:center;gap:8px;box-sizing:border-box;height:48px;font-size:15px;font-weight:500;padding:0 12px;border-radius:var(--qs-r-xs,12px);border:1px solid var(--qs-line,#dbe8ee);background:var(--qs-paper,#f6fbfd);color:var(--qs-ink,#1d2733)}
 .qa-vc label{display:flex;flex-direction:column;gap:8px;font-size:13px;font-weight:500;color:var(--qs-ink-2,#5f666e)}
 .qa-vc-types{display:flex;flex-wrap:wrap;gap:8px}
-.qa-vc-type{font-family:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:8px 16px;border-radius:var(--qs-r-xs,12px);border:1px solid var(--qs-line-2,#c3d6df);background:#fff;color:var(--qs-ink,#1d2733);text-align:start}
+.qa-vc-type{font-family:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:8px 16px;border-radius:var(--qs-r-xs,12px);border:1px solid var(--qs-line-2,#c3d6df);background:var(--qd-surface2,#fff);color:var(--qs-ink,#1d2733);text-align:start}
 .qa-vc-type.on{border-color:var(--qs-brand,#049dc5);background:var(--qs-brand-soft,#e3f5fc);box-shadow:none}
 .qa-vc-type b{font-size:15px;font-weight:600}.qa-vc-type span{font-size:13px;color:var(--qs-ink-2,#5f666e)}
 .qa-vc-res{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:16px;animation:qa-tf-in .4s cubic-bezier(.16,1,.3,1) both}
@@ -104,7 +104,7 @@ export default function VisaChecker({ lang = 'ar', embedded = false }) {
 .qa-vc-docs{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
 .qa-vc-docs li{display:flex;gap:8px;align-items:flex-start;font-size:15px;color:var(--qs-ink,#1d2733);line-height:1.6}
 .qa-vc-docs li::before{content:'';flex-shrink:0;width:20px;height:20px;border-radius:50%;background:var(--qs-brand-soft,#e3f5fc) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23036f8c' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") center/12px no-repeat;margin-top:2px}
-.qa-vc-docs.opt li::before{background:#fff4dc url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238a5a00' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14M12 5v14'/%3E%3C/svg%3E") center/12px no-repeat}
+.qa-vc-docs.opt li::before{background:var(--qd-amberbg,#fff4dc) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238a5a00' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14M12 5v14'/%3E%3C/svg%3E") center/12px no-repeat}
 .qa-vc-btns{display:flex;flex-wrap:wrap;gap:12px}
 @keyframes qa-tf-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 @media (max-width:820px){.qa-vc{padding:24px 16px}.qa-vc h2{font-size:20px!important}.qa-vc-row,.qa-vc-res{display:flex!important;flex-direction:column}.qa-vc-btns>*{flex:1 1 100%;justify-content:center}}
@@ -159,12 +159,12 @@ export default function VisaChecker({ lang = 'ar', embedded = false }) {
                 )}
                 {iso && guideFor(iso) && <Link href={'/guide/' + iso} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: 15, fontWeight: 600, color: 'var(--qs-brand-deep,#049dc5)', marginTop: 4 }}><Icon name="compass" size={16} />{en ? 'Travel guide for this country' : 'دليل السفر لهذه الدولة'}<Icon name={en ? 'chevron-right' : 'chevron-left'} size={16} /></Link>}
               </div>
-              <div className="qa-vc-box" style={{ background: '#fff', border: '1px solid var(--qs-line,#dbe8ee)' }}>
+              <div className="qa-vc-box" style={{ background: 'var(--qd-surface,#fff)', border: '1px solid var(--qs-line,#dbe8ee)' }}>
                 <b style={{ fontSize: 17, fontWeight: 600, color: 'var(--qs-ink,#1d2733)' }}>{en ? 'Documents to prepare' : 'المستندات المطلوبة'}</b>
                 {loading && !detail ? <span style={{ color: 'var(--qs-ink-2,#5f666e)', fontSize: 15 }}>{en ? 'Loading…' : 'جارٍ التحميل…'}</span> : null}
                 {detail && req.length === 0 && opt.length === 0 ? <span style={{ color: 'var(--qs-ink-2,#5f666e)', fontSize: 15 }}>{en ? 'Message us and we will tell you exactly what is needed.' : 'راسلنا ونخبرك بالمطلوب بالضبط.'}</span> : null}
                 {req.length > 0 && <ul className="qa-vc-docs">{req.map((d) => <li key={d.id}>{nm(d.name_ar, d.name_en)}{audience(d.audience) ? <span style={{ color: 'var(--qs-ink-2,#5f666e)', fontSize: 13 }}> ({audience(d.audience)})</span> : null}</li>)}</ul>}
-                {opt.length > 0 && (<><span style={{ fontSize: 13, color: '#8a5a00', fontWeight: 500, marginTop: 4 }}>{en ? 'If applicable' : 'عند الحاجة'}</span><ul className="qa-vc-docs opt">{opt.map((d) => <li key={d.id}>{nm(d.name_ar, d.name_en)}</li>)}</ul></>)}
+                {opt.length > 0 && (<><span style={{ fontSize: 13, color: 'var(--qd-ambertext,#8a5a00)', fontWeight: 500, marginTop: 4 }}>{en ? 'If applicable' : 'عند الحاجة'}</span><ul className="qa-vc-docs opt">{opt.map((d) => <li key={d.id}>{nm(d.name_ar, d.name_en)}</li>)}</ul></>)}
               </div>
             </div>
             <div className="qa-vc-btns">

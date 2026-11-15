@@ -28,7 +28,7 @@ import { imgProps } from '../../../lib/img';
 
 const optStyle = (on) => ({
   display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', borderRadius: 'var(--tw-radius-sm,10px)',
-  border: `1px solid ${on ? 'var(--qs-brand,#049dc5)' : 'var(--qs-line,#ececed)'}`, cursor: 'pointer', background: on ? 'var(--qs-brand-soft,#eaf8fd)' : '#fff',
+  border: `1px solid ${on ? 'var(--qs-brand,#049dc5)' : 'var(--qs-line,#ececed)'}`, cursor: 'pointer', background: on ? 'var(--qs-brand-soft,#eaf8fd)' : 'var(--qd-surface,#fff)',
 });
 
 // "12 Dec 2026" / "12 كانون الأول 2026" for the departure–return line.
@@ -262,7 +262,7 @@ export default function PackageDetailPage() {
         <SiteHeader active="المجموعات والباقات" />
         <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 40 }}>
           <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'center' }}>
-            <p style={{ color: '#d2324f', background: '#fdecef', border: '1px solid #f7c3cc', borderRadius: 'var(--tw-radius-sm,10px)', padding: '14px 20px' }}>{error}</p>
+            <p style={{ color: 'var(--qd-red,#d2324f)', background: 'var(--qd-redbg,#fdecef)', border: '1px solid var(--qd-redline,#f7c3cc)', borderRadius: 'var(--tw-radius-sm,10px)', padding: '14px 20px' }}>{error}</p>
             <Link href="/packages" className="qa-btn qa-cyan" style={{ textDecoration: 'none' }}>{t.back_to_results}</Link>
           </div>
         </main>
@@ -335,17 +335,17 @@ export default function PackageDetailPage() {
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
                     {availableDates.map((d, i) => (
                       <button key={d.date} type="button" onClick={() => setDateIdx(i)}
-                        style={{ borderRadius: 'var(--tw-radius-sm,10px)', padding: '8px 12px', cursor: 'pointer', fontFamily: 'inherit', fontSize: 15, fontWeight: 600, border: i === dateIdx ? '2px solid var(--qs-brand-deep,#049dc5)' : '1px solid var(--qs-line,#ececed)', background: i === dateIdx ? 'var(--qs-brand-soft,#eaf8fd)' : '#fff', color: 'var(--qs-ink,#1d2733)' }}>
+                        style={{ borderRadius: 'var(--tw-radius-sm,10px)', padding: '8px 12px', cursor: 'pointer', fontFamily: 'inherit', fontSize: 15, fontWeight: 600, border: i === dateIdx ? '2px solid var(--qs-brand-deep,#049dc5)' : '1px solid var(--qs-line,#ececed)', background: i === dateIdx ? 'var(--qs-brand-soft,#eaf8fd)' : 'var(--qd-surface2,#fff)', color: 'var(--qs-ink,#1d2733)' }}>
                         <span dir="ltr">{new Date(d.date).toLocaleDateString(lang === 'en' ? 'en-GB' : 'ar-IQ-u-nu-latn', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
-                        {d.adjust ? <span style={{ display: 'block', fontSize: 13, color: d.adjust > 0 ? '#c27a00' : '#1a7f47' }}>{formatSignedPrice(d.adjust, 'IQD', lang)}</span> : null}
+                        {d.adjust ? <span style={{ display: 'block', fontSize: 13, color: d.adjust > 0 ? 'var(--qd-ambertext,#c27a00)' : 'var(--qd-green,#1a7f47)' }}>{formatSignedPrice(d.adjust, 'IQD', lang)}</span> : null}
                       </button>
                     ))}
                   </div>
                   {selectedDate && returnDate(pkg, selectedDate.date) && (
-                    <div data-no-i18n="" style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', fontSize: 15, background: '#f3fafc', border: '1px solid #d9e9ef', borderRadius: 'var(--tw-radius-sm,10px)', padding: '8px 12px' }}>
+                    <div data-no-i18n="" style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', fontSize: 15, background: 'var(--qd-surface2,#f3fafc)', border: '1px solid var(--qd-line,#d9e9ef)', borderRadius: 'var(--tw-radius-sm,10px)', padding: '8px 12px' }}>
                       <Icon name="calendar-days" size={16} style={{ color: 'var(--qs-brand-deep,#036f8c)', flex: 'none' }} />
                       <span>{lang === 'en' ? 'Departure' : 'الانطلاق'} <b dir="ltr">{fmtTripDate(selectedDate.date, lang)}</b></span>
-                      <span style={{ color: '#b0b6bb' }}>·</span>
+                      <span style={{ color: 'var(--qd-ink3,#b0b6bb)' }}>·</span>
                       <span>{lang === 'en' ? 'Return' : 'العودة'} <b dir="ltr">{fmtTripDate(returnDate(pkg, selectedDate.date), lang)}</b></span>
                       <span style={{ color: 'var(--qs-ink-2,#5f666e)' }}>({tripDays(pkg)} {lang === 'en' ? 'days' : 'أيام'})</span>
                     </div>
@@ -361,26 +361,26 @@ export default function PackageDetailPage() {
                   const unit = totals.units ? totals.units[tt.key] : unitPrice(pkg, tt, upgrade);
                   return (
                     <div key={tt.key} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
-                      <span style={{ fontSize: 15, color: unit == null ? '#b0b6bb' : 'var(--qs-ink,#1d2733)' }}>{label}{hint ? <span style={{ fontSize: 13, color: 'var(--qs-ink-2,#5f666e)' }}> ({hint})</span> : null}
-                        {unit == null ? <span style={{ display: 'block', fontSize: 13, color: '#b0b6bb' }}>{lang === 'en' ? 'Not available for this hotel' : 'غير متاح لهذا الفندق'}</span>
+                      <span style={{ fontSize: 15, color: unit == null ? 'var(--qd-ink3,#b0b6bb)' : 'var(--qs-ink,#1d2733)' }}>{label}{hint ? <span style={{ fontSize: 13, color: 'var(--qs-ink-2,#5f666e)' }}> ({hint})</span> : null}
+                        {unit == null ? <span style={{ display: 'block', fontSize: 13, color: 'var(--qd-ink3,#b0b6bb)' }}>{lang === 'en' ? 'Not available for this hotel' : 'غير متاح لهذا الفندق'}</span>
                           : counts[tt.key] > 0 && <span style={{ display: 'block', fontSize: 13, color: 'var(--qs-ink-2,#5f666e)' }}>{formatPrice(unit, 'IQD', lang)}</span>}
                       </span>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                        <button type="button" disabled={counts[tt.key] <= 0} onClick={() => setCounts((c) => ({ ...c, [tt.key]: Math.max(0, c[tt.key] - 1) }))} style={{ width: 28, height: 28, borderRadius: '50%', border: '1px solid var(--qs-line-2,#cacbcc)', background: '#fff', cursor: counts[tt.key] <= 0 ? 'not-allowed' : 'pointer', opacity: counts[tt.key] <= 0 ? 0.4 : 1 }}>−</button>
+                        <button type="button" disabled={counts[tt.key] <= 0} onClick={() => setCounts((c) => ({ ...c, [tt.key]: Math.max(0, c[tt.key] - 1) }))} style={{ width: 28, height: 28, borderRadius: '50%', border: '1px solid var(--qs-line-2,#cacbcc)', background: 'var(--qd-surface,#fff)', cursor: counts[tt.key] <= 0 ? 'not-allowed' : 'pointer', opacity: counts[tt.key] <= 0 ? 0.4 : 1 }}>−</button>
                         <span style={{ minWidth: 18, textAlign: 'center' }}>{counts[tt.key]}</span>
-                        <button type="button" disabled={unit == null} onClick={() => setCounts((c) => ({ ...c, [tt.key]: c[tt.key] + 1 }))} style={{ width: 28, height: 28, borderRadius: '50%', border: '1px solid var(--qs-line-2,#cacbcc)', background: '#fff', cursor: unit == null ? 'not-allowed' : 'pointer', opacity: unit == null ? 0.4 : 1 }}>+</button>
+                        <button type="button" disabled={unit == null} onClick={() => setCounts((c) => ({ ...c, [tt.key]: c[tt.key] + 1 }))} style={{ width: 28, height: 28, borderRadius: '50%', border: '1px solid var(--qs-line-2,#cacbcc)', background: 'var(--qd-surface,#fff)', cursor: unit == null ? 'not-allowed' : 'pointer', opacity: unit == null ? 0.4 : 1 }}>+</button>
                       </div>
                     </div>
                   );
                 })}
                 {noAdults && (
-                  <span role="alert" style={{ fontSize: 13, fontWeight: 500, color: '#d2324f', background: '#fdecef', border: '1px solid #f7c3cc', borderRadius: 'var(--tw-radius-xs,8px)', padding: '8px 10px' }}>{noAdultsMsg}</span>
+                  <span role="alert" style={{ fontSize: 13, fontWeight: 500, color: 'var(--qd-red,#d2324f)', background: 'var(--qd-redbg,#fdecef)', border: '1px solid var(--qd-redline,#f7c3cc)', borderRadius: 'var(--tw-radius-xs,8px)', padding: '8px 10px' }}>{noAdultsMsg}</span>
                 )}
               </div>
 
               <div style={{ borderTop: '1px solid var(--qs-line,#ececed)', paddingTop: 14, display: 'flex', flexDirection: 'column', gap: 6 }}>
                 {totals.lines.map((l) => (
-                  <div key={l.type.key} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, color: '#5b646d' }}>
+                  <div key={l.type.key} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, color: 'var(--qd-ink2,#5b646d)' }}>
                     <span>{l.count} {lang === 'en' ? l.type.en : l.type.ar} × {formatPrice(l.unit, 'IQD', lang)}</span>
                     <span>{formatPrice(l.subtotal, 'IQD', lang)}</span>
                   </div>
@@ -393,8 +393,8 @@ export default function PackageDetailPage() {
 
               <UrgencyPanel pkg={pkg} lang={lang} />
               {staffMode && (
-                <div style={{ border: '2px dashed #faab18', background: '#fffaf0', borderRadius: 'var(--tw-radius-sm,10px)', padding: 12, display: 'flex', flexDirection: 'column', gap: 8 }}>
-                  <b style={{ fontSize: 15, color: '#8a5a00' }}>عرض سعر مخصص (وضع الموظفين)</b>
+                <div style={{ border: '2px dashed #faab18', background: 'var(--qd-amberbg,#fffaf0)', borderRadius: 'var(--tw-radius-sm,10px)', padding: 12, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  <b style={{ fontSize: 15, color: 'var(--qd-ambertext,#8a5a00)' }}>عرض سعر مخصص (وضع الموظفين)</b>
                   <input style={{ padding: '8px 10px', borderRadius: 'var(--tw-radius-xs,8px)', border: '1px solid var(--qs-line,#ececed)', fontFamily: 'inherit' }} placeholder="اسم العميل — مثال: أحمد علي" value={quote.customer} onChange={(e) => setQuote({ ...quote, customer: e.target.value })} />
                   <div style={{ display: 'flex', gap: 6 }}>
                     <select style={{ padding: '8px', borderRadius: 'var(--tw-radius-xs,8px)', border: '1px solid var(--qs-line,#ececed)', fontFamily: 'inherit' }} value={quote.discountType} onChange={(e) => setQuote({ ...quote, discountType: e.target.value })}>
@@ -465,7 +465,7 @@ export default function PackageDetailPage() {
                         ) : null}
                         <span className="qa-opt-name" style={{ flex: 1, fontSize: 15, color: 'var(--qs-ink,#1d2733)' }}>
                           {nm(h.nameAr, h.nameEn)}
-                          {(h.notesAr || h.notesEn) && <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 13, color: '#1a7f47', fontWeight: 600, marginTop: 2 }}><Icon name="utensils" size={12} style={{ flex: 'none' }} />{nm(h.notesAr, h.notesEn)}</span>}
+                          {(h.notesAr || h.notesEn) && <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 13, color: 'var(--qd-green,#1a7f47)', fontWeight: 600, marginTop: 2 }}><Icon name="utensils" size={12} style={{ flex: 'none' }} />{nm(h.notesAr, h.notesEn)}</span>}
                         </span>
                         <span className="qa-opt-price" style={{ fontSize: 15, fontWeight: 600, color: (h.extras?.adult ?? h.diff) ? 'var(--qs-brand-deep,#049dc5)' : 'var(--qs-ink-2,#5f666e)' }}>{(h.extras?.adult ?? h.diff) ? formatSignedPrice(h.extras?.adult ?? h.diff, 'IQD', lang) : (lang === 'en' ? 'Included' : 'مشمول')}</span>
                       </div>
@@ -503,7 +503,7 @@ export default function PackageDetailPage() {
                         loading="lazy"
                         src={`https://www.openstreetmap.org/export/embed.html?bbox=${selectedHotelCoords.lng - 0.01}%2C${selectedHotelCoords.lat - 0.01}%2C${selectedHotelCoords.lng + 0.01}%2C${selectedHotelCoords.lat + 0.01}&layer=mapnik&marker=${selectedHotelCoords.lat}%2C${selectedHotelCoords.lng}`}
                       />
-                      <div style={{ padding: '10px 14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, background: '#f8fbfc' }}>
+                      <div style={{ padding: '10px 14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, background: 'var(--qd-surface2,#f8fbfc)' }}>
                         <span style={{ fontSize: 13, color: 'var(--qs-ink-2,#5f666e)', display: 'flex', alignItems: 'center', gap: 4 }}>
                           <Icon name="map-pin" size={13} style={{ color: 'var(--qs-brand-deep,#049dc5)' }} />
                           {nm(hotels[hotelIdx]?.nameAr, hotels[hotelIdx]?.nameEn)}

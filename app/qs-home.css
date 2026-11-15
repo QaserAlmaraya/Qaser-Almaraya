@@ -14,11 +14,11 @@
 
 /* ---------- 1. Chapters: one spacing rhythm, alternating plain and tint ---------- */
 html[data-area=site] .qs-home .qs-ch{padding-block:var(--qs-s8);scroll-margin-top:72px}
-html[data-area=site] .qs-home .qs-ch-plain{background:#fff}
-html[data-area=site] .qs-home .qs-ch-tint{background:#f1f9fc}
+html[data-area=site] .qs-home .qs-ch-plain{background:var(--qd-surface,#fff)}
+html[data-area=site] .qs-home .qs-ch-tint{background:var(--qd-soft,#f1f9fc)}
 html[data-area=site] .qs-home .qs-ch>:is(.qs-band,.qa-sec,.qs-st-band){padding-block:var(--qs-s6);background:transparent}
 html[data-area=site] .qs-home .qs-ch>.qs-ch-top{padding-bottom:var(--qs-s5)}
-html[data-area=site] .qs-home #contact{scroll-margin-top:72px;background:#fff;padding-block:var(--qs-s9)}
+html[data-area=site] .qs-home #contact{scroll-margin-top:72px;background:var(--qd-surface,#fff);padding-block:var(--qs-s9)}
 
 /* ---------- 2. Headings: chapter title 32, section title 26, group title 20 ---------- */
 html[data-area=site] .qs-home h2:not(.qh-title){font-weight:600!important;line-height:1.35!important}
@@ -60,7 +60,7 @@ html[data-area=site] .qs-home .qs-bp-chips button{padding:4px 12px;font-size:13p
 html[data-area=site] .qs-home .qs-bp-chips button.on{background:var(--qs-brand);border-color:var(--qs-brand)}
 @media (max-width:820px){
   /* phones: the panel sits on the plain page, so it is an ordinary solid block */
-  html[data-area=site] .qs-home .qs-bp{background:#fff;border-block:1px solid var(--qs-line)}
+  html[data-area=site] .qs-home .qs-bp{background:var(--qd-surface,#fff);border-block:1px solid var(--qs-line)}
   html[data-area=site] .qs-home .qs-bp-field :is(input,select){font-size:17px}   /* below 16px iOS zooms the page on focus */
 }
 
@@ -93,7 +93,7 @@ html[data-area=site] .qs-home .qs-fold:not(:has(.qs-fold-body>*)){display:none}
 html[data-area=site] .qs-home .qs-tools:not(:has(.qs-fold-body>*)){display:none}
 
 /* The fold: a native <details> drawn as the page's one card */
-html[data-area=site] .qs-home .qs-fold{background:#fff;border:1px solid var(--qs-line);border-radius:var(--qs-r);overflow:hidden;interpolate-size:allow-keywords;transition:border-color .2s var(--qs-ease)}
+html[data-area=site] .qs-home .qs-fold{background:var(--qd-surface,#fff);border:1px solid var(--qs-line);border-radius:var(--qs-r);overflow:hidden;interpolate-size:allow-keywords;transition:border-color .2s var(--qs-ease)}
 html[data-area=site] .qs-home .qs-fold:hover{border-color:var(--qs-line-2)}
 html[data-area=site] .qs-home .qs-fold-sum{display:grid;grid-template-columns:44px minmax(0,1fr) 24px;align-items:center;gap:var(--qs-s4);padding:var(--qs-s5);cursor:pointer;list-style:none;outline-offset:-3px!important}
 html[data-area=site] .qs-home .qs-fold-sum::-webkit-details-marker{display:none}
@@ -118,7 +118,7 @@ html[data-area=site] .qs-home .qs-fold :is(.qa-vc,.qa-tf){padding:0!important;bo
 }
 
 /* Trip finder and visa checker on the light card (qs.css painted the finder cyan) */
-html[data-area=site] .qs-home .qa-tf{background:#fff!important;border-radius:var(--qs-r)!important;padding:var(--qs-s6)!important}
+html[data-area=site] .qs-home .qa-tf{background:var(--qd-surface,#fff)!important;border-radius:var(--qs-r)!important;padding:var(--qs-s6)!important}
 html[data-area=site] .qs-home .qa-tf-chip{border-radius:999px!important;font-weight:500!important}
 html[data-area=site] .qs-home .qa-tf-chip.on{color:#fff!important}
 html[data-area=site] .qs-home .qa-tf-card{border-radius:var(--qs-r-xs)!important}
@@ -142,7 +142,7 @@ html[data-area=site] .qs-home .qs-ch>.qs-agents{padding-block:var(--qs-s8) var(-
 html[data-area=site] .qs-home .qs-agents .qs-head{margin-bottom:var(--qs-s4)}
 html[data-area=site] .qs-home .qs-agents .qpw{padding:var(--qs-s4) 0 0}
 /* One card: white, hairline, no coloured top edge */
-html[data-area=site] .qs-home .qs-voice{gap:var(--qs-s4);padding:var(--qs-s5);background:#fff;border:1px solid var(--qs-line)!important;border-radius:var(--qs-r)}
+html[data-area=site] .qs-home .qs-voice{gap:var(--qs-s4);padding:var(--qs-s5);background:var(--qd-surface,#fff);border:1px solid var(--qs-line)!important;border-radius:var(--qs-r)}
 html[data-area=site] .qs-home .qs-voice:hover{border-color:var(--qs-line-2)!important}
 html[data-area=site] .qs-home .qs-voice blockquote{font-size:17px;line-height:1.8}
 html[data-area=site] .qs-home .qs-voice-wa blockquote{padding:var(--qs-s4);background:var(--qs-paper);border-radius:var(--qs-r-xs);border-start-start-radius:4px;box-shadow:none}

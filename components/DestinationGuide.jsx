@@ -67,16 +67,16 @@ function Fact({ icon, label, value, note }) {
 
 const CSS = `
 .qa-gd-facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
-.qa-gd-fact{display:flex;gap:12px;align-items:flex-start;background:#fff;border:1px solid var(--qs-line,#ececed);border-radius:var(--tw-radius,16px);padding:16px}
-.qa-gd-ico{width:36px;height:36px;flex-shrink:0;border-radius:var(--tw-radius-sm,10px);background:#eaf8fd;color:#036f8c;display:grid;place-items:center}
+.qa-gd-fact{display:flex;gap:12px;align-items:flex-start;background:var(--qd-surface,#fff);border:1px solid var(--qs-line,#ececed);border-radius:var(--tw-radius,16px);padding:16px}
+.qa-gd-ico{width:36px;height:36px;flex-shrink:0;border-radius:var(--tw-radius-sm,10px);background:var(--qd-soft,#eaf8fd);color:var(--qd-cyan,#036f8c);display:grid;place-items:center}
 .qa-gd-chart{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:6px;align-items:end;height:170px;padding-top:22px}
 .qa-gd-col{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;height:100%}
 .qa-gd-bar{width:100%;max-width:34px;border-radius:8px 8px 3px 3px;position:relative}
-.qa-gd-bar b{position:absolute;top:-19px;left:50%;transform:translateX(-50%);font-size:13px;color:#3d4650;font-weight:600}
-.qa-gd-col span{font-size:13px;color:#5f666e;white-space:nowrap;text-align:center;line-height:1.2}
+.qa-gd-bar b{position:absolute;top:-19px;left:50%;transform:translateX(-50%);font-size:13px;color:var(--qd-body,#3d4650);font-weight:600}
+.qa-gd-col span{font-size:13px;color:var(--qd-ink2,#5f666e);white-space:nowrap;text-align:center;line-height:1.2}
 .qa-gd-n{display:none}
 @media (max-width:1100px){.qa-gd-col span.qa-gd-m{white-space:normal;font-size:13px}}
-.qa-gd-col.on span{color:#036f8c;font-weight:600}
+.qa-gd-col.on span{color:var(--qd-cyan,#036f8c);font-weight:600}
 @media (max-width:820px){.qa-gd-facts{grid-template-columns:repeat(2,minmax(0,1fr))!important;display:grid!important}.qa-gd-chart{gap:3px;height:150px}.qa-gd-bar b{font-size:13px}.qa-gd-col span.qa-gd-m{display:none}.qa-gd-col span.qa-gd-n{display:block;font-size:13px}}
 `;
 

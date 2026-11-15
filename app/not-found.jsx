@@ -18,9 +18,9 @@ export default function NotFound() {
         <p style={{ fontSize: 17, color: 'var(--qs-body,#3d4650)', maxWidth: 520, lineHeight: 1.7 }}>ربما تغيّر الرابط أو انتهت هذه الباقة. اختر من الأقسام التالية أو تواصل معنا مباشرة.</p>
         <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 12, justifyContent: 'center' }}>
           <CtaButton href="/packages" label="الباقات" />
-          <Link href="/visa" className="qa-btn" style={{ background: '#fff', color: 'var(--qs-ink,#1d2733)', border: '1px solid var(--qs-line-2,#cacbcc)' }}>التأشيرات</Link>
-          <Link href="/" className="qa-btn" style={{ background: '#fff', color: 'var(--qs-ink,#1d2733)', border: '1px solid var(--qs-line-2,#cacbcc)' }}>الرئيسية</Link>
-          <a href={waLink('مرحباً قصر المرايا، أحتاج مساعدة.')} target="_blank" rel="noopener" className="qa-btn" style={{ background: '#fff', color: 'var(--qs-ink,#1d2733)', border: '1px solid var(--qs-line-2,#cacbcc)' }}>واتساب</a>
+          <Link href="/visa" className="qa-btn" style={{ background: 'var(--qd-surface,#fff)', color: 'var(--qs-ink,#1d2733)', border: '1px solid var(--qs-line-2,#cacbcc)' }}>التأشيرات</Link>
+          <Link href="/" className="qa-btn" style={{ background: 'var(--qd-surface,#fff)', color: 'var(--qs-ink,#1d2733)', border: '1px solid var(--qs-line-2,#cacbcc)' }}>الرئيسية</Link>
+          <a href={waLink('مرحباً قصر المرايا، أحتاج مساعدة.')} target="_blank" rel="noopener" className="qa-btn" style={{ background: 'var(--qd-surface,#fff)', color: 'var(--qs-ink,#1d2733)', border: '1px solid var(--qs-line-2,#cacbcc)' }}>واتساب</a>
         </div>
       </main>
       <SiteFooter />

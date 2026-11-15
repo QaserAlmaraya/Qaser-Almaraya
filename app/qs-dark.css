@@ -1,0 +1,65 @@
+/* Qasr Al-Maraya — dark mode (Nov 2026).
+   Applies only to html[data-area=site][data-theme=dark], so the light site and
+   /admin, /staff are never touched. Two token families do the work:
+   --qs-*  the design tokens from qs.css / qs-modern.css, re-valued here;
+   --qd-*  wrappers around colours that used to be written as literals. They are
+           defined ONLY here; everywhere else the literal fallback still wins,
+           which keeps light mode pixel-identical. */
+html[data-area=site][data-theme=dark]{
+  color-scheme:dark;
+  --qs-ink:#f1f5f8;--qs-ink-90:#fff;--qs-body:#c9d2d9;--qs-ink-2:#a4afb9;--qs-ink-3:#8793a0;
+  --qs-paper:#0f161d;--qs-sand:#131c25;--qs-surface:#19232e;
+  --qs-line:#27333f;--qs-line-2:#364656;
+  --qs-brand:#1fb6ea;--qs-brand-deep:#45c3ec;--qs-brand-soft:#11313d;
+  --qs-sky:linear-gradient(180deg,#121b24 0%,#0f1920 100%);
+  --qs-band-grad:linear-gradient(150deg,#12a9d8 0%,#0489ad 72%);
+  --qs-band:#0492b8;--qs-band-hover:#049dc5;
+  --q-surface:#19232e;
+  --tw-pop-shadow:0 1px 2px rgba(0,0,0,.4),0 12px 32px -12px rgba(0,0,0,.6);
+  --tw-lift-shadow:0 1px 2px rgba(0,0,0,.4),0 18px 40px -16px rgba(0,0,0,.7);
+  --qs-glow-cyan:0 6px 14px -8px rgba(0,0,0,.6);
+
+  --qd-surface:#19232e;--qd-surface2:#141d27;--qd-soft:#11313d;
+  --qd-redbg:#3a1820;--qd-amberbg:#3a2c0c;--qd-greenbg:#12301f;
+  --qd-line:#27333f;--qd-linecyan:#1f5568;--qd-redline:#6b2a36;--qd-amberline:#6b5216;--qd-greenline:#235a3a;
+  --qd-ink:#f1f5f8;--qd-body:#c9d2d9;--qd-ink2:#a4afb9;--qd-ink3:#8793a0;
+  --qd-cyan:#45c3ec;--qd-red:#ff7a90;--qd-ambertext:#f5c15c;--qd-green:#5fd08f;
+}
+/* Amber keeps charcoal text in both modes (Owner rule, 7 Nov). */
+html[data-area=site][data-theme=dark] :is(.qa-amber,.q-btn-pri,.qs-btn-pri,.qa-headcta,[style*="#faab18"],[style*="250, 171, 24"]){
+  --qs-ink:#1d2733;--qd-ink:#1d2733;--qs-body:#1d2733;--qd-body:#1d2733}
+
+/* ---------- The switch (components/ThemeToggle.jsx) ---------- */
+html[data-area=site] .qt-switch{flex:none;position:relative;display:inline-flex;align-items:center;gap:2px;height:36px;width:64px;padding:3px;border-radius:999px;border:1px solid var(--qs-line-2);background:var(--qs-surface,#fff);cursor:pointer;font-family:inherit}
+html[data-area=site] .qt-switch span{position:relative;z-index:1;flex:1;display:inline-flex;align-items:center;justify-content:center;height:100%;color:var(--qs-ink-2);transition:color .25s var(--qs-ease)}
+html[data-area=site] .qt-switch::before{content:"";position:absolute;top:3px;bottom:3px;inset-inline-start:3px;width:calc(50% - 3px);border-radius:999px;background:var(--qs-amber,#faab18);transition:inset-inline-start .35s var(--qs-ease)}
+html[data-area=site][data-theme=dark] .qt-switch::before{inset-inline-start:50%}
+html[data-area=site]:not([data-theme=dark]) .qt-switch span:first-child,
+html[data-area=site][data-theme=dark] .qt-switch span:last-child{color:#1d2733}
+html[data-area=site] .qt-switch:focus-visible{outline:2px solid var(--qs-brand);outline-offset:2px}
+@media (max-width:1023px){html[data-area=site] .qn-header .qt-switch{display:none}}
+/* Room for the switch: it sits close to the language button and the links tighten a little. */
+html[data-area=site] .qn-header .qt-switch{margin-inline-end:calc(var(--qs-s2) * -1)}
+html[data-area=site] .qn-header .qn-head{gap:var(--qs-s4)!important}
+html[data-area=site] .qn-header .qn-nav{gap:var(--qs-s1) 12px!important}
+html[data-area=site] .qn-menu .qt-switch{height:48px;width:92px;border-color:var(--qs-line-dark);background:transparent}
+html[data-area=site] .qn-menu .qt-switch span{color:#fff}
+html[data-area=site]:not([data-theme=dark]) .qn-menu .qt-switch span:first-child,
+html[data-area=site][data-theme=dark] .qn-menu .qt-switch span:last-child{color:#1d2733}
+
+/* ---------- The change itself: the new look arrives inside a plane ----------
+   qt-vt is on <html> only while the switch animation runs. The outgoing page
+   holds still and the incoming one is clipped to a growing plane (JS drives
+   the clip-path on ::view-transition-new). */
+html.qt-vt::view-transition-old(root),html.qt-vt::view-transition-new(root){animation:none;mix-blend-mode:normal}
+html.qt-vt::view-transition-image-pair(root){isolation:auto}
+html.qt-vt::view-transition-old(root){z-index:1}
+html.qt-vt::view-transition-new(root){z-index:2}
+html.qt-vt *{view-transition-name:none!important}
+
+/* ---------- Shared chrome ---------- */
+html[data-area=site][data-theme=dark] header:has(.qa-head){
+  background:rgba(15,22,29,calc(.9 - var(--qs-hk) * .12))!important;
+  border-bottom:1px solid rgba(54,70,86,.6)!important;
+  box-shadow:0 12px 32px -18px rgba(0,0,0,calc(var(--qs-hk) * .7))!important}
+html[data-area=site][data-theme=dark] .qa-langbtn:hover{background:rgba(31,182,234,.12)!important}

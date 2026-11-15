@@ -12,6 +12,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
+import ThemeToggle from '../ThemeToggle';
 import Icon from '../Icon';
 import CtaButton from '../CtaButton';
 import SeasonDecor from '../SeasonDecor';
@@ -145,7 +146,7 @@ export default function SiteNav({
 
   return (
     <>
-      <header className="qn-header" style={{ position: 'sticky', top: 0, zIndex: 40, background: '#fff', borderBottom: '1px solid var(--qs-line,#ececed)', boxShadow: 'var(--tw-card-shadow,0 1px 3px rgba(29,39,51,.06))' }}>
+      <header className="qn-header" style={{ position: 'sticky', top: 0, zIndex: 40, background: 'var(--qd-surface,#fff)', borderBottom: '1px solid var(--qs-line,#ececed)', boxShadow: 'var(--tw-card-shadow,0 1px 3px rgba(29,39,51,.06))' }}>
         <SeasonDecor />
         <div className="qa-head qn-head" style={{ maxWidth: 1240, margin: '0 auto', padding: '12px 32px', display: 'flex', alignItems: 'center', gap: 24 }}>
           {home.onClick
@@ -176,6 +177,8 @@ export default function SiteNav({
               </div>
             ) : null}
           </nav>
+
+          <ThemeToggle lang={lang} />
 
           <button type="button" onClick={onToggleLang} aria-label="Language" title="Language" data-no-i18n="" className="qa-langbtn qn-lang" style={{ flex: 'none', display: 'flex', alignItems: 'center', gap: 8, fontFamily: 'inherit', cursor: 'pointer' }}>
             <Icon name="globe" size={17} strokeWidth={1.8} />
@@ -218,6 +221,7 @@ export default function SiteNav({
           </nav>
 
           <div className="qn-menu-foot">
+            <ThemeToggle lang={lang} />
             <button type="button" onClick={onToggleLang} data-no-i18n="" className="qn-menu-lang">
               <Icon name="globe" size={17} strokeWidth={1.8} />
               <span>{langText}</span>

@@ -158,7 +158,7 @@ export default function TripFinder({ lang = 'ar', embedded = false }) {
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     {p.image_url ? <img {...imgProps(p.image_url, '96px', [384])} alt="" loading="lazy" decoding="async" /> : <span style={{ width: 96, background: 'var(--qs-brand-soft,#e4f5fb)' }} />}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 4, padding: '12px 0', paddingInlineEnd: 12, minWidth: 0, flex: 1 }}>
-                      <span className="qa-tf-tag" style={exact ? { background: 'var(--qs-brand-soft,#e3f5fc)', color: '#036f8c' } : { background: '#fff4dc', color: '#8a5a00' }}>{exact ? (en ? 'Matches your choice' : 'يطابق اختيارك') : (en ? 'Closest option' : 'أقرب خيار')}</span>
+                      <span className="qa-tf-tag" style={exact ? { background: 'var(--qs-brand-soft,#e3f5fc)', color: 'var(--qd-cyan,#036f8c)' } : { background: 'var(--qd-amberbg,#fff4dc)', color: 'var(--qd-ambertext,#8a5a00)' }}>{exact ? (en ? 'Matches your choice' : 'يطابق اختيارك') : (en ? 'Closest option' : 'أقرب خيار')}</span>
                       <b style={{ fontSize: 15, fontWeight: 600, lineHeight: 1.5, overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>{nm(p.title_ar, p.title_en)}</b>
                       <span style={{ fontSize: 13, color: 'var(--qs-ink-2,#5f666e)' }}>{[destinationLabel(p, lang), nightsLabel(p, lang)].filter(Boolean).join(' · ')}</span>
                       <span style={{ marginTop: 'auto', fontSize: 15, fontWeight: 600, color: 'var(--qs-ink,#1d2733)' }}>{formatPrice(p.price, 'IQD', lang)}</span>

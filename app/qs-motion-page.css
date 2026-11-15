@@ -1,0 +1,46 @@
+/* Qasr Al-Maraya — motion layer (page). Every rule must be scoped to html[data-area=site]
+   so /admin and /staff never change, and honour prefers-reduced-motion. */
+
+/* ---------- 1. Page change (components/motion/PageTransition.jsx) ----------
+   The class qm-vt is put on <html> by JS only for the length of one page
+   change, and only on the public site, in browsers with View Transitions and
+   for visitors who have not asked for less motion. Without it none of this
+   applies and pages swap as they always did. */
+@media (prefers-reduced-motion:no-preference){
+  /* Old and new page fade over the same time and curve, so anything identical
+     on both (background, floating buttons) stays steady instead of dipping. */
+  html[data-area=site].qm-vt::view-transition-old(root){animation:qm-vt-out .3s cubic-bezier(.4,0,.2,1) both}
+  html[data-area=site].qm-vt::view-transition-new(root){animation:qm-vt-in .3s cubic-bezier(.4,0,.2,1) both}
+
+  /* The sticky header is carried as its own layer so it does not flicker with
+     the page under it. qm-vt-h is left off when the full-screen menu is open. */
+  html[data-area=site].qm-vt.qm-vt-h .qn-header{view-transition-name:qm-header}
+  html[data-area=site].qm-vt::view-transition-group(qm-header){animation-duration:.3s}
+  html[data-area=site].qm-vt::view-transition-old(qm-header),
+  html[data-area=site].qm-vt::view-transition-new(qm-header){animation-duration:.3s}
+
+  /* The older page-enter slide (.qa-page in site.css) would play on top of the
+     cross-fade. Its duration is cut to nothing while a transition runs; the
+     animation itself is kept, so it does not replay when the class goes. */
+  html[data-area=site].qm-vt .qa-page{animation-duration:0s}
+}
+@keyframes qm-vt-out{from{opacity:1}to{opacity:0}}
+@keyframes qm-vt-in{from{opacity:0;transform:translate3d(0,8px,0)}to{opacity:1;transform:none}}
+
+/* ---------- 2. Photo depth (components/motion/Parallax.jsx) ----------
+   qm-px is added by JS to large section photos whose frame already clips.
+   The photo is drawn a little larger so its small scroll drift (written to
+   `translate` by JS, 24px at most, 12px on phones) never uncovers the frame.
+   `scale` and `translate` are separate from `transform`, so the existing hover
+   zoom on these photos keeps working unchanged. */
+@media (prefers-reduced-motion:no-preference){
+  html[data-area=site] img.qm-px{scale:1.08}
+  /* Only photos near the screen are promoted to their own layer. */
+  html[data-area=site] img.qm-px.qm-px-on{will-change:translate}
+}
+@media (prefers-reduced-motion:reduce){
+  html[data-area=site] img.qm-px{scale:none!important;translate:none!important}
+}
+@media print{
+  html[data-area=site] img.qm-px{scale:none!important;translate:none!important}
+}

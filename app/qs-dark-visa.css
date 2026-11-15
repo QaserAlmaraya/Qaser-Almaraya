@@ -1,0 +1,31 @@
+/* Dark mode fixes: visa pages. Every rule must start with html[data-area=site][data-theme=dark]. */
+
+/* Cyan buttons: --qs-brand-deep turns into the light text cyan in dark mode, which left white
+   text on a pale fill. Buttons use the band cyan instead (bright cyan, white text). */
+html[data-area=site][data-theme=dark] :is(.qa-cyan,.qs-btn-brand):not(.qa-headcta,.qa-amber){background:var(--qs-band)!important;border-color:var(--qs-band)!important;color:#fff!important}
+html[data-area=site][data-theme=dark] :is(.qa-cyan,.qs-btn-brand):not(.qa-headcta,.qa-amber):hover{background:var(--qs-band-hover)!important;border-color:var(--qs-band-hover)!important}
+
+/* Fields that carry no background of their own (country search, tracking box, application form). */
+html[data-area=site][data-theme=dark] main:has(.qa-visa-grid) input[type=text],
+html[data-area=site][data-theme=dark] div[style*="z-index: 80"][style*="blur(6px)"] input,
+html[data-area=site][data-theme=dark] .qa-visa-side ~ div :is(input:not([type=file]),textarea,select){
+  background:var(--qd-surface2);color:var(--qd-ink);border-color:var(--qs-line-2)!important}
+html[data-area=site][data-theme=dark] main:has(.qa-visa-grid) input::placeholder,
+html[data-area=site][data-theme=dark] div[style*="z-index: 80"][style*="blur(6px)"] input::placeholder,
+html[data-area=site][data-theme=dark] .qa-visa-side ~ div input::placeholder{color:var(--qd-ink3);opacity:1}
+html[data-area=site][data-theme=dark] main:has(.qa-visa-grid) select{border-color:var(--qs-line-2)!important}
+html[data-area=site][data-theme=dark] div[style*="z-index: 80"][style*="blur(6px)"]{background:rgba(6,10,14,.66)!important}
+
+/* Visa checker: tick / plus marks drawn for a light chip. */
+html[data-area=site][data-theme=dark] .qa-vc-docs li::before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2345c3ec' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E")}
+html[data-area=site][data-theme=dark] .qa-vc-docs.opt li::before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f5c15c' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14M12 5v14'/%3E%3C/svg%3E")}
+html[data-area=site][data-theme=dark] .qa-vc-type.on{border-color:var(--qd-cyan)}
+
+/* Price slider on the country page: the browser default track is a pale blue. */
+html[data-area=site][data-theme=dark] .qa-page input[type=range]{accent-color:#1fb6ea}
+
+/* Time difference card (components/WorldClocks.jsx, shared): the Baghdad clock keeps a literal #f6f7f8 tile. */
+html[data-area=site][data-theme=dark] .qa-card div:is([style*="#f6f7f8"],[style*="rgb(246, 247, 248)"]){background:var(--qd-surface2)!important}
+
+/* "Required" tag in the documents list: amber tint keeps amber text instead of near-white. */
+html[data-area=site][data-theme=dark] .qr-doc-tag.is-req{color:var(--qd-ambertext)}

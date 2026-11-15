@@ -65,7 +65,7 @@ export default function AchievementSpread({ items = [], active, onSelect, assetB
             style={{
               position: 'relative',
               zIndex: 1,
-              background: '#fff',
+              background: 'var(--qd-surface,#fff)',
               border: '1px solid var(--qs-line,#ececed)',
               borderRadius: 'var(--tw-radius,16px)',
               overflow: 'hidden',
@@ -146,7 +146,7 @@ export default function AchievementSpread({ items = [], active, onSelect, assetB
                   padding: '12px 16px',
                   borderRadius: 'var(--tw-radius-sm,10px)',
                   border: isActive ? '2px solid var(--qs-brand-deep,#049dc5)' : '1px solid var(--qs-line,#ececed)',
-                  background: '#fff',
+                  background: 'var(--qd-surface,#fff)',
                   fontFamily: 'inherit',
                   cursor: 'pointer',
                 }}

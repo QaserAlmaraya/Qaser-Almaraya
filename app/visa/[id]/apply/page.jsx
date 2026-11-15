@@ -16,7 +16,7 @@ const inputStyle = {
   boxSizing: 'border-box',
   padding: '10px 12px',
   borderRadius: 'var(--tw-radius-xs,8px)',
-  border: '1px solid #ececed',
+  border: '1px solid var(--qd-line,#ececed)',
   fontSize: 15,
   fontFamily: 'inherit',
 };
@@ -25,17 +25,17 @@ function sanitizeName(value) {
   // Strip Latin and Arabic-Indic digits, keep letters/spaces/hyphens only
   return value.replace(/[0-9\u0660-\u0669]/g, '');
 }
-const labelStyle = { display: 'flex', flexDirection: 'column', gap: 6, fontSize: 15, fontWeight: 600, color: '#3d4650' };
+const labelStyle = { display: 'flex', flexDirection: 'column', gap: 6, fontSize: 15, fontWeight: 600, color: 'var(--qd-body,#3d4650)' };
 const btnStyle = (variant) => ({
   cursor: 'pointer',
-  border: variant === 'ghost' ? '1px solid #ececed' : 'none',
+  border: variant === 'ghost' ? '1px solid var(--qd-line,#ececed)' : 'none',
   borderRadius: 999,
   padding: '12px 24px',
   fontSize: 15,
   fontWeight: 600,
   fontFamily: 'inherit',
-  background: variant === 'primary' ? '#049dc5' : '#fff',
-  color: variant === 'primary' ? '#fff' : '#3d4650',
+  background: variant === 'primary' ? '#049dc5' : 'var(--qd-surface,#fff)',
+  color: variant === 'primary' ? '#fff' : 'var(--qd-body,#3d4650)',
 });
 
 const STEPS = [
@@ -144,7 +144,7 @@ function TravelerForm({ index, travelerType, documents, onChange, onProgress }) 
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <span style={{ fontSize: 15, fontWeight: 600, color: 'var(--qs-body,#3d4650)' }}>{d.name_ar}</span>
               {d.required && (
-                <span style={{ fontSize: 13, fontWeight: 500, color: '#a06a00', background: '#fef3dc', borderRadius: 999, padding: '2px 10px' }}>مطلوب</span>
+                <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--qd-ambertext,#a06a00)', background: 'var(--qd-amberbg,#fef3dc)', borderRadius: 999, padding: '2px 10px' }}>مطلوب</span>
               )}
             </div>
 
@@ -158,7 +158,7 @@ function TravelerForm({ index, travelerType, documents, onChange, onProgress }) 
                   {uploading[d.id] && <span style={{ fontSize: 13, color: 'var(--qs-ink-2,#5f666e)' }}>...جارٍ الرفع</span>}
                   {!uploading[d.id] && files[d.id] && <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 13, color: 'var(--qs-brand-deep,#049dc5)' }}><Icon name="check" size={14} />تم الرفع</span>}
                 </div>
-                {uploadErrors[d.id] && <span style={{ fontSize: 13, color: '#d2324f' }}>{uploadErrors[d.id]}</span>}
+                {uploadErrors[d.id] && <span style={{ fontSize: 13, color: 'var(--qd-red,#d2324f)' }}>{uploadErrors[d.id]}</span>}
               </div>
             )}
 
@@ -181,7 +181,7 @@ function TravelerForm({ index, travelerType, documents, onChange, onProgress }) 
                       padding: '10px 0',
                       borderRadius: 'var(--tw-radius-xs,8px)',
                       border: '1px solid ' + (answers[d.id] === val ? '#049dc5' : 'var(--qs-line,#ececed)'),
-                      background: answers[d.id] === val ? 'var(--qs-band,#049dc5)' : '#fff',
+                      background: answers[d.id] === val ? 'var(--qs-band,#049dc5)' : 'var(--qd-surface,#fff)',
                       color: answers[d.id] === val ? '#fff' : 'var(--qs-body,#3d4650)',
                       fontFamily: 'inherit',
                       fontWeight: 600,
@@ -205,7 +205,7 @@ function TravelerForm({ index, travelerType, documents, onChange, onProgress }) 
                       padding: '10px 16px',
                       borderRadius: 999,
                       border: '1px solid ' + (answers[d.id] === c ? '#049dc5' : 'var(--qs-line,#ececed)'),
-                      background: answers[d.id] === c ? 'var(--qs-band,#049dc5)' : '#fff',
+                      background: answers[d.id] === c ? 'var(--qs-band,#049dc5)' : 'var(--qd-surface,#fff)',
                       color: answers[d.id] === c ? '#fff' : 'var(--qs-body,#3d4650)',
                       fontFamily: 'inherit',
                       fontSize: 15,
@@ -349,7 +349,7 @@ function ArchivedVisaApplyPage() {
       <div dir="rtl" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
         <SiteHeader active="التأشيرات" />
         <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 40 }}>
-          <p style={{ color: '#d2324f', background: '#fdecef', border: '1px solid #f7c3cc', borderRadius: 'var(--tw-radius-sm,10px)', padding: '14px 20px' }}>{error}</p>
+          <p style={{ color: 'var(--qd-red,#d2324f)', background: 'var(--qd-redbg,#fdecef)', border: '1px solid var(--qd-redline,#f7c3cc)', borderRadius: 'var(--tw-radius-sm,10px)', padding: '14px 20px' }}>{error}</p>
         </main>
         <SiteFooter />
       </div>
@@ -402,7 +402,7 @@ function ArchivedVisaApplyPage() {
                       display: 'inline-flex',
                       alignItems: 'center',
                       gap: 8,
-                      background: s.id === activeStep ? '#fff' : 'rgba(255,255,255,.16)',
+                      background: s.id === activeStep ? 'var(--qd-surface,#fff)' : 'rgba(255,255,255,.16)',
                       color: s.id === activeStep ? 'var(--qs-brand-deep,#049dc5)' : '#fff',
                       borderRadius: 999,
                       padding: '8px 16px',
@@ -518,7 +518,7 @@ function ArchivedVisaApplyPage() {
                   ))}
 
                   {error && (
-                    <p style={{ margin: 0, padding: 12, background: '#fdecef', border: '1px solid #f7c3cc', borderRadius: 'var(--tw-radius-sm,10px)', color: '#d2324f', fontSize: 15 }}>{error}</p>
+                    <p style={{ margin: 0, padding: 12, background: 'var(--qd-redbg,#fdecef)', border: '1px solid var(--qd-redline,#f7c3cc)', borderRadius: 'var(--tw-radius-sm,10px)', color: 'var(--qd-red,#d2324f)', fontSize: 15 }}>{error}</p>
                   )}
                 </>
               )}
@@ -527,7 +527,7 @@ function ArchivedVisaApplyPage() {
                 <div className="qa-card">
                   {submitting && <p style={{ margin: 0, color: 'var(--qs-ink-2,#5f666e)', fontSize: 15 }}>...جارٍ إرسال طلبك في الخلفية</p>}
                   {error && (
-                    <p style={{ margin: '0 0 14px', padding: 12, background: '#fdecef', border: '1px solid #f7c3cc', borderRadius: 'var(--tw-radius-sm,10px)', color: '#d2324f', fontSize: 15 }}>{error}</p>
+                    <p style={{ margin: '0 0 14px', padding: 12, background: 'var(--qd-redbg,#fdecef)', border: '1px solid var(--qd-redline,#f7c3cc)', borderRadius: 'var(--tw-radius-sm,10px)', color: 'var(--qd-red,#d2324f)', fontSize: 15 }}>{error}</p>
                   )}
                   <PaymentMethods
                     submitting={submitting}
