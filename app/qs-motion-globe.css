@@ -1,0 +1,97 @@
+/* Qasr Al-Maraya — motion layer (globe). Every rule must be scoped to html[data-area=site]
+   so /admin and /staff never change, and honour prefers-reduced-motion. */
+
+/* ---------- Destination globe: pick a country, see its offers ----------
+   components/GuideGlobe.jsx. The globe itself is styled in qs-modern.css
+   (.qs-globe*); this file adds the selected pin and the offers panel (.qm-*).
+   Selectors carry both classes (.qs-globe.qm-globe) so they win over the base
+   rules whichever stylesheet loads last. */
+
+/* Pins are buttons now (they select a country instead of leaving the page),
+   so strip the browser's button chrome and keep the dot-and-label look. */
+html[data-area=site] .qs-globe-pin.qm-pin{padding:0;border:0;background:none;font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+html[data-area=site] .qs-globe-pin.qm-pin:focus-visible{outline:2px solid var(--qs-brand);outline-offset:2px;border-radius:50%}
+
+/* Selected pin: stays enlarged with its label showing and a cyan ring, above
+   the other pins. The ring is drawn on the dot; the one-off pulse is a
+   separate ::after so it never fights the transform the globe sets on the pin. */
+html[data-area=site] .qs-globe-pin.qm-sel{z-index:4}
+html[data-area=site] .qs-globe-pin.qm-sel i{transform:scale(1.45);box-shadow:0 0 0 3px rgba(4,157,197,.38),0 1px 3px rgba(29,39,51,.35)}
+html[data-area=site] .qs-globe-pin.qm-sel b{opacity:1;background:var(--qs-brand)}
+html[data-area=site] .qs-globe-pin.qm-sel::after{content:"";position:absolute;inset:0;margin:auto;width:14px;height:14px;border-radius:50%;border:2px solid var(--qs-brand);pointer-events:none;opacity:0;animation:qm-pin-pulse .9s var(--qs-ease) 1}
+@keyframes qm-pin-pulse{from{opacity:.75;transform:scale(1)}to{opacity:0;transform:scale(3.4)}}
+
+/* The panel. Phones: under the globe, full width. */
+html[data-area=site] .qs-globe.qm-globe{gap:12px}
+html[data-area=site] .qm-gp{width:100%;max-width:520px;min-width:0;text-align:start}
+html[data-area=site] .qm-gp-idle{display:flex;align-items:center;justify-content:center;gap:8px;margin:0;padding:4px 8px;font-size:14px;line-height:1.6;color:var(--qs-ink-2);text-align:center}
+html[data-area=site] .qm-gp-idle svg{flex:none;color:var(--qs-brand)}
+
+html[data-area=site] .qm-gp-card{display:flex;flex-direction:column;gap:16px;padding:16px;background:#fff;border:1px solid var(--qs-line);border-radius:var(--tw-radius,16px);box-shadow:var(--tw-pop-shadow,0 6px 20px rgba(1,42,55,.10));animation:qm-gp-in .25s var(--qs-ease) both}
+@keyframes qm-gp-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+html[data-area=site] .qm-gp-head{display:flex;align-items:center;gap:12px}
+html[data-area=site] .qm-gp-flag{flex:none;width:40px;height:28px;object-fit:cover;border-radius:4px;border:1px solid var(--qs-line)}
+html[data-area=site] .qm-gp-title{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+html[data-area=site] .qm-gp-title h2{margin:0;font-size:22px!important;color:var(--qs-ink)}
+html[data-area=site] .qm-gp-guide{align-self:flex-start;font-size:14px;font-weight:600;color:var(--qs-brand);text-decoration:underline;text-underline-offset:3px}
+html[data-area=site] .qm-gp-guide:hover{color:var(--qs-band-hover)}
+html[data-area=site] .qm-gp-close{flex:none;display:grid;place-items:center;width:36px;height:36px;padding:0;border:0;border-radius:50%;background:#f4fbfe;color:var(--qs-ink);cursor:pointer;transition:background .15s ease}
+html[data-area=site] .qm-gp-close:hover{background:var(--qs-brand-soft)}
+
+html[data-area=site] .qm-gp-list{display:flex;flex-direction:column;gap:8px;margin:0;padding:0;list-style:none}
+/* Rows arrive one after another (60ms apart) once the card is in. */
+html[data-area=site] .qm-gp-list li{animation:qm-gp-in .25s var(--qs-ease) both;animation-delay:calc(80ms + var(--qm-i,0) * 60ms)}
+html[data-area=site] .qm-gp-row{display:flex;align-items:center;gap:12px;padding:8px;border-radius:12px;background:#f4fbfe;color:var(--qs-ink);text-decoration:none;transition:background .15s ease}
+html[data-area=site] .qm-gp-row:hover{background:var(--qs-brand-soft);color:var(--qs-ink)}
+html[data-area=site] .qm-gp-thumb{flex:none;width:72px;height:72px;border-radius:8px;overflow:hidden;background:var(--qs-brand-soft)}
+html[data-area=site] .qm-gp-thumb img{display:block;width:100%;height:100%;object-fit:cover}
+html[data-area=site] .qm-gp-text{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+html[data-area=site] .qm-gp-text b{font-size:15px;font-weight:600;line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+html[data-area=site] .qm-gp-meta{font-size:13px;color:var(--qs-ink-2)}
+html[data-area=site] .qm-gp-price{font-size:15px;font-weight:700;color:var(--qs-ink)}
+html[data-area=site] .qm-gp-price small{font-size:13px;font-weight:400;color:var(--qs-ink-2)}
+
+html[data-area=site] .qm-gp-all{align-self:flex-start;font-size:15px;font-weight:600;color:var(--qs-brand);text-decoration:underline;text-underline-offset:3px}
+html[data-area=site] .qm-gp-all:hover{color:var(--qs-band-hover)}
+
+/* Quiet placeholder rows while /api/packages is on its way. */
+html[data-area=site] .qm-gp-skel{display:block;height:88px;border-radius:12px;background:linear-gradient(90deg,#eef6f9 25%,#f7fbfc 50%,#eef6f9 75%);background-size:200% 100%;animation:qm-gp-skel 1.4s linear infinite}
+@keyframes qm-gp-skel{to{background-position:-200% 0}}
+
+html[data-area=site] .qm-gp-empty{display:flex;flex-direction:column;gap:16px;animation:qm-gp-in .25s var(--qs-ease) both;animation-delay:80ms}
+html[data-area=site] .qm-gp-empty p{margin:0;font-size:15px;line-height:1.8;color:var(--qs-body)}
+html[data-area=site] .qm-gp-actions{display:flex;flex-wrap:wrap;gap:8px}
+/* Primary action: amber with charcoal text, like every other primary button. */
+html[data-area=site] .qm-gp-wa,
+html[data-area=site] .qm-gp-ghost{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 20px;border-radius:999px;font-size:15px;font-weight:600;text-decoration:none;transition:background .15s ease,border-color .15s ease}
+html[data-area=site] .qm-gp-wa{background:var(--qs-amber);color:var(--qs-ink)}
+html[data-area=site] .qm-gp-wa:hover{background:var(--qs-amber-hover);color:var(--qs-ink)}
+html[data-area=site] .qm-gp-ghost{background:#fff;color:var(--qs-ink);border:1px solid var(--qs-line-2)}
+html[data-area=site] .qm-gp-ghost:hover{border-color:var(--qs-brand);color:var(--qs-ink)}
+
+html[data-area=site] .qm-gp :is(a,button):focus-visible{outline:2px solid var(--qs-brand);outline-offset:2px}
+
+/* Desktop: the panel sits beside the globe. Its column has a fixed width and
+   is there from the start (holding the hint), so the globe does not move when
+   a country is chosen. */
+@media (min-width:900px){
+  html[data-area=site] .qs-globe.qm-globe{flex-direction:row;justify-content:center;align-items:center;gap:32px}
+  html[data-area=site] .qs-globe.qm-globe .qs-globe-box{flex:0 1 520px;min-width:0}
+  html[data-area=site] .qm-gp{flex:0 0 380px;width:380px;max-width:380px}
+  html[data-area=site] .qm-gp-idle{flex-direction:column;gap:12px;padding:24px;font-size:15px}
+  html[data-area=site] .qm-gp-card{padding:20px}
+}
+
+/* Reduced motion: everything simply appears. */
+@media (prefers-reduced-motion:reduce){
+  html[data-area=site] .qm-gp-card,
+  html[data-area=site] .qm-gp-list li,
+  html[data-area=site] .qm-gp-empty,
+  html[data-area=site] .qm-gp-skel,
+  html[data-area=site] .qs-globe-pin.qm-sel::after{animation:none}
+  html[data-area=site] .qm-gp-row,
+  html[data-area=site] .qm-gp-close,
+  html[data-area=site] .qm-gp-wa,
+  html[data-area=site] .qm-gp-ghost{transition:none}
+}

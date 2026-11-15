@@ -1,0 +1,65 @@
+/* Qasr Al-Maraya — motion layer (cards). Every rule must be scoped to html[data-area=site]
+   so /admin and /staff never change, and honour prefers-reduced-motion. */
+
+/* ---------- 1. Package cards (components/PackageCard.jsx) on hover ----------
+   The lift, shadow and border of the card are in qs-routes.css; this adds the
+   parts that were still: the photo and the price/CTA row. Only screens with a
+   real hover get it, and only when motion has not been turned down.
+   --qm-mx / --qm-my (-1..1) are written by panToPointer() in PackageCard.jsx;
+   without them the photo simply zooms about its centre. The drift (1.2%) is
+   smaller than the overhang the zoom creates (2.5% a side), so no edge shows. */
+@media (hover:hover) and (prefers-reduced-motion:no-preference){
+  html[data-area=site] .qa-pkg-card .qa-pkg-hero img{transition:transform .9s var(--qs-spring,cubic-bezier(.22,1,.36,1))}
+  html[data-area=site] .qa-pkg-card:hover .qa-pkg-hero img{
+    transform:scale(1.05) translate3d(calc(var(--qm-mx,0)*-1.2%),calc(var(--qm-my,0)*-1.2%),0)}
+
+  /* Price and CTA: a quiet "this is the part to act on". The price grows a
+     touch from its own edge; the CTA gets a soft ring (its own hover fill,
+     set in PackageCard.jsx, is kept as it is). */
+  html[data-area=site] .qa-pkg-card .qa-pkg-foot{transition:background-color .3s ease-out}
+  html[data-area=site] .qa-pkg-card:hover .qa-pkg-foot{background-color:rgba(4,157,197,.04)}
+  html[data-area=site] .qa-pkg-card .qa-pkg-price{transform-origin:0 50%;transition:transform .35s ease-out}
+  html[data-area=site] .qa-pkg-card[dir=rtl] .qa-pkg-price{transform-origin:100% 50%}
+  html[data-area=site] .qa-pkg-card:hover .qa-pkg-price{transform:scale(1.04)}
+  html[data-area=site] .qa-pkg-card .qa-pkg-cta{transition:background .16s ease,box-shadow .3s ease-out}
+  html[data-area=site] .qa-pkg-card:hover .qa-pkg-cta{box-shadow:0 0 0 3px rgba(4,157,197,.14)}
+}
+
+/* ---------- 2. Home "Featured offers" cards (components/HomeOffers.jsx) ----------
+   These already zoom on hover (qs-modern.css, scale 1.04 over .7s). The same
+   zoom is refined here rather than doubled: a hair deeper, plus the drift
+   toward the pointer, on the transition qs-modern.css already sets. */
+@media (hover:hover) and (prefers-reduced-motion:no-preference){
+  html[data-area=site] .qa-offers .qa-offer:hover .qa-offer-img img{
+    transform:scale(1.05) translate3d(calc(var(--qm-mx,0)*-1.2%),calc(var(--qm-my,0)*-1.2%),0)}
+  /* The price sits at the far end of its row, so it grows from that edge. */
+  html[data-area=site] .qa-offers .qm-offer-price{display:inline-block;transform-origin:100% 50%;transition:transform .35s ease-out}
+  html[data-area=site] .qa-offers[dir=rtl] .qm-offer-price{transform-origin:0 50%}
+  html[data-area=site] .qa-offers .qa-offer:hover .qm-offer-price{transform:scale(1.06)}
+}
+
+/* ---------- 3. Home offers on phones: swipe row + position dots ----------
+   The row itself is already a CSS scroll-snap row below 820px (rule inside
+   HomeOffers.jsx: one card at 78% with the next one peeking; `start` snapping
+   is logical, so it is correct in RTL and LTR). This keeps a sideways swipe
+   from dragging the page or the browser's back gesture along, and styles the
+   dots that components/motion/SwipeDots.jsx renders under it. */
+html[data-area=site] .qm-dots{display:none}
+@media (max-width:820px){
+  html[data-area=site] .qa-offers .qa-offers-grid{overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
+  /* The section is a flex column with a 40px gap; pull the dots up to the row. */
+  html[data-area=site] .qa-offers .qm-dots{display:flex;justify-content:center;gap:2px;margin-top:-30px}
+  /* A 28px button for the finger, an 8px dot for the eye. */
+  html[data-area=site] .qm-dot{position:relative;flex:none;width:28px;height:28px;padding:0;border:0;border-radius:50%;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  html[data-area=site] .qm-dot::before{content:"";position:absolute;inset:10px;border-radius:50%;background:var(--qs-brand-deep,#036f8c);opacity:.24;transition:opacity .25s ease-out,transform .25s ease-out}
+  html[data-area=site] .qm-dot.on::before{opacity:1;transform:scale(1.3)}
+  html[data-area=site] .qm-dot:focus-visible{outline:2px solid var(--qs-brand-deep,#049dc5);outline-offset:-4px}
+}
+@media (max-width:820px) and (prefers-reduced-motion:reduce){
+  html[data-area=site] .qm-dot::before{transition:none}
+}
+
+/* ---------- 4. Count-up numbers (components/motion/CountUp.jsx) ----------
+   Equal-width digits so the number does not shiver while it counts; an
+   inline-block so the width reserved during the count can apply. */
+html[data-area=site] .qm-count{display:inline-block;font-variant-numeric:tabular-nums;text-align:start}

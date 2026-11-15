@@ -8,6 +8,7 @@ import SiteHeader from '../../components/SiteHeader';
 import SiteFooter from '../../components/SiteFooter';
 import MascotLoader from '../../components/MascotLoader';
 import PackageCard from '../../components/PackageCard';
+import CountUp from '../../components/motion/CountUp';
 import CtaButton from '../../components/CtaButton';
 
 import Icon from '../../components/Icon';
@@ -733,19 +734,19 @@ export default function PackagesPage({ initialPackages = null }) {
             </section>
           )}
 
-          {/* Highlights: inventory numbers */}
+          {/* Highlights: inventory numbers. They count up once when scrolled into view (components/motion/CountUp.jsx). */}
           <section style={{ background: 'var(--qs-brand-soft,#eaf8fd)', padding: 'clamp(28px,4vw,40px) clamp(16px,4vw,32px)' }}>
             <div style={{ maxWidth: 1240, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(240px,1fr))', gap: 28 }}>
               {[
-                { icon: 'building-2', value: lang === 'en' ? '+1,000,000' : '+1,000,000', label: lang === 'en' ? 'Hotels' : 'فندق', sub: lang === 'en' ? 'In our booking inventory, across every destination' : 'ضمن مخزوننا من الفنادق حول العالم' },
-                { icon: 'plane', value: lang === 'en' ? '+150' : '+150', label: lang === 'en' ? 'Tours & package types' : 'جولة ونوع باقة', sub: lang === 'en' ? 'For every kind of traveller and group' : 'تناسب كل أنواع المسافرين والمجموعات' },
+                { icon: 'building-2', count: 1000000, label: lang === 'en' ? 'Hotels' : 'فندق', sub: lang === 'en' ? 'In our booking inventory, across every destination' : 'ضمن مخزوننا من الفنادق حول العالم' },
+                { icon: 'plane', count: 150, label: lang === 'en' ? 'Tours & package types' : 'جولة ونوع باقة', sub: lang === 'en' ? 'For every kind of traveller and group' : 'تناسب كل أنواع المسافرين والمجموعات' },
               ].map((s) => (
                 <div key={s.label} style={{ display: 'flex', alignItems: 'flex-start', gap: 14 }}>
                   <span style={{ width: 48, height: 48, borderRadius: '50%', background: '#fff', display: 'grid', placeItems: 'center', flex: 'none', border: '1px solid var(--qs-line-2,#bfe9f6)' }}>
                     <Icon name={s.icon} size={22} style={{ color: 'var(--qs-brand-deep,#049dc5)' }} />
                   </span>
                   <div>
-                    <div style={{ fontSize: 17, fontWeight: 600, color: 'var(--qs-ink,#1d2733)' }}>{s.value} <span style={{ fontWeight: 600, fontSize: 15, color: 'var(--qs-body,#3d4650)' }}>{s.label}</span></div>
+                    <div style={{ fontSize: 17, fontWeight: 600, color: 'var(--qs-ink,#1d2733)' }}><CountUp value={s.count} prefix="+" /> <span style={{ fontWeight: 600, fontSize: 15, color: 'var(--qs-body,#3d4650)' }}>{s.label}</span></div>
                     <div style={{ fontSize: 13, color: 'var(--qs-ink-2,#5f666e)', marginTop: 3 }}>{s.sub}</div>
                   </div>
                 </div>

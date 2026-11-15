@@ -7,6 +7,9 @@ import './qs-nav.css';
 import './qs-home.css';
 import './qs-inner.css';
 import './qs-routes.css';
+import './qs-motion-page.css';
+import './qs-motion-cards.css';
+import './qs-motion-globe.css';
 import AreaMark from '../components/AreaMark';
 import MobileBottomBar from '../components/MobileBottomBar';
 import LiveChat from '../components/LiveChat';
@@ -15,6 +18,7 @@ import RoutePrefetch from '../components/RoutePrefetch';
 import LangGuard from '../components/LangGuard';
 import TravelAlert from '../components/TravelAlert';
 import ScrollReveal from '../components/ScrollReveal';
+import SiteMotion from '../components/motion/SiteMotion';
 import { SITE_URL, DEFAULT_OG, ORG_JSON_LD } from '../lib/seo';
 
 export const viewport = {
@@ -60,6 +64,7 @@ export default function RootLayout({ children }) {
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ORG_JSON_LD) }} />
         <TravelAlert />
         <ScrollReveal />
+        <SiteMotion />
         {children}
         <MobileBottomBar />
         <LiveChat />

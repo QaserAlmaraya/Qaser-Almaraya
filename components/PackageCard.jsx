@@ -3,6 +3,27 @@ import { imgProps } from '../lib/img';
 import React, { useId, useState } from 'react';
 import Icon from './Icon';
 
+// Desktop hover: the card photo drifts a little toward the mouse.
+// This only writes two CSS variables (--qm-mx / --qm-my, each -1..1) on the
+// card; the motion itself is a transform in app/qs-motion-cards.css, which is
+// also where hover-capable screens and prefers-reduced-motion are checked, so
+// on phones and for people who asked for less motion nothing moves. Touch and
+// pen are skipped, and work is limited to one measurement per frame.
+let panFrame = 0;
+export function panToPointer(e, el) {
+  if (!el || panFrame || (e.pointerType && e.pointerType !== 'mouse')) return;
+  const x = e.clientX;
+  const y = e.clientY;
+  panFrame = requestAnimationFrame(() => {
+    panFrame = 0;
+    const r = el.getBoundingClientRect();
+    if (!r.width || !r.height) return;
+    const unit = (v) => Math.max(-1, Math.min(1, v * 2 - 1)).toFixed(2);
+    el.style.setProperty('--qm-mx', unit((x - r.left) / r.width));
+    el.style.setProperty('--qm-my', unit((y - r.top) / r.height));
+  });
+}
+
 function FlightRow({ f, lang, selected, onSelect }) {
   const nm = (ar, en) => (lang === 'en' && en ? en : ar);
   const airline = nm(f.nameAr, f.nameEn);
@@ -183,7 +204,7 @@ export default function PackageCard({ title, destination, image, nights, groupTy
   const detailsLabel = en ? 'Package details' : 'تفاصيل الباقة';
 
   return (
-    <div dir={en ? 'ltr' : 'rtl'} className="qa-pkg-card" style={{ background: '#fff', border: '1px solid var(--q-line,var(--qs-line,#e6e9eb))', borderRadius: 'var(--q-r,12px)', overflow: 'hidden', display: 'flex', flexDirection: 'column', minWidth: 0, ...style }}>
+    <div dir={en ? 'ltr' : 'rtl'} className="qa-pkg-card" onPointerMove={(e) => panToPointer(e, e.currentTarget)} style={{ background: '#fff', border: '1px solid var(--q-line,var(--qs-line,#e6e9eb))', borderRadius: 'var(--q-r,12px)', overflow: 'hidden', display: 'flex', flexDirection: 'column', minWidth: 0, ...style }}>
       {/* Image + text are one focusable region that opens the package. */}
       <button type="button" onClick={onDetails} aria-label={heading ? `${detailsLabel} — ${heading}` : detailsLabel} className="qa-pkg-link">
         <div className="qa-pkg-hero" style={{ position: 'relative', background: 'var(--q-surface-2,var(--qs-paper,#f6f8f9))', overflow: 'hidden' }}>
@@ -307,7 +328,8 @@ export default function PackageCard({ title, destination, image, nights, groupTy
       ) : null}
 
       <style jsx>{`
-        /* Rest and hover of the card itself live in app/qs-routes.css (one card family). */
+        /* Rest and hover of the card itself live in app/qs-routes.css (one card family).
+           Photo drift and price/CTA emphasis on hover live in app/qs-motion-cards.css. */
 
         .qa-pkg-link {
           display: block; width: 100%; min-width: 0; margin: 0; padding: 0;

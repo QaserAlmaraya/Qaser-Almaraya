@@ -1,12 +1,14 @@
 'use client';
 import { imgProps } from '../lib/img';
 import Icon from './Icon';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { formatPrice } from '../lib/currency';
 import { nightsLabel, destinationLabel } from '../lib/destinations';
 import { loadPackages } from '../lib/publicPackages';
 import { siteUrgency } from '../lib/packageUrgency';
+import { panToPointer } from './PackageCard';
+import SwipeDots from './motion/SwipeDots';
 
 // "Featured offers" strip on the homepage: the first packages in the order
 // set in the dashboard, with photo, duration and starting price. Hidden when
@@ -21,6 +23,7 @@ export default function HomeOffers({ lang = 'ar', variant }) {
   const en = lang === 'en';
   const events = variant === 'events';
   const [items, setItems] = useState(null);
+  const row = useRef(null); // the cards row; a swipe row on phones (see the <style> below)
 
   useEffect(() => {
     let alive = true;
@@ -55,7 +58,9 @@ export default function HomeOffers({ lang = 'ar', variant }) {
         </div>
         <Link href={events ? '/packages?cat=' + (items.some((p) => p.cat === 'music') ? 'music' : 'sports') : '/packages'} className="qs-link">{events ? (en ? 'All event trips' : 'كل رحلات الفعاليات') : (en ? 'All packages' : 'كل الباقات')}</Link>
       </div>
-      <div className="qa-offers-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,minmax(0,1fr))', gap: 20 }}>
+      {/* One mouse listener for the whole row: the photo of the hovered card
+          drifts toward the pointer (CSS in app/qs-motion-cards.css). */}
+      <div ref={row} className="qa-offers-grid" onPointerMove={(e) => { const card = e.target.closest ? e.target.closest('.qa-offer') : null; if (card) panToPointer(e, card); }} style={{ display: 'grid', gridTemplateColumns: 'repeat(3,minmax(0,1fr))', gap: 20 }}>
         {items === null
           ? [0, 1, 2].map((i) => <div key={i} className="qa-offer-skel" aria-hidden="true" />)
           : items.map((p) => (
@@ -74,12 +79,16 @@ export default function HomeOffers({ lang = 'ar', variant }) {
                 <h3 style={{ fontSize: 18, fontWeight: 700, color: 'var(--qs-ink,#1d2733)', lineHeight: 1.35 }}>{nm(p.title_ar, p.title_en)}</h3>
                 <div style={{ marginTop: 'auto', paddingTop: 10, display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 8 }}>
                   <span style={{ fontSize: 13, color: 'var(--qs-ink-2,#5f666e)' }}>{en ? 'From' : 'يبدأ من'}</span>
-                  <span style={{ fontSize: 19, fontWeight: 700, color: 'var(--qs-brand-deep,#036f8c)' }}>{formatPrice(p.price, 'IQD', lang)}</span>
+                  <span className="qm-offer-price" style={{ fontSize: 19, fontWeight: 700, color: 'var(--qs-brand-deep,#036f8c)' }}>{formatPrice(p.price, 'IQD', lang)}</span>
                 </div>
               </div>
             </Link>
           ))}
       </div>
+      {/* Position dots for the phone swipe row; hidden by CSS on wider screens. */}
+      {items && items.length > 1 ? (
+        <SwipeDots scroller={row} count={items.length} label={(i, n) => (en ? 'Offer ' + i + ' of ' + n : 'العرض ' + i + ' من ' + n)} />
+      ) : null}
     </section>
   );
 }

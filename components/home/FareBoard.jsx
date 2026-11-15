@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useMemo, useState } from 'react';
+import { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import Icon from '../Icon';
 import { getRate, loadRate } from '../../lib/currency';
@@ -33,12 +33,62 @@ function flightMessage({ origin, dest, carrier, trip, cabin, price, en }) {
     : ['مرحباً، أرغب بحجز هذه الرحلة:', '✈️ من ' + origin.ar + ' إلى ' + dest.ar + ' على ' + carrier.ar, 'نوع الرحلة: ' + tripText, 'الدرجة: ' + (biz ? 'رجال الأعمال' : 'السياحية'), biz ? 'كم سعر درجة رجال الأعمال؟' : 'السعر في الموقع: ' + num(price) + ' د.ع'].join('\n');
 }
 
-function Price({ value, en, label }) {
+// Prices roll from the amount that was on show to the new one when the city,
+// the trip type or the destination changes, instead of jumping.
+//
+// The rows that hold a price are remounted on those changes (the list is keyed
+// by origin, the flights by destination and trip), so a component cannot
+// remember its own previous price. Instead the board keeps one small memory of
+// "the amount last shown in this slot" (a slot is a place on the board: the
+// row of a destination, or the n-th flight row of the panel), and a freshly
+// mounted Price starts from whatever its slot showed last.
+const PriceMemory = createContext(null);
+const TWEEN_MS = 450;
+
+function useRolledPrice(value, slot) {
+  const memory = useContext(PriceMemory);
+  // Nothing is remembered on the first render (server and hydration), so the
+  // real price is printed and the markup matches on both sides.
+  const [shown, setShown] = useState(() => {
+    const last = memory && slot ? memory.get(slot) : undefined;
+    return typeof last === 'number' ? last : value;
+  });
+  const shownRef = useRef(shown);
+
+  useEffect(() => {
+    const from = shownRef.current;
+    const put = (v) => { shownRef.current = v; if (memory && slot) memory.set(slot, v); setShown(v); };
+    const calm = typeof window === 'undefined' || !window.requestAnimationFrame
+      || (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    if (from === value || calm) { put(value); return undefined; }
+    let raf = 0;
+    let start = 0;
+    const step = (now) => {
+      if (!start) start = now;
+      const t = Math.min(1, (now - start) / TWEEN_MS);
+      if (t >= 1) { put(value); return; }
+      const eased = 1 - Math.pow(1 - t, 3); // ease-out, no overshoot
+      // Whole thousands on the way, so every frame still reads like a fare.
+      put(Math.round((from + (value - from) * eased) / 1000) * 1000);
+      raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [value, slot, memory]);
+
+  return shown;
+}
+
+function Price({ value, en, label, slot }) {
+  const shown = useRolledPrice(value, slot);
+  // The side panel is an aria-live region: the in-between amounts are hidden
+  // from screen readers, which then hear the final price once.
+  const rolling = shown !== value;
   return (
     <span className="qs-fb-price">
       {label ? <small>{label}</small> : null}
       <span className="qs-fb-amount">
-        {en ? <span>IQD</span> : null}<b>{num(value)}</b>{en ? null : <span>د.ع</span>}
+        {en ? <span>IQD</span> : null}<b aria-hidden={rolling ? 'true' : undefined}>{num(shown)}</b>{en ? null : <span>د.ع</span>}
       </span>
     </span>
   );
@@ -103,7 +153,8 @@ function LiveSearch({ d, from, trip, cabin, en }) {
 
 // One destination's flights, cheapest first. Rendered beside the list on wide
 // screens and under the opened row on phones.
-function Flights({ d, from, trip, cabin, rate, en }) {
+// `slot` names where these rows sit (side panel or under a list row) for the price memory.
+function Flights({ d, from, trip, cabin, rate, en, slot = 'p' }) {
   const n = d.offers.length;
   const biz = cabin === 'biz';
   const count = en ? n + (n === 1 ? ' flight' : ' flights') : (n === 1 ? 'رحلة واحدة' : n === 2 ? 'رحلتان' : n <= 10 ? n + ' رحلات' : n + ' رحلة');
@@ -148,7 +199,7 @@ function Flights({ d, from, trip, cabin, rate, en }) {
               </div>
               {biz
                 ? <span className="qs-fb-price qs-fb-onask"><span className="qs-fb-amount"><b>{en ? 'Price on request' : 'السعر عند الطلب'}</b></span></span>
-                : <Price value={f.price} en={en} label={f.carrier.fixed ? '' : (en ? 'From' : 'يبدأ من')} />}
+                : <Price value={f.price} en={en} label={f.carrier.fixed ? '' : (en ? 'From' : 'يبدأ من')} slot={slot + ':' + k} />}
               <a className="qs-fb-book" href={waLink(flightMessage({ origin: from, dest: d.place, carrier: f.carrier, trip, cabin, price: f.price, en }))} target="_blank" rel="noopener">
                 <Icon name="message-circle" size={16} strokeWidth={2} />
                 {biz ? (en ? 'Ask for the fare' : 'اطلب السعر') : (en ? 'Book' : 'احجز')}
@@ -170,6 +221,8 @@ export default function FareBoard({ lang = 'ar', initial = 8, link = true }) {
   const [all, setAll] = useState(false);
   const [cabin, setCabin] = useState('eco'); // 'eco' | 'biz'. The sheet has economy fares only.
   const [rate, setRate] = useState(getRate());
+  // Amount last shown per price slot; see useRolledPrice.
+  const [priceMemory] = useState(() => new Map());
 
   useEffect(() => { let alive = true; loadRate().then((r) => { if (alive) setRate(r); }); return () => { alive = false; }; }, []);
 
@@ -182,6 +235,7 @@ export default function FareBoard({ lang = 'ar', initial = 8, link = true }) {
   const pickOrigin = (code) => { setOrigin(code); setOpen(''); setAll(false); };
 
   return (
+    <PriceMemory.Provider value={priceMemory}>
     <section id="fares" className="qs-band qs-fb-band" data-no-i18n="" dir={en ? 'ltr' : 'rtl'}>
       <div className="qs-wrap" style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
         <div className="qs-head">
@@ -237,10 +291,10 @@ export default function FareBoard({ lang = 'ar', initial = 8, link = true }) {
                           <span className="qs-fb-name">{en ? d.place.en : d.place.ar}</span>
                           <small>{sub}</small>
                         </span>
-                        {cabin === 'biz' ? null : <Price value={d.from} en={en} label={en ? 'From' : 'يبدأ من'} />}
+                        {cabin === 'biz' ? null : <Price value={d.from} en={en} label={en ? 'From' : 'يبدأ من'} slot={'d:' + d.key} />}
                         <Icon name="chevron-down" size={18} strokeWidth={2} className="qs-fb-chev" />
                       </button>
-                      {isOpen ? <div className="qs-fb-inline"><Flights d={d} from={from} trip={trip} cabin={cabin} rate={rate} en={en} /></div> : null}
+                      {isOpen ? <div className="qs-fb-inline"><Flights d={d} from={from} trip={trip} cabin={cabin} rate={rate} en={en} slot="i" /></div> : null}
                     </li>
                   );
                 })}
@@ -253,7 +307,7 @@ export default function FareBoard({ lang = 'ar', initial = 8, link = true }) {
               ) : null}
             </div>
             <div className="qs-fb-panel" aria-live="polite">
-              {side ? <Flights key={side.key + trip} d={side} from={from} trip={trip} cabin={cabin} rate={rate} en={en} /> : null}
+              {side ? <Flights key={side.key + trip} d={side} from={from} trip={trip} cabin={cabin} rate={rate} en={en} slot="p" /> : null}
             </div>
           </div>
 
@@ -266,5 +320,6 @@ export default function FareBoard({ lang = 'ar', initial = 8, link = true }) {
         </div>
       </div>
     </section>
+    </PriceMemory.Provider>
   );
 }
