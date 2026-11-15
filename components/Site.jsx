@@ -16,6 +16,7 @@ import DeparturesBoard from './home/DeparturesBoard';
 import FareBoard from './home/FareBoard';
 import SeasonSpotlight from './SeasonSpotlight';
 import SeasonDecor from './SeasonDecor';
+import SiteNav from './nav/SiteNav';
 import TripFinder from './TripFinder';
 import VisaChecker from './VisaChecker';
 import PartnersWall from './PartnersWall';
@@ -154,7 +155,8 @@ const ACHIEVEMENTS=[
   body:['تفخر شركة قصر المرايا للسفر والسياحة بدورها في دعم الرياضة العراقية وجماهيرها العريقة، وذلك من خلال تنظيم رحلات خاصة لنقل مشجعي منتخبنا الوطني إلى مختلف البطولات والمباريات.',
    'نواصل التزامنا بدعم رياضتنا ومشجعينا، وسنبقى دائمًا شريككم في كل رحلة انتصار، لنرسم معًا لحظات الفخر ونصنع التاريخ بوقوفنا خلف منتخبنا العظيم!']}];
 
-const NAV=[{id:'home',label:'الرئيسية'},{id:'flights',label:'الطيران والفنادق'},{id:'packages',label:'المجموعات والباقات'},{id:'visas',label:'التأشيرات'},{id:'guide',label:'دليل الوجهات'},{id:'jobs',label:'الوظائف'},{id:'faq',label:'الأسئلة الشائعة'},{id:'contact',label:'تواصل معنا'}];
+// Header links (components/nav/SiteNav.jsx). The logo is the home link; `more` items sit under «المزيد».
+const NAV=[{id:'flights',label:'الطيران والفنادق',icon:'plane'},{id:'packages',label:'المجموعات والباقات',icon:'luggage'},{id:'visas',label:'التأشيرات',icon:'id-card'},{id:'guide',label:'دليل الوجهات',icon:'compass'},{id:'jobs',label:'الوظائف',icon:'briefcase',more:true},{id:'faq',label:'الأسئلة الشائعة',icon:'circle-help',more:true},{id:'contact',label:'تواصل معنا',icon:'mail',more:true}];
 const GROUPS=['الكل','عائلي','شبابي','رجال أعمال','حج وعمرة'];
 
 export default function Site(props) {
@@ -407,12 +409,14 @@ function   renderVals(){
     const navItems = NAV.map(n => {
       const isOn = page === n.id;
       return {
-        label: n.id === 'packages' && st.lang === 'en' ? 'Groups & Packages' : n.id === 'guide' && st.lang === 'en' ? 'Travel guides' : n.label,
-        noI18n: n.id === 'packages' || n.id === 'guide',
-        weight: isOn ? 700 : 500,
-        color: isOn ? '#049dc5' : '#3d4650',
-        border: isOn ? '#049dc5' : 'transparent',
-        go: ROUTE_MAP[n.id]
+        id: n.id,
+        label: n.label,
+        labelEn: n.id === 'packages' ? 'Groups & Packages' : n.id === 'guide' ? 'Travel guides' : undefined,
+        icon: n.icon,
+        more: !!n.more,
+        on: isOn,
+        href: ROUTE_MAP[n.id] || '#',
+        onClick: ROUTE_MAP[n.id]
           ? e => { e.preventDefault(); router.push(ROUTE_MAP[n.id]); }
           : e => { e.preventDefault(); go(n.id); }
       };
@@ -851,74 +855,16 @@ function   visaVals(country){
 
 
 <div dir="rtl" style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
-<header style={{ position: "sticky", top: "0", zIndex: "40", background: "#fff", borderBottom: "1px solid var(--qs-line,#ececed)", boxShadow: "var(--tw-card-shadow,0 1px 3px rgba(29,39,51,.06))" }}>
-<SeasonDecor />
-<div className="qa-head" style={{ maxWidth: "1240px", margin: "0 auto", padding: "12px 32px", display: "flex", alignItems: "center", gap: "24px" }}>
-<a href="#" onClick={goHome} aria-label="قصر المرايا للسفر و السياحة" className="qa-logo" style={{ display: "flex", alignItems: "center", gap: "8px", textDecoration: "none", flex: "none" }}>
-<img src="/assets/logo-mark-tight.webp" alt="" style={{ height: "38px", width: "38px", objectFit: "contain", display: "block", flex: "none" }} />
-<span style={{ display: "flex", flexDirection: "column", gap: "1px", lineHeight: "1.05" }}>
-<span style={{ fontSize: "19px", fontWeight: "700", color: "var(--qs-brand-deep,#22a9d4)", whiteSpace: "nowrap" }}>قصر المرايا</span>
-<span style={{ fontSize: "10px", fontWeight: "600", color: "var(--qs-ink-2,#5f666e)", whiteSpace: "nowrap" }}>للسفر و السياحة</span>
-</span>
-</a>
-<nav className="qa-navrow" style={{ display: "flex", alignItems: "center", gap: "20px", flex: "1", flexWrap: "wrap", fontSize: "16px" }}>
-{(navItems || []).map((item, $index) => (<React.Fragment key={$index}>
-<a href="#" className="qa-nav" data-i18n-short={item.noI18n ? undefined : ""} data-no-i18n={item.noI18n ? "" : undefined} onClick={item.go} style={{ fontWeight: item.weight, color: item.color, paddingBottom: "2px", borderBottom: `2px solid ${item.border}`, cursor: "pointer" }}>{item.label}</a>
-</React.Fragment>))}
-</nav>
-<button type="button" onClick={toggleLang} aria-label="Language" title="Language" className="qa-langbtn" style={{ flex: "none", display: "flex", alignItems: "center", gap: "8px", padding: "8px 14px", border: "1px solid var(--qs-line,#ececed)", borderRadius: "999px", background: "#fff", fontFamily: "inherit", fontSize: "13px", fontWeight: "700", letterSpacing: ".04em", color: "var(--qs-brand-deep,#22a9d4)", cursor: "pointer" }}>
-<Icon name="globe" size={17} strokeWidth={1.8} />
-<span data-no-i18n="">{langLabel}</span>
-</button>
-<button className="qa-btn qa-cyan qa-headcta" style={{ flex: "none", padding: "8px 16px", fontSize: "14px" }} onClick={goContact}>تواصل معنا</button>
-<button
-  type="button"
-  onClick={() => setQaMobileMenuOpen(true)}
-  aria-label="القائمة"
-  aria-expanded={qaMobileMenuOpen}
-  className="qa-burger"
-  style={{ display: "none", flex: "none", alignItems: "center", justifyContent: "center", width: 42, height: 42, border: 0, borderRadius: 'var(--tw-radius-sm,10px)', background: "var(--qs-band,#049dc5)", color: "#fff", cursor: "pointer", marginInlineStart: "auto" }}
->
-  <Icon name="menu" size={22} strokeWidth={2.2} />
-</button>
-</div>
-</header>
-
-{qaMobileMenuOpen && (
-  <div className="qa-mobilemenu" style={{ position: "fixed", inset: 0, zIndex: 50, background: "var(--qs-band,#049dc5)", display: "flex", flexDirection: "column", overflowY: "auto" }}>
-    <div style={{ display: "flex", justifyContent: "flex-end", padding: "14px 16px" }}>
-      <button type="button" onClick={() => setQaMobileMenuOpen(false)} aria-label="إغلاق" style={{ width: 42, height: 42, borderRadius: 'var(--tw-radius-sm,10px)', border: 0, background: "rgba(255,255,255,.18)", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
-        <Icon name="x" size={20} strokeWidth={2.4} />
-      </button>
-    </div>
-    <nav style={{ display: "flex", flexDirection: "column", padding: "4px 24px 20px" }}>
-      {(navItems || []).map((item, $index) => (
-        <a
-          key={$index}
-          href="#"
-          data-i18n-short=""
-          onClick={(e) => { setQaMobileMenuOpen(false); item.go(e); }}
-          style={{ color: "#fff", fontSize: 20, fontWeight: item.weight >= 700 ? 800 : 600, padding: "16px 4px", borderBottom: "1px solid rgba(255,255,255,.18)", textDecoration: "none" }}
-        >
-          {item.label}
-        </a>
-      ))}
-    </nav>
-    <div style={{ marginTop: "auto", padding: "16px 24px 28px", display: "flex", alignItems: "center", gap: 12 }}>
-      <button type="button" onClick={toggleLang} data-no-i18n="" style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 16px", border: "1px solid rgba(255,255,255,.35)", borderRadius: 999, background: "transparent", fontFamily: "inherit", fontSize: 13, fontWeight: 700, letterSpacing: ".04em", color: "#fff", cursor: "pointer" }}>
-        <Icon name="globe" size={17} strokeWidth={1.8} />
-        <span>{langLabel}</span>
-      </button>
-      <button
-        type="button"
-        onClick={(e) => { setQaMobileMenuOpen(false); goContact(e); }}
-        style={{ flex: 1, textAlign: "center", padding: "12px 16px", borderRadius: 999, background: "#fff", color: "var(--qs-brand-deep,#049dc5)", fontWeight: 700, fontSize: 15, border: 0, cursor: "pointer" }}
-      >
-        تواصل معنا
-      </button>
-    </div>
-  </div>
-)}
+<SiteNav
+  lang={st.lang}
+  onToggleLang={toggleLang}
+  home={{ href: "/", onClick: goHome }}
+  primary={(navItems || []).filter((item) => !item.more)}
+  more={(navItems || []).filter((item) => item.more)}
+  cta={{ label: "تواصل معنا", onClick: goContact }}
+  menuOpen={qaMobileMenuOpen}
+  setMenuOpen={setQaMobileMenuOpen}
+/>
 
 <main style={{ flex: "1" }}>
 
