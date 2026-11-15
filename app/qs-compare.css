@@ -1,0 +1,179 @@
+/* Every rule must start with html[data-area=site]. Dark mode: add a matching html[data-area=site][data-theme=dark] rule or use --qs-* tokens / var(--qd-NAME,#literal). */
+
+/* ── Package comparison (components/compare/*) ─────────────────────────────
+   1. the «قارن» tick on a package card
+   2. the tray fixed at the bottom while something is ticked
+   3. the comparison view (dialog on desktop, bottom sheet on phones)        */
+
+/* ---------- 1. Tick on the card photo ---------- */
+html[data-area=site] .qc-pick{
+  position:absolute;z-index:3;top:12px;inset-inline-end:12px;
+  display:inline-flex;align-items:center;gap:8px;min-height:36px;padding:0 12px;padding-inline-start:10px;
+  border:1px solid var(--qs-line);border-radius:999px;background:var(--qs-surface);color:var(--qs-ink);
+  font-family:var(--qs-sans);font-size:13px;font-weight:600;line-height:1;cursor:pointer;
+  transition:border-color .16s var(--qs-ease),color .16s var(--qs-ease)}
+/* 44px tap area without a bigger pill */
+html[data-area=site] .qc-pick::after{content:"";position:absolute;inset:-5px -4px}
+html[data-area=site] .qc-pick:hover{border-color:var(--qs-brand)}
+html[data-area=site] .qc-pick-box{
+  flex:none;display:grid;place-items:center;width:18px;height:18px;border:1.5px solid var(--qs-ink-3);border-radius:4px;
+  background:var(--qs-surface);color:var(--qs-surface);transition:background-color .16s var(--qs-ease),border-color .16s var(--qs-ease)}
+html[data-area=site] .qc-pick.on{border-color:var(--qs-brand);color:var(--qs-brand-deep)}
+html[data-area=site] .qc-pick.on .qc-pick-box{background:var(--qs-brand);border-color:var(--qs-brand)}
+
+/* ---------- 2. Tray ---------- */
+html[data-area=site] .qc-tray{
+  position:fixed;z-index:898;bottom:16px;left:0;right:0;margin-inline:auto;
+  width:min(920px,calc(100% - 220px));box-sizing:border-box;padding:10px 12px;padding-inline-start:16px;
+  background:var(--qs-surface);border:1px solid var(--qs-line);border-top:2px solid var(--qs-brand);border-radius:var(--qs-r);
+  box-shadow:0 1px 2px rgba(29,39,51,.05),0 18px 36px -22px rgba(29,39,51,.4);
+  font-family:var(--qs-sans);color:var(--qs-body);animation:qc-rise .22s var(--qs-ease) both}
+html[data-area=site] .qc-tray-in{display:flex;align-items:center;gap:12px;min-width:0}
+html[data-area=site] .qc-tray-t{flex:none;display:inline-flex;align-items:center;gap:8px;font-size:15px;font-weight:600;color:var(--qs-ink)}
+html[data-area=site] .qc-tray-t svg{color:var(--qs-brand-deep)}
+html[data-area=site] .qc-tray-t b{font-weight:500;font-size:13px;color:var(--qs-ink-2);direction:ltr}
+html[data-area=site] .qc-chips{flex:1;min-width:0;display:flex;gap:8px;margin:0;padding:2px 0;list-style:none;overflow-x:auto;scrollbar-width:none}
+html[data-area=site] .qc-chips::-webkit-scrollbar{display:none}
+html[data-area=site] .qc-chip{flex:0 1 auto;min-width:96px;max-width:240px;display:inline-flex;align-items:center;gap:2px;
+  padding-inline-start:12px;border:1px solid var(--qs-line);border-radius:999px;background:var(--qs-brand-soft);color:var(--qs-ink)}
+html[data-area=site] .qc-chip-t{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;font-weight:500;line-height:1.6}
+html[data-area=site] .qc-chip-x{flex:none;display:grid;place-items:center;width:32px;height:32px;border:0;border-radius:50%;background:none;color:var(--qs-ink-2);cursor:pointer}
+html[data-area=site] .qc-chip-x:hover{color:var(--qs-ink)}
+html[data-area=site] .qc-tray-act{flex:none;display:flex;align-items:center;gap:4px}
+html[data-area=site] .qc-clear{min-height:40px;padding:0 12px;border:0;background:none;color:var(--qs-ink-2);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:4px;text-decoration-color:var(--qs-line-2)}
+html[data-area=site] .qc-clear:hover{color:var(--qs-ink)}
+html[data-area=site] .qc-go{min-height:40px;padding:0 20px;border:1px solid var(--qs-amber);border-radius:999px;font-family:inherit;font-size:15px;font-weight:600;white-space:nowrap;cursor:pointer;
+  transition:background-color .18s var(--qs-ease),border-color .18s var(--qs-ease)}
+html[data-area=site] .qc-go:disabled{opacity:.45;cursor:not-allowed}
+html[data-area=site] .qc-note{margin:0;font-size:13px;line-height:1.6;color:var(--qs-ink-2)}
+html[data-area=site] .qc-note:empty{display:none}
+html[data-area=site] .qc-note:not(:empty){padding-bottom:6px}
+html[data-area=site] .qc-note.full{color:var(--qs-ink)}
+html[data-area=site] body:has(.qc-tray){padding-bottom:88px}
+html[data-area=site] body.qa-drawer-open .qc-tray{display:none}
+
+@media (max-width:820px){
+  /* above the phone bottom bar and its raised WhatsApp button (8px gap + 62px bar + 26px button rise + 6px) */
+  html[data-area=site] .qc-tray{bottom:calc(102px + env(safe-area-inset-bottom,0px));left:10px;right:10px;width:auto;padding:8px 10px 10px;padding-inline-start:12px}
+  html[data-area=site] .qc-tray-in{flex-wrap:wrap;gap:8px 10px}
+  html[data-area=site] .qc-tray-t{order:1;font-size:13px}
+  html[data-area=site] .qc-tray-act{order:2;margin-inline-start:auto}
+  html[data-area=site] .qc-chips{order:3;flex:1 0 100%}
+  html[data-area=site] .qc-chip{flex:none;max-width:62vw}
+  html[data-area=site] .qc-go{min-height:40px;padding:0 16px}
+  html[data-area=site] body:has(.qc-tray){padding-bottom:calc(224px + env(safe-area-inset-bottom,0px))}
+  /* the chat bubble moves up so it never sits on the tray */
+  html[data-area=site] body:has(.qc-tray) #zsiq_float{bottom:calc(232px + env(safe-area-inset-bottom,0px))!important}
+}
+
+/* ---------- 3. Comparison view ---------- */
+html[data-area=site] body.qc-open{overflow:hidden}
+html[data-area=site] body.qc-open #zsiq_float,html[data-area=site] body.qc-open .qa-chat-label{display:none!important}
+html[data-area=site] .qc-overlay{position:fixed;inset:0;z-index:1100;display:grid;place-items:center;padding:24px;background:rgba(1,20,28,.5);font-family:var(--qs-sans);animation:qc-fade .18s ease both}
+html[data-area=site] .qc-sheet{
+  --qc-lab:168px;--qc-col:220px;
+  display:flex;flex-direction:column;width:100%;max-width:calc(var(--qc-lab) + var(--qc-n) * 300px);max-height:calc(100vh - 48px);max-height:calc(100dvh - 48px);
+  background:var(--qs-surface);color:var(--qs-body);border:1px solid var(--qs-line);border-radius:var(--qs-r);overflow:hidden;
+  box-shadow:0 1px 2px rgba(29,39,51,.05),0 24px 48px -24px rgba(29,39,51,.45);animation:qc-rise .22s var(--qs-ease) both}
+html[data-area=site] .qc-sheet[data-n="1"]{max-width:560px}
+html[data-area=site] .qc-head{flex:none;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 20px;border-bottom:1px solid var(--qs-line)}
+html[data-area=site] .qc-head .qc-title{margin:0;font-family:var(--qs-display)!important;font-size:20px;font-weight:700!important;line-height:1.4!important;color:var(--qs-ink)}
+html[data-area=site] .qc-sub{display:block;font-size:13px;color:var(--qs-ink-2);line-height:1.6}
+html[data-area=site] .qc-close{flex:none;display:grid;place-items:center;width:44px;height:44px;border:1px solid var(--qs-line);border-radius:50%;background:var(--qs-surface);color:var(--qs-ink);cursor:pointer}
+html[data-area=site] .qc-close:hover{border-color:var(--qs-ink-3)}
+
+html[data-area=site] .qc-scroll{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+html[data-area=site] .qc-grid{min-width:calc(var(--qc-lab) + var(--qc-n) * var(--qc-col))}
+html[data-area=site] .qc-row{display:grid;grid-template-columns:var(--qc-lab) repeat(var(--qc-n),minmax(0,1fr));border-bottom:1px solid var(--qs-line)}
+html[data-area=site] .qc-row:last-child{border-bottom:0}
+html[data-area=site] .qc-lab{position:sticky;inset-inline-start:0;z-index:1;display:block;padding:16px 20px;background:var(--qs-paper);font-size:13px;font-weight:600;line-height:1.6;color:var(--qs-ink-2)}
+html[data-area=site] .qc-cell{min-width:0;padding:16px;border-inline-start:1px solid var(--qs-line);font-size:15px;line-height:1.6;color:var(--qs-ink);overflow-wrap:anywhere}
+html[data-area=site] .qc-row.same .qc-val{color:var(--qs-ink-2)}
+html[data-area=site] .qc-dash{color:var(--qs-ink-3)}
+html[data-area=site] .qc-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+
+/* header row: photo + name stay in view while the rows scroll */
+html[data-area=site] .qc-row-head{position:sticky;top:0;z-index:3;background:var(--qs-surface)}
+html[data-area=site] .qc-row-head .qc-lab{z-index:4}
+html[data-area=site] .qc-corner span{display:none}
+html[data-area=site] .qc-col-head{display:flex;flex-direction:column;gap:10px;background:var(--qs-surface)}
+html[data-area=site] .qc-photo{position:relative;display:grid;place-items:center;aspect-ratio:2/1;border-radius:var(--qs-r-xs);overflow:hidden;background:var(--qs-paper);color:var(--qs-ink-3)}
+html[data-area=site] .qc-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+html[data-area=site] .qc-remove{position:absolute;top:6px;inset-inline-end:6px;display:grid;place-items:center;width:32px;height:32px;border:1px solid var(--qs-line);border-radius:50%;background:var(--qs-surface);color:var(--qs-ink);cursor:pointer}
+html[data-area=site] .qc-remove::after{content:"";position:absolute;inset:-6px}
+html[data-area=site] .qc-remove:hover{border-color:var(--qs-ink-3)}
+html[data-area=site] .qc-name{font-size:17px;font-weight:600;line-height:1.45;color:var(--qs-ink);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+/* price */
+html[data-area=site] .qc-price{display:flex;flex-direction:column;gap:2px}
+html[data-area=site] .qc-price small{font-size:13px;color:var(--qs-ink-2)}
+html[data-area=site] .qc-price b{font-size:20px;font-weight:600;line-height:1.3;color:var(--qs-ink);white-space:nowrap}
+html[data-area=site] .qc-price em{display:inline-flex;align-items:center;gap:6px;font-style:normal;font-size:13px;font-weight:600;color:var(--qs-brand-deep)}
+html[data-area=site] .qc-price em::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--qs-brand)}
+html[data-area=site] .qc-price.low b{color:var(--qs-brand-deep)}
+
+/* lists inside cells */
+html[data-area=site] :is(.qc-list,.qc-dates,.qc-hotels,.qc-plain){margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
+html[data-area=site] .qc-list li{display:flex;align-items:flex-start;gap:8px;font-size:15px;line-height:1.55;color:var(--qs-body)}
+html[data-area=site] .qc-list svg{flex:none;margin-top:5px}
+html[data-area=site] .qc-list-yes svg{color:var(--qs-brand-deep)}
+html[data-area=site] .qc-list-no svg{color:var(--qs-ink-3)}
+html[data-area=site] .qc-more{font-size:13px;color:var(--qs-ink-2)}
+html[data-area=site] .qc-list .qc-more{padding-inline-start:22px}
+html[data-area=site] .qc-hotels{gap:12px}
+html[data-area=site] .qc-hotels li{display:flex;flex-direction:column;gap:2px}
+html[data-area=site] .qc-hotel-n{font-weight:500;color:var(--qs-ink)}
+html[data-area=site] .qc-stars{display:inline-flex;gap:2px;color:var(--qs-amber)}
+html[data-area=site] .qc-stars svg{fill:currentColor}
+html[data-area=site] :is(.qc-hotel-m,.qc-hotel-x){display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--qs-ink-2)}
+html[data-area=site] .qc-hotel-m svg{flex:none;color:var(--qs-brand-deep)}
+
+/* actions */
+html[data-area=site] .qc-row-foot .qc-lab{background:var(--qs-surface)}
+html[data-area=site] .qc-acts{display:flex;flex-direction:column;gap:8px;padding-block:20px}
+html[data-area=site] .qc-book{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 12px;border:1px solid var(--qs-amber);border-radius:999px;font-family:inherit;font-size:15px;font-weight:600;cursor:pointer;
+  transition:background-color .18s var(--qs-ease),border-color .18s var(--qs-ease)}
+html[data-area=site] .qc-book svg{flex:none;width:18px;height:18px}
+html[data-area=site] .qc-open-link{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 12px;border:1px solid var(--qs-brand);border-radius:999px;color:var(--qs-brand-deep);font-size:15px;font-weight:600;text-decoration:none;
+  transition:background-color .16s var(--qs-ease)}
+html[data-area=site] .qc-open-link:hover{background:var(--qs-brand-soft);color:var(--qs-brand-deep)}
+
+@media (max-width:820px){
+  /* bottom sheet; the row label becomes a band above its values */
+  html[data-area=site] .qc-overlay{place-items:end stretch;padding:0}
+  html[data-area=site] .qc-sheet{--qc-col:50%;max-width:none;max-height:92vh;max-height:92dvh;border-width:1px 0 0;border-radius:12px 12px 0 0}
+  html[data-area=site] .qc-sheet[data-n="1"]{--qc-col:100%;max-width:none}
+  html[data-area=site] .qc-sheet[data-n="3"]{--qc-col:44vw}
+  html[data-area=site] .qc-head{padding:12px 16px}
+  html[data-area=site] .qc-head .qc-title{font-size:17px}
+  html[data-area=site] .qc-grid{min-width:calc(var(--qc-n) * var(--qc-col))}
+  html[data-area=site] .qc-row{grid-template-columns:repeat(var(--qc-n),minmax(0,1fr))}
+  html[data-area=site] .qc-lab{position:static;grid-column:1/-1;padding:6px 0;border-bottom:1px solid var(--qs-line)}
+  html[data-area=site] .qc-lab>span{position:sticky;inset-inline-start:0;display:inline-block;padding:0 16px}
+  html[data-area=site] .qc-lab-empty{display:none}
+  html[data-area=site] .qc-corner{background:var(--qs-surface);border-bottom:0;padding:0;font-weight:500}
+  html[data-area=site] .qc-corner span:empty{display:none}
+  html[data-area=site] .qc-corner span:not(:empty){display:inline-block;padding:8px 16px 0}
+  html[data-area=site] .qc-cell{padding:12px;font-size:13px}
+  html[data-area=site] .qc-cell:first-of-type{border-inline-start:0}
+  html[data-area=site] .qc-col-head{gap:8px;padding-bottom:10px}
+  html[data-area=site] .qc-photo{aspect-ratio:auto;height:76px}
+  html[data-area=site] .qc-name{font-size:15px}
+  html[data-area=site] .qc-price b{font-size:17px}
+  html[data-area=site] .qc-list li{font-size:13px}
+  html[data-area=site] .qc-list svg{margin-top:4px}
+  html[data-area=site] :is(.qc-book,.qc-open-link){font-size:13px;padding:0 8px}
+  html[data-area=site] .qc-book{gap:6px}
+  html[data-area=site] .qc-acts{padding-bottom:calc(16px + env(safe-area-inset-bottom,0px))}
+}
+
+/* dark: the shadows need more weight, everything else follows the tokens */
+html[data-area=site][data-theme=dark] :is(.qc-tray,.qc-sheet){box-shadow:0 1px 2px rgba(0,0,0,.4),0 24px 48px -24px rgba(0,0,0,.8)}
+html[data-area=site][data-theme=dark] .qc-overlay{background:rgba(0,0,0,.62)}
+
+@keyframes qc-rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes qc-fade{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){
+  html[data-area=site] :is(.qc-tray,.qc-sheet,.qc-overlay){animation:none}
+  html[data-area=site] :is(.qc-pick,.qc-pick-box,.qc-go,.qc-book,.qc-open-link){transition:none}
+}

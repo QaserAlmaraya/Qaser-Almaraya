@@ -1,0 +1,115 @@
+/* Every rule must start with html[data-area=site]. Dark mode: add a matching html[data-area=site][data-theme=dark] rule or use --qs-* tokens / var(--qd-NAME,#literal). */
+
+/* ── «احسب السعر» quick price calculator (components/calc/PriceCalc.jsx) ── */
+
+/* The control on a package card: a quiet text button under the price. */
+html[data-area=site] .qk-card-btn{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;min-height:36px;margin:2px 0 -8px;padding:0;border:0;background:none;font-family:inherit;font-size:13px;font-weight:600;line-height:1.2;color:var(--qs-ink-2,#5f666e);cursor:pointer;white-space:nowrap;-webkit-tap-highlight-color:transparent}
+html[data-area=site] .qk-card-btn svg{flex:none;color:var(--qs-brand-deep,#049dc5)}
+html[data-area=site] .qk-card-btn span{border-bottom:1px solid var(--qs-line-2,#cfc8bb);padding-bottom:1px;transition:color .16s ease,border-color .16s ease}
+html[data-area=site] .qk-card-btn:hover span{color:var(--qs-ink,#1d2733);border-color:var(--qs-brand-deep,#049dc5)}
+html[data-area=site] .qk-card-btn:focus-visible{outline:2px solid var(--qs-brand-deep,#049dc5);outline-offset:3px;border-radius:var(--qs-r-xs,4px)}
+
+/* Panel: centred dialog on desktop, bottom sheet on phones. */
+html[data-area=site] .qk-root{position:fixed;inset:0;z-index:1200;display:flex;align-items:center;justify-content:center;padding:24px;font-family:var(--qs-sans,'IBM Plex Sans Arabic',system-ui,sans-serif);color:var(--qs-body,#3d4650)}
+html[data-area=site] .qk-scrim{position:absolute;inset:0;background:rgba(1,20,28,.5);animation:qk-fade .2s ease both}
+html[data-area=site] .qk-panel{position:relative;display:flex;flex-direction:column;width:min(480px,100%);max-height:min(760px,100%);background:var(--qs-surface,#fff);border:1px solid var(--qs-line,#e2ddd3);border-radius:var(--tw-radius,16px);box-shadow:var(--tw-lift-shadow,0 8px 22px rgba(1,42,55,.12));overflow:hidden;animation:qk-rise .24s var(--qs-ease,cubic-bezier(.2,.7,.2,1)) both}
+html[data-area=site] .qk-panel *{box-sizing:border-box}
+
+html[data-area=site] .qk-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:20px 20px 16px;border-bottom:1px solid var(--qs-line,#e2ddd3)}
+html[data-area=site] .qk-head-copy{display:flex;flex-direction:column;gap:4px;min-width:0}
+html[data-area=site] .qk-eyebrow{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--qs-brand-deep,#049dc5)}
+html[data-area=site] .qk-title{font-size:20px;font-weight:600;line-height:1.35;color:var(--qs-ink,#1d2733);overflow-wrap:anywhere}
+html[data-area=site] .qk-sub{font-size:13px;line-height:1.5;color:var(--qs-ink-2,#5f666e)}
+html[data-area=site] .qk-x{flex:none;display:grid;place-items:center;width:40px;height:40px;margin:-6px;margin-inline-start:0;border:0;border-radius:50%;background:var(--qs-paper,#f7f5f0);color:var(--qs-ink,#1d2733);cursor:pointer}
+html[data-area=site] .qk-x:hover{background:var(--qs-brand-soft,#e7f3f6)}
+
+html[data-area=site] .qk-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;display:flex;flex-direction:column;gap:20px;padding:16px 20px 20px}
+html[data-area=site] .qk-sec{display:flex;flex-direction:column;gap:8px;min-width:0;margin:0;padding:0;border:0}
+html[data-area=site] .qk-label{padding:0;font-size:13px;font-weight:600;color:var(--qs-ink-2,#5f666e)}
+html[data-area=site] legend.qk-label{margin-bottom:8px}
+html[data-area=site] .qk-fact{flex-direction:row;align-items:baseline;gap:12px;font-size:15px;color:var(--qs-ink,#1d2733)}
+html[data-area=site] .qk-fact .qk-label{flex:none}
+html[data-area=site] .qk-fact small{display:block;font-size:13px;color:var(--qs-ink-2,#5f666e)}
+
+/* Hotel / flight choice */
+html[data-area=site] .qk-opt{position:relative;display:flex;align-items:center;gap:12px;min-height:48px;padding:8px 12px;border:1px solid var(--qs-line,#e2ddd3);border-radius:var(--tw-radius-sm,10px);background:var(--qs-surface,#fff);cursor:pointer;transition:border-color .16s ease,background-color .16s ease}
+html[data-area=site] .qk-opt input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer}
+html[data-area=site] .qk-opt.on{border-color:var(--qs-brand-deep,#049dc5);background:var(--qs-brand-soft,#e7f3f6)}
+html[data-area=site] .qk-opt:has(input:focus-visible){outline:2px solid var(--qs-brand-deep,#049dc5);outline-offset:2px}
+html[data-area=site] .qk-dot{flex:none;width:18px;height:18px;border-radius:50%;border:1.5px solid var(--qs-line-2,#cfc8bb);background:var(--qs-surface,#fff)}
+html[data-area=site] .qk-opt.on .qk-dot{border:5px solid var(--qs-brand-deep,#049dc5)}
+html[data-area=site] .qk-opt-name{flex:1;min-width:0;font-size:15px;line-height:1.45;color:var(--qs-ink,#1d2733);overflow-wrap:anywhere}
+html[data-area=site] .qk-opt-name small{display:block;font-size:13px;color:var(--qs-ink-2,#5f666e)}
+html[data-area=site] .qk-opt-diff{flex:none;font-size:13px;font-weight:600;color:var(--qs-ink-2,#5f666e);white-space:nowrap;font-variant-numeric:tabular-nums}
+html[data-area=site] .qk-opt-diff.up{color:var(--qs-ink,#1d2733)}
+
+/* Departure dates */
+html[data-area=site] .qk-dates{display:flex;gap:8px;overflow-x:auto;margin:0 -20px;padding:0 20px 2px;scrollbar-width:none}
+html[data-area=site] .qk-dates::-webkit-scrollbar{display:none}
+html[data-area=site] .qk-date{flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:44px;padding:6px 14px;border:1px solid var(--qs-line,#e2ddd3);border-radius:var(--tw-radius-sm,10px);background:var(--qs-surface,#fff);font-family:inherit;font-size:15px;font-weight:600;color:var(--qs-ink,#1d2733);cursor:pointer;white-space:nowrap;transition:border-color .16s ease,background-color .16s ease}
+html[data-area=site] .qk-date.on{border-color:var(--qs-brand-deep,#049dc5);background:var(--qs-brand-soft,#e7f3f6)}
+html[data-area=site] .qk-date small{font-size:13px;font-weight:500;color:var(--qs-ink-2,#5f666e);font-variant-numeric:tabular-nums}
+html[data-area=site] .qk-date small.up{color:var(--qd-ambertext,#8a5a00)}
+html[data-area=site] .qk-date small.down{color:var(--qd-green,#1a7f47)}
+
+/* Traveller steppers */
+html[data-area=site] .qk-row{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:48px}
+html[data-area=site] .qk-row + .qk-row{border-top:1px solid var(--qs-line,#e2ddd3);padding-top:8px}
+html[data-area=site] .qk-row-name{display:flex;flex-direction:column;gap:2px;min-width:0;font-size:15px;line-height:1.4;color:var(--qs-ink,#1d2733)}
+html[data-area=site] .qk-row-name small{font-size:13px;color:var(--qs-ink-2,#5f666e)}
+html[data-area=site] .qk-row-unit{font-size:13px;color:var(--qs-ink-2,#5f666e);font-variant-numeric:tabular-nums}
+html[data-area=site] .qk-step{flex:none;display:inline-flex;align-items:center;gap:4px}
+html[data-area=site] .qk-step button{display:grid;place-items:center;width:40px;height:40px;padding:0;border:1px solid var(--qs-line-2,#cfc8bb);border-radius:50%;background:var(--qs-surface,#fff);color:var(--qs-ink,#1d2733);font-family:inherit;font-size:20px;line-height:1;cursor:pointer;transition:border-color .16s ease,background-color .16s ease}
+html[data-area=site] .qk-step button:hover:not(:disabled){border-color:var(--qs-brand-deep,#049dc5);background:var(--qs-brand-soft,#e7f3f6)}
+html[data-area=site] .qk-step button:disabled{opacity:.38;cursor:not-allowed}
+html[data-area=site] .qk-step b{min-width:28px;text-align:center;font-size:17px;font-weight:600;color:var(--qs-ink,#1d2733);font-variant-numeric:tabular-nums}
+html[data-area=site] .qk-warn{font-size:13px;font-weight:500;line-height:1.6;color:var(--qd-red,#d2324f);background:var(--qd-redbg,#fdecef);border:1px solid var(--qd-redline,#f7c3cc);border-radius:var(--tw-radius-xs,8px);padding:8px 10px}
+
+/* Per-line breakdown */
+html[data-area=site] .qk-lines{list-style:none;margin:0;padding:12px 14px;display:flex;flex-direction:column;gap:6px;background:var(--qs-paper,#f7f5f0);border-radius:var(--tw-radius-sm,10px)}
+html[data-area=site] .qk-lines li{display:flex;justify-content:space-between;gap:12px;font-size:13px;line-height:1.6;color:var(--qs-body,#3d4650);font-variant-numeric:tabular-nums}
+html[data-area=site] .qk-lines li span:last-child{flex:none;font-weight:600;color:var(--qs-ink,#1d2733)}
+
+/* Price on request */
+html[data-area=site] .qk-ask{gap:6px;padding:28px 20px}
+html[data-area=site] .qk-ask-h{font-size:22px;font-weight:600;color:var(--qs-ink,#1d2733)}
+html[data-area=site] .qk-ask-p{font-size:15px;line-height:1.7;color:var(--qs-ink-2,#5f666e)}
+
+/* Total + actions (always visible) */
+html[data-area=site] .qk-foot{flex:none;display:flex;flex-direction:column;gap:12px;padding:14px 20px 20px;border-top:1px solid var(--qs-line,#e2ddd3);background:var(--qs-surface,#fff)}
+html[data-area=site] .qk-total{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+html[data-area=site] .qk-total > span:first-child{font-size:15px;font-weight:600;color:var(--qs-ink,#1d2733)}
+html[data-area=site] .qk-total b{font-size:28px;font-weight:600;line-height:1.15;color:var(--qs-brand-deep,#049dc5);white-space:nowrap;font-variant-numeric:tabular-nums}
+html[data-area=site] .qk-sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+html[data-area=site] .qk-acts{display:flex;align-items:stretch;gap:10px}
+html[data-area=site] .qk-wa{flex:1 1 auto;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 18px;border:0;border-radius:999px;background:#faab18;color:#1d2733;font-family:inherit;font-size:15px;font-weight:600;cursor:pointer;transition:background-color .16s ease}
+html[data-area=site] .qk-wa:hover:not(:disabled){background:var(--qs-amber-hover,#f09c05)}
+html[data-area=site] .qk-wa:disabled{opacity:.5;cursor:not-allowed}
+html[data-area=site] .qk-wa svg{flex:none}
+html[data-area=site] .qk-more{flex:none;display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 18px;border:1px solid var(--qs-line-2,#cfc8bb);border-radius:999px;background:transparent;color:var(--qs-ink,#1d2733);font-size:15px;font-weight:600;text-decoration:none;white-space:nowrap;transition:border-color .16s ease,background-color .16s ease}
+html[data-area=site] .qk-more:hover{border-color:var(--qs-brand-deep,#049dc5);background:var(--qs-brand-soft,#e7f3f6);color:var(--qs-ink,#1d2733)}
+html[data-area=site] .qk-x:focus-visible,html[data-area=site] .qk-date:focus-visible,html[data-area=site] .qk-step button:focus-visible,html[data-area=site] .qk-wa:focus-visible,html[data-area=site] .qk-more:focus-visible{outline:2px solid var(--qs-brand-deep,#049dc5);outline-offset:2px}
+
+html[data-area=site][data-theme=dark] .qk-scrim{background:rgba(0,0,0,.62)}
+html[data-area=site][data-theme=dark] .qk-panel{box-shadow:0 12px 32px rgba(0,0,0,.5)}
+html[data-area=site][data-theme=dark] .qk-opt-diff.up{color:var(--qs-ink,#f1f5f8)}
+
+@keyframes qk-fade{from{opacity:0}to{opacity:1}}
+@keyframes qk-rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes qk-sheet{from{transform:translateY(100%)}to{transform:none}}
+
+@media (max-width:640px){
+  html[data-area=site] .qk-root{align-items:flex-end;padding:0}
+  html[data-area=site] .qk-panel{width:100%;max-height:calc(100dvh - 40px);border-width:1px 0 0;border-radius:var(--tw-radius,16px) var(--tw-radius,16px) 0 0;animation-name:qk-sheet;animation-duration:.28s}
+  html[data-area=site] .qk-head{padding:16px 16px 12px}
+  html[data-area=site] .qk-title{font-size:17px}
+  html[data-area=site] .qk-body{gap:16px;padding:14px 16px 16px}
+  html[data-area=site] .qk-dates{margin:0 -16px;padding:0 16px 2px}
+  html[data-area=site] .qk-foot{gap:10px;padding:12px 16px calc(14px + env(safe-area-inset-bottom,0px))}
+  html[data-area=site] .qk-total b{font-size:26px}
+  html[data-area=site] .qk-more{padding:0 14px}
+}
+@media (prefers-reduced-motion:reduce){
+  html[data-area=site] .qk-scrim,html[data-area=site] .qk-panel{animation:none}
+  html[data-area=site] .qk-card-btn span,html[data-area=site] .qk-opt,html[data-area=site] .qk-date,html[data-area=site] .qk-step button,html[data-area=site] .qk-wa,html[data-area=site] .qk-more{transition:none}
+}

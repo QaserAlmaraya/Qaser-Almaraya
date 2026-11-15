@@ -10,6 +10,9 @@ import './qs-routes.css';
 import './qs-motion-page.css';
 import './qs-motion-cards.css';
 import './qs-motion-globe.css';
+import './qs-compare.css';
+import './qs-calc.css';
+import './qs-pwa.css';
 import './qs-dark.css';
 import './qs-dark-home.css';
 import './qs-dark-packages.css';
@@ -24,6 +27,8 @@ import LangGuard from '../components/LangGuard';
 import TravelAlert from '../components/TravelAlert';
 import ScrollReveal from '../components/ScrollReveal';
 import SiteMotion from '../components/motion/SiteMotion';
+import PwaRegister from '../components/pwa/PwaRegister';
+import InstallPrompt from '../components/pwa/InstallPrompt';
 import { ThemeSync } from '../components/ThemeToggle';
 import { SITE_URL, DEFAULT_OG, ORG_JSON_LD } from '../lib/seo';
 
@@ -39,6 +44,7 @@ export const metadata = {
   title: 'قصر المرايا للسفر و السياحة | Qaser Almaraya for Travel & Tourism',
   description: 'حجوزات الطيران، الفنادق، والبرامج السياحية — رحلتك تبدأ معنا.',
   applicationName: 'قصر المرايا للسفر والسياحة',
+  appleWebApp: { capable: true, title: 'قصر المرايا', statusBarStyle: 'default' },
   openGraph: { siteName: 'قصر المرايا للسفر والسياحة', locale: 'ar_IQ', type: 'website', images: [DEFAULT_OG] },
   twitter: { card: 'summary_large_image', images: [DEFAULT_OG] },
 };
@@ -71,6 +77,8 @@ export default function RootLayout({ children }) {
         <TravelAlert />
         <ScrollReveal />
         <SiteMotion />
+        <PwaRegister />
+        <InstallPrompt />
         <ThemeSync />
         {children}
         <MobileBottomBar />
