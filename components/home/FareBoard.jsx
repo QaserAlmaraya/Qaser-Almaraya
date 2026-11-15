@@ -87,7 +87,6 @@ export default function FareBoard({ lang = 'ar', initial = 8, link = true }) {
               const n = destinationCount(o.code);
               return (
                 <button key={o.code} type="button" role="tab" aria-selected={o.code === origin} className="qs-fb-origin" onClick={() => pickOrigin(o.code)}>
-                  <span className="qs-fb-code" dir="ltr" data-keep-dir="">{o.code}</span>
                   <span className="qs-fb-city">{en ? o.en : o.ar}</span>
                   <span className="qs-fb-n">{en ? n + (n === 1 ? ' destination' : ' destinations') : (n === 1 ? 'وجهة واحدة' : n === 2 ? 'وجهتان' : n <= 10 ? n + ' وجهات' : n + ' وجهة')}</span>
                 </button>
@@ -114,7 +113,6 @@ export default function FareBoard({ lang = 'ar', initial = 8, link = true }) {
               return (
                 <li key={d.key} className={'qs-fb-item' + (isOpen ? ' open' : '') + (best ? ' best' : '')}>
                   <button type="button" className="qs-fb-row" aria-expanded={isOpen} onClick={() => setOpen(isOpen ? '' : d.key)} style={{ animationDelay: Math.min(i, 11) * 30 + 'ms' }}>
-                    <span className="qs-fb-tag" dir="ltr" data-keep-dir="" aria-hidden="true">{d.key.toUpperCase()}</span>
                     <span className="qs-fb-dest">
                       <span className="qs-fb-name">{en ? d.place.en : d.place.ar}{best ? <span className="qs-fb-low">{en ? 'Lowest fare' : 'أقل سعر'}</span> : null}</span>
                       <small>{sub}</small>
@@ -136,9 +134,9 @@ export default function FareBoard({ lang = 'ar', initial = 8, link = true }) {
                         const label = f.carrier.fixed ? (en ? 'Fixed fare' : 'سعر ثابت') : (en ? 'From' : 'يبدأ من');
                         const when = (time, days) => [time ? (en ? 'Departs ' : 'الإقلاع ') + time : (en ? 'Time varies by day' : 'الوقت حسب اليوم'), days].filter(Boolean);
                         const legs = [
-                          { id: 'one', name: en ? 'Outbound' : 'الذهاب', codes: f.from + ' \u2192 ' + f.to, meta: when(f.time, en ? f.daysEn : f.daysAr), price: fareIqd(f.oneWay, f.currency, rate) },
-                          { id: 'back', name: en ? 'Return' : 'العودة', codes: f.to + ' \u2192 ' + f.from, meta: when(f.backTime, en ? f.backDaysEn : f.backDaysAr), price: fareIqd(f.back, f.currency, rate) },
-                          { id: 'round', name: en ? 'Round trip' : 'ذهاب وعودة', codes: f.from + ' \u21C4 ' + f.to, meta: [en ? 'Fixed or open return' : 'عودة محددة أو مفتوحة'], price: fareIqd(f.round, f.currency, rate) },
+                          { id: 'one', name: en ? 'Outbound' : 'الذهاب', codes: en ? from.en + ' \u2192 ' + d.place.en : from.ar + ' \u2190 ' + d.place.ar, meta: when(f.time, en ? f.daysEn : f.daysAr), price: fareIqd(f.oneWay, f.currency, rate) },
+                          { id: 'back', name: en ? 'Return' : 'العودة', codes: en ? d.place.en + ' \u2192 ' + from.en : d.place.ar + ' \u2190 ' + from.ar, meta: when(f.backTime, en ? f.backDaysEn : f.backDaysAr), price: fareIqd(f.back, f.currency, rate) },
+                          { id: 'round', name: en ? 'Round trip' : 'ذهاب وعودة', codes: (en ? from.en : from.ar) + ' \u21C4 ' + (en ? d.place.en : d.place.ar), meta: [en ? 'Fixed or open return' : 'عودة محددة أو مفتوحة'], price: fareIqd(f.round, f.currency, rate) },
                         ].filter((l) => l.price > 0);
                         return (
                           <li key={k} className="qs-fb-flight">
@@ -149,7 +147,7 @@ export default function FareBoard({ lang = 'ar', initial = 8, link = true }) {
                                   <img src={'/assets/airlines-color/' + f.carrier.logo + '.webp'} alt="" loading="lazy" decoding="async" />
                                 </span>
                               ) : (
-                                <span className="qs-fb-mark qs-fb-tail" dir="ltr" data-keep-dir="" aria-hidden="true">{f.carrier.code || f.carrier.en}</span>
+                                <span className="qs-fb-mark qs-fb-tail" aria-hidden="true">{en ? f.carrier.en : (f.carrier.shortAr || f.carrier.ar)}</span>
                               )}
                               <span className="qs-fb-carrier">
                                 <span>{en ? f.carrier.en : f.carrier.ar}</span>
@@ -164,7 +162,7 @@ export default function FareBoard({ lang = 'ar', initial = 8, link = true }) {
                               {legs.map((l) => (
                                 <div key={l.id} className={'qs-fb-legrow' + (l.id === trip ? ' on' : '')}>
                                   <b>{l.name}</b>
-                                  <span className="qs-fb-codes" dir="ltr" data-keep-dir="">{l.codes}</span>
+                                  <span className="qs-fb-codes">{l.codes}</span>
                                   <span className="qs-fb-when">{l.meta.map((m, j) => <span key={j}>{m}</span>)}</span>
                                   {cabin === 'biz'
                                     ? <span className="qs-fb-price qs-fb-onask"><small>{en ? 'Business class' : 'رجال الأعمال'}</small><span className="qs-fb-amount"><b>{en ? 'On request' : 'السعر عند الطلب'}</b></span></span>
