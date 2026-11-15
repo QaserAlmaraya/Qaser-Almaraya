@@ -58,13 +58,6 @@ html[data-area=site] .qs-home .qs-bp-chips{gap:var(--qs-s2)}
 html[data-area=site] .qs-home .qs-bp-chips b{font-size:15px}
 html[data-area=site] .qs-home .qs-bp-chips button{padding:4px 12px;font-size:13px;font-weight:500}
 html[data-area=site] .qs-home .qs-bp-chips button.on{background:var(--qs-brand);border-color:var(--qs-brand)}
-@media (min-width:821px){
-  html[data-area=site] .qs-home .qh{height:min(84vh,800px);min-height:600px}
-  /* the copy panel is centred in the part of the photo the booking panel leaves free */
-  html[data-area=site] .qs-home .qh .qh-copy{top:calc(50% - 56px)}
-  html[data-area=site] .qs-home .qh .qh-foot{bottom:120px}
-  html[data-area=site] .qs-home .qs-bp-wrap{margin-top:-96px}
-}
 @media (max-width:820px){
   /* phones: the panel sits on the plain page, so it is an ordinary solid block */
   html[data-area=site] .qs-home .qs-bp{background:#fff;border-block:1px solid var(--qs-line)}
