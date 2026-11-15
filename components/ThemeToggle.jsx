@@ -66,7 +66,13 @@ function change(next, origin) {
   const vt = document.startViewTransition(run);
   const done = () => root.classList.remove('qt-vt');
   vt.ready.then(() => {
-    root.animate({ clipPath: frames }, { duration: 1300, easing: 'linear', pseudoElement: '::view-transition-new(root)', fill: 'both' });
+    const opts = { duration: 1300, easing: 'linear', pseudoElement: '::view-transition-new(root)', fill: 'both' };
+    root.animate({ clipPath: frames }, opts);
+    // Photos look the same in both modes, so the plane would vanish over them.
+    // Inside the plane the page is dimmed (going dark) or lit (going light)
+    // until it opens up, which keeps the shape readable on any background.
+    const tint = next === 'dark' ? 'brightness(.5) saturate(.8)' : 'brightness(1.55) saturate(.75)';
+    root.animate({ filter: [tint, tint, 'brightness(1) saturate(1)'], offset: [0, 0.62, 1] }, opts);
   }).catch(done);
   vt.finished.then(done, done);
 }
