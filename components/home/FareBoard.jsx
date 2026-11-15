@@ -58,7 +58,7 @@ export default function FareBoard({ lang = 'ar', initial = 8, link = true }) {
   const pickTrip = (t) => { setTrip(t); setOpen(''); };
 
   return (
-    <section className="qs-band qs-fb-band" data-no-i18n="" dir={en ? 'ltr' : 'rtl'}>
+    <section id="fares" className="qs-band qs-fb-band" data-no-i18n="" dir={en ? 'ltr' : 'rtl'}>
       <div className="qs-wrap" style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
         <div className="qs-head">
           <div>

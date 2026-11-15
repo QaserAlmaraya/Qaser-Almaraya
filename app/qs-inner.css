@@ -164,3 +164,9 @@ html[data-area=site] .qi-legal-intro .qi-h3{display:flex;align-items:baseline;ga
   html[data-area=site] .qi-foot-col:last-child{grid-column:1/-1}
 }
 html[data-area=site] .qi-page :is(h2.qi-h3,h2.qi-cta-title){font-size:20px!important}
+
+/* Phones: the fixed bottom bar (.qa-mbar) sits over the end of the page, so the
+   footer keeps clear of it and its last line stays readable. */
+@media (max-width:820px){
+  html[data-area=site] .qi-foot-bar>div{padding-bottom:calc(40px + env(safe-area-inset-bottom,0px))}
+}

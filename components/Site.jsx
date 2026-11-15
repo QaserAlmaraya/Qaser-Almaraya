@@ -2531,7 +2531,6 @@ function   visaVals(country){
 <div>
 <a href="https://www.instagram.com/qaseralmaraya/?hl=ar" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram"><Icon name="instagram" size="19" /></a>
 <a href="https://www.linkedin.com/company/qaseralmaraya" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn">in</a>
-<a href="#" aria-label="X" title="X">X</a>
 <a href="https://www.facebook.com/p/%D8%B4%D8%B1%D9%83%D8%A9-%D9%82%D8%B5%D8%B1-%D8%A7%D9%84%D9%85%D8%B1%D8%A7%D9%8A%D8%A7-%D9%84%D9%84%D8%B3%D9%81%D8%B1-%D9%88%D8%A7%D9%84%D8%B3%D9%8A%D8%A7%D8%AD%D8%A9-61567289284263/?locale=ar_AR" target="_blank" rel="noopener" aria-label="Facebook" title="Facebook">f</a>
 </div>
 </div>

@@ -22,7 +22,7 @@ const PAGES = [
   { id: 'visa', icon: 'id-card', ar: 'التأشيرات', en: 'Visas', href: '/visa', kw: 'فيزا فيز تأشيرة سمة visa' },
   { id: 'flights', icon: 'plane', ar: 'الطيران والفنادق', en: 'Flights & Hotels', href: '/flights', kw: 'تذاكر حجز فندق طيران tickets booking hotel' },
   { id: 'guide', icon: 'compass', ar: 'دليل الوجهات', en: 'Travel guides', href: '/guide', kw: 'وجهات دول سفر destinations countries' },
-  { id: 'fares', icon: 'banknote', ar: 'أسعار التذاكر', en: 'Ticket prices', href: '/flights', scrollTo: '.qs-fb-band', kw: 'اسعار سعر تذكرة fares price' },
+  { id: 'fares', icon: 'banknote', ar: 'أسعار التذاكر', en: 'Ticket prices', href: '/flights', scrollTo: '#fares', kw: 'اسعار سعر تذكرة fares price' },
   { id: 'faq', icon: 'circle-help', ar: 'الأسئلة الشائعة', en: 'FAQ', href: '/faq', kw: 'اسئلة سؤال مساعدة questions help' },
   { id: 'jobs', icon: 'briefcase', ar: 'الوظائف', en: 'Careers', href: '/jobs', kw: 'وظيفة توظيف عمل careers work' },
   { id: 'contact', icon: 'mail', ar: 'تواصل معنا', en: 'Contact us', href: '/contact', kw: 'اتصال عنوان فروع بريد address branches email' },

@@ -124,3 +124,6 @@ html[data-area=site] .qs-fb-note svg{flex:none;margin-top:4px;color:var(--qs-ink
   html[data-area=site] .qs-fb-cta .qs-btn{flex:1}
   html[data-area=site] .qs-fb-note{padding:12px 16px}
 }
+
+/* The palette and the footer jump here; keep the heading clear of the sticky header. */
+html[data-area=site] #fares{scroll-margin-top:96px}

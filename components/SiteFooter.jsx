@@ -1,51 +1,62 @@
+import Link from 'next/link';
+import Icon from './Icon';
 import PaymentBadges from './PaymentBadges';
 
+// Footer of the pages that have their own route file (/packages, /visa, /guide,
+// /news, 404). It uses the same markup and classes (app/qs-inner.css, `qi-foot`)
+// as the footer inside components/Site.jsx, so the site has one footer.
+// The pages that exist only inside Site.jsx (about, insurance, groups, terms,
+// privacy) have no URL of their own, so they are not listed here.
 export default function SiteFooter() {
   return (
-    <footer style={{ background: 'var(--qs-band,#049dc5)', color: 'rgba(255,255,255,.95)' }}>
-      <div
-        className="qa-foot"
-        style={{ maxWidth: 1240, margin: '0 auto', padding: '24px 32px 16px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(196px,1fr))', gap: '28px 24px', alignItems: 'start' }}
-      >
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-          <div style={{ position: 'relative', alignSelf: 'flex-start', display: 'flex', alignItems: 'center', gap: 14 }}>
-            <span
-              style={{
-                position: 'relative',
-                flex: 'none',
-                width: 78,
-                height: 78,
-                borderRadius: '50%',
-                background: '#fff',
-                display: 'grid',
-                placeItems: 'center',
-              }}
-            >
-              <img src="/assets/logo-mark-tight.webp" alt="قصر المرايا" style={{ width: 56, height: 56, objectFit: 'contain' }} />
-            </span>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              <p style={{ fontSize: 22, fontWeight: 700, color: '#fff', margin: 0, lineHeight: 1.3 }}>رحلتك تبدأ معنا</p>
-              <span style={{ width: 56, height: 3, borderRadius: 2, background: '#faab18' }} />
-              <p style={{ margin: 0, fontSize: 14, lineHeight: 1.7, color: 'rgba(255,255,255,.9)', maxWidth: 230 }}>نأخذك إلى حيث تتمنى، لنصنع ذكريات لا تُنسى.</p>
-            </div>
+    <footer className="qi-foot">
+      <div className="qi-foot-grid">
+        <div className="qi-foot-brand">
+          <span className="qi-foot-logo"><img src="/assets/logo-mark-tight.webp" alt="قصر المرايا" /></span>
+          <p className="qi-foot-tag">رحلتك تبدأ معنا</p>
+          <p className="qi-foot-sub">نأخذك إلى حيث تتمنى، لنصنع ذكريات لا تُنسى.</p>
+        </div>
+        <div className="qi-foot-col">
+          <h4>خدماتنا</h4>
+          <Link href="/flights">حجوزات الطيران</Link>
+          <Link href="/flights">حجوزات الفنادق</Link>
+          <Link href="/flights">عروض السفر</Link>
+        </div>
+        <div className="qi-foot-col">
+          <h4>عن الشركة</h4>
+          <Link href="/jobs">التوظيف</Link>
+          <a href="/assets/qaser-almaraya-company-profile-2026.pdf" target="_blank" rel="noopener">ملف تعريفي</a>
+        </div>
+        <div className="qi-foot-col">
+          <h4>مركز المعلومات</h4>
+          <Link href="/news">المدونة</Link>
+          <Link href="/news?category=tips">نصائح السفر</Link>
+          <Link href="/faq">الأسئلة الشائعة</Link>
+        </div>
+        <div className="qi-foot-col">
+          <h4>للتواصل</h4>
+          <a href="tel:009647749999600" dir="ltr">00964-774-9999-600</a>
+          <a href="tel:009647849999600" dir="ltr">00964-784-9999-600</a>
+          <a href="mailto:sales@almarayagroup.com">sales@almarayagroup.com</a>
+          <span>العراق: شارع 14 رمضان، بغداد</span>
+          <span>أوقات الدوام: يومياً من 9 صباحاً حتى 12 منتصف الليل</span>
+        </div>
+      </div>
+      <div className="qi-foot-row">
+        <div className="qi-foot-social">
+          <h4>تابعنا</h4>
+          <div>
+            <a href="https://www.instagram.com/qaseralmaraya/?hl=ar" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram"><Icon name="instagram" size="19" /></a>
+            <a href="https://www.linkedin.com/company/qaseralmaraya" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn">in</a>
+            <a href="https://www.facebook.com/p/%D8%B4%D8%B1%D9%83%D8%A9-%D9%82%D8%B5%D8%B1-%D8%A7%D9%84%D9%85%D8%B1%D8%A7%D9%8A%D8%A7-%D9%84%D9%84%D8%B3%D9%81%D8%B1-%D9%88%D8%A7%D9%84%D8%B3%D9%8A%D8%A7%D8%AD%D8%A9-61567289284263/?locale=ar_AR" target="_blank" rel="noopener" aria-label="Facebook" title="Facebook">f</a>
           </div>
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-          <h4 style={{ fontSize: 18, color: '#fff', margin: 0 }}>للتواصل</h4>
-          <a href="tel:009647749999600" dir="ltr" style={{ fontSize: 16, whiteSpace: 'nowrap', color: 'rgba(255,255,255,.9)', textDecoration: 'none' }}>00964-774-9999-600</a>
-          <a href="tel:009647849999600" dir="ltr" style={{ fontSize: 16, whiteSpace: 'nowrap', color: 'rgba(255,255,255,.9)', textDecoration: 'none' }}>00964-784-9999-600</a>
-          <a href="mailto:sales@almarayagroup.com" style={{ fontSize: 16, color: 'rgba(255,255,255,.9)', textDecoration: 'none' }}>sales@almarayagroup.com</a>
-          <span style={{ fontSize: 16, lineHeight: 1.6 }}>العراق: شارع 14 رمضان، بغداد</span>
-          <span style={{ fontSize: 15, lineHeight: 1.6, color: 'rgba(255,255,255,.85)' }}>أوقات الدوام: يومياً من 9 صباحاً حتى 12 منتصف الليل</span>
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-          <h4 style={{ fontSize: 18, color: '#fff', margin: 0 }}>تحتاج مساعدة؟</h4>
-          <span style={{ fontSize: 16, lineHeight: 1.7, color: 'rgba(255,255,255,.85)' }}>الرقم المختصر 6393 — فريقنا جاهز لخدمتك بكل احترافية وسرعة.</span>
         </div>
         <PaymentBadges />
       </div>
-      <div style={{ borderTop: '1px solid rgba(255,255,255,.2)', textAlign: 'center', padding: '14px 20px', fontSize: 14, color: 'rgba(255,255,255,.8)' }}>
-        © 2026 قصر المرايا للسفر و السياحة — رقم الإجازة 784 — جميع الحقوق محفوظة
+      <div className="qi-foot-bar">
+        <div>
+          <span>© 2026 قصر المرايا للسفر و السياحة — رقم الإجازة 784 — جميع الحقوق محفوظة</span>
+        </div>
       </div>
     </footer>
   );
