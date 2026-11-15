@@ -34,7 +34,7 @@ function Price({ value, en, label }) {
     <span className="qs-fb-price">
       {label ? <small>{label}</small> : null}
       <span className="qs-fb-amount">
-        {en ? <i>IQD</i> : null}<b>{num(value)}</b>{en ? null : <i>د.ع</i>}
+        {en ? <span>IQD</span> : null}<b>{num(value)}</b>{en ? null : <span>د.ع</span>}
       </span>
     </span>
   );
@@ -62,11 +62,11 @@ export default function FareBoard({ lang = 'ar', initial = 8, link = true }) {
       <div className="qs-wrap" style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
         <div className="qs-head">
           <div>
-            <span className="qs-kicker">{en ? 'Flight fares' : 'أسعار الطيران'}</span>
+            <span className="qs-kicker">{en ? 'Flights' : 'الطيران'}</span>
             <h2 className="qs-h2">{en ? 'Ticket prices from your city' : 'أسعار التذاكر من مدينتك'}</h2>
             <p className="qs-lead">{en
-              ? 'Choose the airport you leave from to see the lowest fare to each destination. Open a destination for its airlines, times and days.'
-              : 'اختر مطار المغادرة لترى أقل سعر إلى كل وجهة. افتح أي وجهة لعرض شركات الطيران ومواعيدها وأيام رحلاتها.'}</p>
+              ? 'Choose the airport you leave from to see the lowest fare to each destination, then open a destination for its airlines and times.'
+              : 'اختر مطار المغادرة لترى أقل سعر إلى كل وجهة، ثم افتح الوجهة لعرض شركات الطيران ومواعيدها.'}</p>
           </div>
           {link ? <Link href="/flights" className="qs-link">{en ? 'Flight booking' : 'حجز الطيران'}</Link> : null}
         </div>
@@ -87,8 +87,7 @@ export default function FareBoard({ lang = 'ar', initial = 8, link = true }) {
 
           <div className="qs-fb-bar">
             <p className="qs-fb-route">
-              <Icon name="plane" size={18} strokeWidth={2} />
-              <span>{en ? 'Leaving from ' : 'المغادرة من '}<b>{en ? from.airportEn : from.airportAr}</b></span>
+              {en ? 'Leaving from ' : 'المغادرة من '}<b>{en ? from.airportEn : from.airportAr}</b>
             </p>
             <div className="qs-fb-trip" role="group" aria-label={en ? 'Trip type' : 'نوع الرحلة'}>
               <button type="button" aria-pressed={trip === 'one'} onClick={() => pickTrip('one')}>{en ? 'One way' : 'ذهاب فقط'}</button>
@@ -107,11 +106,11 @@ export default function FareBoard({ lang = 'ar', initial = 8, link = true }) {
                   <button type="button" className="qs-fb-row" aria-expanded={isOpen} onClick={() => setOpen(isOpen ? '' : d.key)} style={{ animationDelay: Math.min(i, 11) * 30 + 'ms' }}>
                     <span className="qs-fb-tag" dir="ltr" data-keep-dir="" aria-hidden="true">{d.key.toUpperCase()}</span>
                     <span className="qs-fb-dest">
-                      <span className="qs-fb-name">{en ? d.place.en : d.place.ar}{best ? <em>{en ? 'Lowest fare' : 'أفضل سعر'}</em> : null}</span>
+                      <span className="qs-fb-name">{en ? d.place.en : d.place.ar}{best ? <span className="qs-fb-low">{en ? 'Lowest fare' : 'أقل سعر'}</span> : null}</span>
                       <small>{sub}</small>
                     </span>
                     <Price value={d.from} en={en} label={en ? 'From' : 'يبدأ من'} />
-                    <Icon name="chevron-down" size={18} strokeWidth={2.2} className="qs-fb-chev" />
+                    <Icon name="chevron-down" size={18} strokeWidth={2} className="qs-fb-chev" />
                   </button>
                   <div className="qs-fb-detail" hidden={!isOpen}>
                     <p className="qs-fb-leg">
@@ -126,12 +125,12 @@ export default function FareBoard({ lang = 'ar', initial = 8, link = true }) {
                         ].filter(Boolean);
                         return (
                           <li key={k} className="qs-fb-offer">
-                            <span className="qs-fb-tail" dir="ltr" data-keep-dir="" aria-hidden="true">{f.carrier.code || <Icon name="plane" size={14} strokeWidth={2} />}</span>
+                            <span className="qs-fb-tail" dir="ltr" data-keep-dir="" aria-hidden="true">{f.carrier.code}</span>
                             <span className="qs-fb-carrier">
-                              <span>{en ? f.carrier.en : f.carrier.ar}{f.carrier.fixed ? <em>{en ? 'Fixed fare' : 'سعر ثابت'}</em> : null}</span>
+                              <span>{en ? f.carrier.en : f.carrier.ar}</span>
                               <small>{meta.map((m, j) => <span key={j}>{m}</span>)}</small>
                             </span>
-                            <Price value={f.price} en={en} label={f.carrier.fixed ? '' : (en ? 'From' : 'يبدأ من')} />
+                            <Price value={f.price} en={en} label={f.carrier.fixed ? (en ? 'Fixed fare' : 'سعر ثابت') : (en ? 'From' : 'يبدأ من')} />
                           </li>
                         );
                       })}
@@ -151,12 +150,12 @@ export default function FareBoard({ lang = 'ar', initial = 8, link = true }) {
           {dests.length > initial ? (
             <button type="button" className="qs-fb-more" onClick={() => setAll(!all)} aria-expanded={all}>
               {all ? (en ? 'Show fewer' : 'عرض أقل') : (en ? 'All ' + dests.length + ' destinations from ' + from.en : 'كل الوجهات من ' + from.ar + ' (' + dests.length + ')')}
-              <Icon name={all ? 'chevron-up' : 'chevron-down'} size={16} strokeWidth={2.2} />
+              <Icon name={all ? 'chevron-up' : 'chevron-down'} size={18} strokeWidth={2} />
             </button>
           ) : null}
 
           <p className="qs-fb-note">
-            <Icon name="info" size={16} strokeWidth={2} />
+            <Icon name="info" size={18} strokeWidth={2} />
             <span>{en
               ? 'Prices are per adult in Iraqi dinars. Iraqi Airways fares are fixed; other airlines start from the price shown and change with the travel date and seat availability. Last updated ' + updatedLabel(FARES_UPDATED, true) + '.'
               : 'الأسعار للمسافر البالغ بالدينار العراقي. أسعار الخطوط الجوية العراقية ثابتة، وأسعار بقية الشركات تبدأ من المبلغ المعروض وتتغيّر حسب تاريخ السفر وتوفّر المقاعد. آخر تحديث ' + updatedLabel(FARES_UPDATED, false) + '.'}</span>
