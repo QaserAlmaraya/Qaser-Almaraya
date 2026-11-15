@@ -12,6 +12,7 @@ import HomeContact from './home/HomeContact';
 import HomeInstagram from './home/HomeInstagram';
 import OfferStories from './home/OfferStories';
 import DeparturesBoard from './home/DeparturesBoard';
+import FareBoard from './home/FareBoard';
 import SeasonSpotlight from './SeasonSpotlight';
 import SeasonDecor from './SeasonDecor';
 import TripFinder from './TripFinder';
@@ -935,6 +936,7 @@ function   visaVals(country){
 <OfferStories lang={st.lang} />
 <HomeOffers lang={st.lang} />
 <DeparturesBoard lang={st.lang} />
+<FareBoard lang={st.lang} />
 <HomeDestinations lang={st.lang} />
 <HomeServices lang={st.lang} />
 <VisaChecker lang={st.lang} />
@@ -964,6 +966,7 @@ function   visaVals(country){
 <h1 style={{ fontSize: "52px", fontWeight: "700", lineHeight: "1.15" }}>الطيران والفنادق</h1>
 <p style={{ fontSize: "20px", lineHeight: "1.55", color: "var(--qs-brand-deep,#22a9d4)", maxWidth: "820px" }}>قصر المرايا هي الشريك الرسمي لـ Flamingo — كل حجوزات الطيران والفنادق تُتمّ عبر منصة فلامنغو، ويبقى فريقنا معك من أول بحث حتى بطاقة الصعود.</p>
 </section>
+<FareBoard lang={st.lang} initial={12} link={false} />
 <section className="qa-sec" style={{ paddingTop: "20px" }}>
 <div style={{ position: "relative", width: "100vw", marginInline: "calc(50% - 50vw)", overflow: "hidden", background: "var(--tw-band-deep,var(--qs-band,#049dc5))" }} data-partner-band="">
 <div style={{ position: "relative" }}>

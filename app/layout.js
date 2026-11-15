@@ -1,6 +1,7 @@
 import './site.css';
 import './qs.css';
 import './qs-modern.css';
+import './qs-fares.css';
 import AreaMark from '../components/AreaMark';
 import MobileBottomBar from '../components/MobileBottomBar';
 import LiveChat from '../components/LiveChat';
