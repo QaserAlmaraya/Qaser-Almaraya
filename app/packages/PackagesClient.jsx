@@ -10,6 +10,9 @@ import MascotLoader from '../../components/MascotLoader';
 import PackageCard from '../../components/PackageCard';
 import CountUp from '../../components/motion/CountUp';
 import CtaButton from '../../components/CtaButton';
+import CompareToggle from '../../components/compare/CompareToggle';
+import CompareDock from '../../components/compare/CompareDock';
+import PriceCalcHost, { openPriceCalc } from '../../components/calc/PriceCalc';
 
 import Icon from '../../components/Icon';
 import { useLangToggle } from '../../lib/i18n';
@@ -615,6 +618,8 @@ export default function PackagesPage({ initialPackages = null }) {
                       lang={lang}
                       urgency={siteUrgency(p, lang)}
                       onDetails={() => router.push(`/packages/${p.id}`)}
+                      compareSlot={<CompareToggle id={p.id} title={nm(p.title_ar, p.title_en)} lang={lang} />}
+                      onCalc={() => openPriceCalc(p)}
                     />
                   ))}
                 </div>
@@ -764,7 +769,9 @@ export default function PackagesPage({ initialPackages = null }) {
           </section>
         </div>
       </main>
+      <PriceCalcHost lang={lang} />
       <SiteFooter />
+      <CompareDock packages={packages} lang={lang} />
     </div>
   );
 }

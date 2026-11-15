@@ -159,7 +159,7 @@ function nightsText(nights, lang) {
   return `${n} ليلة`;
 }
 
-export default function PackageCard({ title, destination, image, nights, groupType, departs, price, includes = [], badge, onDetails, hotels = [], flights = [], lang = 'ar', style, urgency = null, priceFromLabel = false }) {
+export default function PackageCard({ title, destination, image, nights, groupType, departs, price, includes = [], badge, onDetails, hotels = [], flights = [], lang = 'ar', style, urgency = null, priceFromLabel = false, onCalc = null, compareSlot = null }) {
   const [open, setOpen] = useState(false);
   const panelId = useId();
   const [tab, setTab] = useState('flights');
@@ -204,7 +204,7 @@ export default function PackageCard({ title, destination, image, nights, groupTy
   const detailsLabel = en ? 'Package details' : 'تفاصيل الباقة';
 
   return (
-    <div dir={en ? 'ltr' : 'rtl'} className="qa-pkg-card" onPointerMove={(e) => panToPointer(e, e.currentTarget)} style={{ background: 'var(--qd-surface,#fff)', border: '1px solid var(--q-line,var(--qs-line,#e6e9eb))', borderRadius: 'var(--q-r,12px)', overflow: 'hidden', display: 'flex', flexDirection: 'column', minWidth: 0, ...style }}>
+    <div dir={en ? 'ltr' : 'rtl'} className="qa-pkg-card" onPointerMove={(e) => panToPointer(e, e.currentTarget)} style={{ background: 'var(--qd-surface,#fff)', border: '1px solid var(--q-line,var(--qs-line,#e6e9eb))', borderRadius: 'var(--q-r,12px)', overflow: 'hidden', display: 'flex', flexDirection: 'column', minWidth: 0, ...(compareSlot ? { position: 'relative' } : null), ...style }}>
       {/* Image + text are one focusable region that opens the package. */}
       <button type="button" onClick={onDetails} aria-label={heading ? `${detailsLabel} — ${heading}` : detailsLabel} className="qa-pkg-link">
         <div className="qa-pkg-hero" style={{ position: 'relative', background: 'var(--q-surface-2,var(--qs-paper,#f6f8f9))', overflow: 'hidden' }}>
@@ -253,12 +253,17 @@ export default function PackageCard({ title, destination, image, nights, groupTy
         </div>
       </button>
 
+      {/* Optional «قارن» tick (components/compare/CompareToggle.jsx), drawn over the photo corner. */}
+      {compareSlot}
+
       <div className="qa-pkg-foot">
         <div style={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0 }}>
           <span className="qa-pkg-price-label">
             {priceFromLabel ? (en ? 'Starting from' : 'يبدأ من') : (en ? 'per person' : 'للفرد')}
           </span>
           <span className="qa-pkg-price">{price}</span>
+          {/* Quick price calculator (components/calc/PriceCalc.jsx, styles in app/qs-calc.css). Off unless onCalc is passed. */}
+          {onCalc ? <button type="button" onClick={onCalc} className="qk-card-btn" data-no-i18n="" aria-haspopup="dialog"><Icon name="banknote" size={15} /><span>{en ? 'Calculate price' : 'احسب السعر'}</span></button> : null}
         </div>
         <button type="button" onClick={onDetails} className="qa-pkg-cta">{detailsLabel}</button>
       </div>

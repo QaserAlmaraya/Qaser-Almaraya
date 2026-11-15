@@ -1,0 +1,36 @@
+/* Every rule must start with html[data-area=site]. Dark mode: add a matching html[data-area=site][data-theme=dark] rule or use --qs-* tokens / var(--qd-NAME,#literal). */
+
+/* ── Install card ("add to home screen"), components/pwa/InstallPrompt.jsx ──
+   Phones: sits above the bottom bar (62px + raised WhatsApp button), the
+   package booking bar and the live-chat button (which ends ~152px from the
+   bottom), so it covers none of them. Wider screens: a small card in the
+   bottom centre, clear of the chat button in the corner. */
+html[data-area=site] .qw-install{position:fixed;z-index:898;left:12px;right:12px;bottom:calc(162px + env(safe-area-inset-bottom,0px));margin-inline:auto;max-width:420px;padding:14px;background:var(--qs-surface,#fff);color:var(--qs-body,#3d4650);box-sizing:border-box;border:1px solid var(--qs-line,#dfe7eb);border-radius:var(--qs-r,6px);box-shadow:0 8px 22px -12px rgba(1,42,55,.35);font-family:var(--qs-sans,"IBM Plex Sans Arabic","IBM Plex Sans",system-ui,sans-serif);animation:qw-install-in .28s ease-out both}
+html[data-area=site][data-theme=dark] .qw-install{box-shadow:0 8px 22px -12px rgba(0,0,0,.7)}
+html[data-area=site] .qw-install-head{display:flex;align-items:center;gap:12px}
+html[data-area=site] .qw-install-logo{flex:none;width:44px;height:44px;border-radius:10px;background:#fff;border:1px solid var(--qs-line,#dfe7eb)}
+html[data-area=site] .qw-install-txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+html[data-area=site] .qw-install-title{font-size:16px;font-weight:700;line-height:1.5;color:var(--qs-ink,#1d2733)}
+html[data-area=site] .qw-install-sub{font-size:13.5px;line-height:1.6;color:var(--qs-body,#3d4650)}
+html[data-area=site] .qw-install-steps{list-style:none;margin:12px 0 0;padding:10px 0 0;border-top:1px solid var(--qs-line,#dfe7eb);display:grid;gap:8px}
+html[data-area=site] .qw-install-steps li{display:flex;align-items:center;gap:10px;font-size:14.5px;line-height:1.6;color:var(--qs-ink,#1d2733)}
+html[data-area=site] .qw-install-ico{flex:none;width:32px;height:32px;display:grid;place-items:center;border:1px solid var(--qs-line,#dfe7eb);border-radius:var(--qs-r,6px);color:var(--qs-brand,#049dc5);background:var(--qs-paper,#f6f8f9)}
+html[data-area=site] .qw-install-acts{display:flex;gap:8px;margin-top:12px}
+html[data-area=site] .qw-install-acts button{min-height:44px;padding:8px 18px;border-radius:var(--qs-r-xs,4px);font-family:inherit;font-size:15px;font-weight:700;line-height:1.4;cursor:pointer;-webkit-tap-highlight-color:transparent}
+html[data-area=site] .qw-install-go{flex:1;background:var(--qs-amber,#faab18);border:1px solid var(--qs-amber,#faab18);color:#1d2733}
+html[data-area=site] .qw-install-go:hover{background:var(--qs-amber-hover,#f09c05);border-color:var(--qs-amber-hover,#f09c05)}
+html[data-area=site] .qw-install-later{flex:none;background:transparent;border:1px solid var(--qs-line-2,var(--qs-line,#dfe7eb));color:var(--qs-ink,#1d2733)}
+html[data-area=site] .qw-install-later:only-child{margin-inline-start:auto}
+html[data-area=site] .qw-install-later:hover{background:var(--qs-paper,#f6f8f9)}
+html[data-area=site] .qw-install-acts button:focus-visible{outline:2px solid var(--qs-brand,#049dc5);outline-offset:2px}
+html[data-area=site] body.qa-drawer-open .qw-install{display:none}
+@keyframes qw-install-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media(min-width:821px){
+  html[data-area=site] .qw-install{bottom:24px;max-width:400px}
+}
+@media(prefers-reduced-motion:reduce){
+  html[data-area=site] .qw-install{animation:none}
+}
+@media print{
+  html[data-area=site] .qw-install{display:none}
+}

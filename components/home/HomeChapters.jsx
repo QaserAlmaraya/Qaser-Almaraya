@@ -3,7 +3,6 @@ import Link from 'next/link';
 import CtaButton from '../CtaButton';
 import HomeFold from './HomeFold';
 import { SHOW_FARES } from '../../lib/flightFares';
-import VisaChecker from '../VisaChecker';
 import TripFinder from '../TripFinder';
 
 // Small pieces that tie the homepage sections into chapters:
@@ -31,9 +30,9 @@ export function PricesHead({ lang = 'ar' }) {
   );
 }
 
-// The visa checker and the budget trip finder are planning tools, not the
-// first thing a visitor needs, so each one is a folded row: the visa checker
-// starts open (it is two fields), the trip finder opens on request.
+// The budget trip finder is a planning tool, shown as one open row. The visa
+// checker that used to sit beside it was removed (Owner, 15 Nov 2026): the
+// visa page already does the same job.
 export function HomeTools({ lang = 'ar' }) {
   const en = lang === 'en';
   return (
@@ -43,13 +42,6 @@ export function HomeTools({ lang = 'ar' }) {
         <div className="qs-fold-group">
           <HomeFold
             open
-            icon="stamp"
-            title={en ? 'Visa checker' : 'فاحص التأشيرة'}
-            note={en ? 'Choose where you are going and see the price, processing time and the documents to prepare.' : 'اختر وجهتك واعرف فوراً السعر ومدة الإصدار والمستندات المطلوبة.'}
-          >
-            <VisaChecker lang={lang} embedded />
-          </HomeFold>
-          <HomeFold
             icon="wallet"
             title={en ? 'Where can I go on my budget?' : 'إلى أين أسافر بميزانيتي؟'}
             note={en ? 'Pick what suits you and we suggest the closest trips.' : 'اختر ما يناسبك، ونقترح عليك أقرب الرحلات.'}
