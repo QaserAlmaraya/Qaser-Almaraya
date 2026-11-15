@@ -11,14 +11,14 @@ export default function HomeContact({ lang = 'ar', contact }) {
   const wa = '0' + WHATSAPP_NUMBER.replace(/^964/, '');
   const tel = (s) => 'tel:' + String(s || '').replace(/[^\d+]/g, '').replace(/^00/, '+');
   return (
-    <section className="qs-band qs-sand" data-no-i18n="" dir={en ? 'ltr' : 'rtl'}>
+    <section className="qs-band qs-contact-band" id="contact" data-no-i18n="" dir={en ? 'ltr' : 'rtl'}>
       <div className="qs-wrap qs-contact">
         <div className="qs-contact-copy">
           <span className="qs-kicker">{en ? 'Talk to us' : 'تواصل معنا'}</span>
           <h2 className="qs-h2">{en ? 'Tell us where you want to go. We will take it from there.' : 'أخبرنا إلى أين ترغب في السفر، ونتولى الباقي.'}</h2>
           <p className="qs-lead">{en ? 'Message us on WhatsApp or call the hotline 6393 from anywhere in Iraq. We are open every day from 9 am to midnight.' : 'راسلنا على واتساب أو اتصل بالرقم المختصر 6393 من أي مكان في العراق. نحن معك يومياً من 9 صباحاً حتى 12 منتصف الليل.'}</p>
           <div className="qs-contact-actions">
-            <a className="qs-btn qs-btn-pri" href={waLink(en ? 'Hello Qaser Almaraya, I would like help planning a trip.' : 'مرحباً قصر المرايا، أرغب بالمساعدة في حجز رحلة.')} target="_blank" rel="noopener">
+            <a className="qs-btn qs-btn-brand" href={waLink(en ? 'Hello Qaser Almaraya, I would like help planning a trip.' : 'مرحباً قصر المرايا، أرغب بالمساعدة في حجز رحلة.')} target="_blank" rel="noopener">
               <Icon name="message-circle" size={18} strokeWidth={2} />{en ? 'WhatsApp us' : 'راسلنا على واتساب'}
             </a>
             <a className="qs-btn qs-btn-line" href="tel:6393"><Icon name="phone" size={18} strokeWidth={2} />{en ? 'Call 6393' : 'اتصل 6393'}</a>

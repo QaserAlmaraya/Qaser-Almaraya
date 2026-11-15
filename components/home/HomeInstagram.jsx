@@ -17,7 +17,7 @@ export default function HomeInstagram({ lang = 'ar' }) {
   const en = lang === 'en';
   return (
     <section className="qs-band qs-ig" data-no-i18n="" dir={en ? 'ltr' : 'rtl'}>
-      <div className="qs-wrap qs-ig-in">
+      <div className="qs-wrap"><div className="qs-ig-in">
         <div className="qs-ig-copy">
           <span className="qs-kicker">{en ? 'Instagram' : 'انستغرام'}</span>
           <h2 className="qs-h2">{en ? 'Follow our trips and offers as they happen' : 'تابعوا رحلاتنا وعروضنا أولاً بأول'}</h2>
@@ -30,9 +30,9 @@ export default function HomeInstagram({ lang = 'ar' }) {
           <span className="qs-ig-mark"><img src="/assets/logo-mark-tight.webp" alt="" width="44" height="44" /></span>
           <span className="qs-ig-handle" dir="ltr" data-keep-dir="">@qaseralmaraya</span>
           <span className="qs-ig-name">{en ? 'Qaser Almaraya Travel & Tourism' : 'شركة قصر المرايا للسفر والسياحة'}</span>
-          <span className="qs-btn qs-btn-pri qs-ig-btn"><Icon name="instagram" size={18} strokeWidth={2} />{en ? 'Follow us on Instagram' : 'تابعنا على انستغرام'}</span>
+          <span className="qs-btn qs-btn-line qs-ig-btn"><Icon name="instagram" size={18} strokeWidth={2} />{en ? 'Follow us on Instagram' : 'تابعنا على انستغرام'}</span>
         </a>
-      </div>
+      </div></div>
     </section>
   );
 }

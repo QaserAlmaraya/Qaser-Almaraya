@@ -6,7 +6,8 @@ import HomeOffers from './HomeOffers';
 import BookingPanel from './home/BookingPanel';
 import HomeDestinations from './home/HomeDestinations';
 import HomeServices from './home/HomeServices';
-import HomeWhy from './home/HomeWhy';
+import HomeWhy, { HomeMilestones } from './home/HomeWhy';
+import { PricesHead, HomeTools, ClosingCta, HomeCta } from './home/HomeChapters';
 import HomeVoices from './home/HomeVoices';
 import HomeContact from './home/HomeContact';
 import HomeInstagram from './home/HomeInstagram';
@@ -919,33 +920,37 @@ function   visaVals(country){
 <main style={{ flex: "1" }}>
 
 {isHome ? (<>
-<div className="qa-page">
-<HomeHero hero={props.content && props.content.hero} lang={st.lang} onPrimary={goPackages}>
+<div className="qa-page qs-home">
+{/* 1. Hero: the photograph, the primary action and the booking panel. */}
+<HomeHero hero={props.content && props.content.hero} lang={st.lang} onPrimary={goPackages} jumpHref="#prices">
 <section style={{ position: "relative", background: "var(--tw-band,var(--qs-band,#34bbe1))" }}>
 <img src="/assets/cover-website.webp" alt="ذكرياتك تبدأ معنا — قصر المرايا للسفر و السياحة" style={{ display: "block", width: "100%", height: "auto" }} />
-<div className="qa-cover-copy" style={{ position: "absolute", right: "3%", top: "50%", transform: "translateY(-50%)", width: "34%", maxHeight: "94%", display: "flex", flexDirection: "column", alignItems: "flex-start", textAlign: "start", gap: "clamp(12px,1.3vw,22px)" }}>
-<h1 style={{ margin: "0", fontSize: "clamp(30px,3.4vw,62px)", fontWeight: "700", lineHeight: "1.12", color: "#0e88ad", textWrap: "pretty" }}>رحلتك تبدأ معنا!</h1>
-<p style={{ margin: "0", fontSize: "clamp(16px,1.25vw,24px)", lineHeight: "1.65", color: "#1d2733", fontWeight: "500", textWrap: "pretty" }}>مع قصر المرايا للسفر والسياحة، نأخذك في رحلات لا تُنسى، بخدمات احترافية وتجارب مصممة خصيصًا لك.</p>
-<button className="qa-btn qa-amber" onClick={goPackages} style={{ alignSelf: "center", display: "inline-flex", alignItems: "center", whiteSpace: "nowrap", gap: "8px", color: "var(--qs-ink,#012a37)", fontWeight: "700", fontSize: "clamp(15px,1.05vw,19px)", padding: "clamp(11px,.9vw,16px) clamp(24px,2vw,38px)" }}>ابدأ رحلتك الآن
-<Icon name="chevron-left" size={14} strokeWidth={2.6} />
-</button>
+<div className="qa-cover-copy" style={{ position: "absolute", right: "3%", top: "50%", transform: "translateY(-50%)", width: "34%", maxHeight: "94%", display: "flex", flexDirection: "column", alignItems: "flex-start", textAlign: "start", gap: "16px" }}>
+<h1 style={{ margin: "0", fontSize: "32px", fontWeight: "700", lineHeight: "1.3", color: "#1d2733", textWrap: "pretty" }}>رحلتك تبدأ معنا!</h1>
+<p style={{ margin: "0", fontSize: "17px", lineHeight: "1.7", color: "#1d2733", fontWeight: "400", textWrap: "pretty" }}>مع قصر المرايا للسفر والسياحة، نأخذك في رحلات لا تُنسى، بخدمات احترافية وتجارب مصممة خصيصًا لك.</p>
+<HomeCta onClick={goPackages} label="ابدأ رحلتك الآن" />
 </div>
 </section>
 </HomeHero>
 <BookingPanel lang={st.lang} />
-<OfferStories lang={st.lang} />
-<HomeOffers lang={st.lang} />
-<DeparturesBoard lang={st.lang} />
-<FareBoard lang={st.lang} />
-<HomeDestinations lang={st.lang} />
+
+{/* 2. Problem and solution: what a traveller asks before booking, and our answer. */}
+<div className="qs-ch qs-ch-plain" id="why">
+<HomeWhy lang={st.lang} />
+</div>
+
+{/* 3. What we do: services, planning tools, destinations and the season. */}
+<div className="qs-ch qs-ch-tint" id="services">
 <HomeServices lang={st.lang} />
-<VisaChecker lang={st.lang} />
-<HomeOffers lang={st.lang} variant="events" />
+<HomeTools lang={st.lang} />
+<HomeDestinations lang={st.lang} />
 <SeasonSpotlight lang={st.lang} />
-<TripFinder lang={st.lang} />
-<HomeWhy lang={st.lang} milestones={ACHIEVEMENTS} />
-<section className="qs-band qs-dark qs-on-dark" data-no-i18n="" dir={st.lang === 'en' ? 'ltr' : 'rtl'}>
-<div className="qs-wrap qs-head" style={{ marginBottom: "16px" }}>
+</div>
+
+{/* 4. Proof: accredited agents, customers' own words, milestones, Instagram. */}
+<div className="qs-ch qs-ch-plain qs-ch-proof" id="trust">
+<section className="qs-band qs-ch-top qs-dark qs-on-dark qs-agents" data-no-i18n="" dir={st.lang === 'en' ? 'ltr' : 'rtl'}>
+<div className="qs-wrap qs-head">
 <div>
 <span className="qs-kicker">{L('شراكات موثوقة', 'Trusted partners')}</span>
 <h2 className="qs-h2">{L('نحن وكلاء معتمدون', 'We are authorised agents')}</h2>
@@ -955,7 +960,22 @@ function   visaVals(country){
 <PartnersWall />
 </section>
 <HomeVoices lang={st.lang} />
+<HomeMilestones lang={st.lang} milestones={ACHIEVEMENTS} />
 <HomeInstagram lang={st.lang} />
+</div>
+
+{/* 5. Prices: offers, the next departures and the ticket fares, as one chapter. */}
+<div className="qs-ch qs-ch-tint" id="prices">
+<PricesHead lang={st.lang} />
+<OfferStories lang={st.lang} />
+<HomeOffers lang={st.lang} />
+<HomeOffers lang={st.lang} variant="events" />
+<DeparturesBoard lang={st.lang} />
+<FareBoard lang={st.lang} />
+</div>
+
+{/* 6. Closing: the primary action once more, then every way to reach us. */}
+<ClosingCta lang={st.lang} />
 <HomeContact lang={st.lang} contact={contentContact} />
 </div>
 </>) : null}

@@ -1,1 +1,262 @@
-/* qs-home.css — public site only: every rule must start with html[data-area=site]. */
+/* ==========================================================================
+   Qasr Al-Maraya — homepage (components/home/**, the hero, the home block of
+   components/Site.jsx). Loads after qs.css / qs-modern.css / qs-fares.css and
+   only refines them for the homepage: every rule is scoped to
+   html[data-area=site] (so /admin and /staff never change) and to .qs-home
+   (so no other public page changes either).
+
+   The page is six chapters:
+     hero · #why · #services · #trust · #prices · closing band + #contact
+   One card (white, hairline, token radius, no shadow at rest), type on
+   13 / 15 / 17 / 20 / 26 / 32, weights 400 / 500 / 600, distances on the 4px
+   grid, flat colour (no decorative gradients, no glow).
+   ========================================================================== */
+
+/* ---------- 1. Chapters: one spacing rhythm, alternating plain and tint ---------- */
+html[data-area=site] .qs-home .qs-ch{padding-block:var(--qs-s8);scroll-margin-top:72px}
+html[data-area=site] .qs-home .qs-ch-plain{background:#fff}
+html[data-area=site] .qs-home .qs-ch-tint{background:#f1f9fc}
+html[data-area=site] .qs-home .qs-ch>:is(.qs-band,.qa-sec,.qs-st-band){padding-block:var(--qs-s6);background:transparent}
+html[data-area=site] .qs-home .qs-ch>.qs-ch-top{padding-bottom:var(--qs-s5)}
+html[data-area=site] .qs-home #contact{scroll-margin-top:72px;background:#fff;padding-block:var(--qs-s9)}
+
+/* ---------- 2. Headings: chapter title 32, section title 26, group title 20 ---------- */
+html[data-area=site] .qs-home h2:not(.qh-title){font-weight:600!important;line-height:1.35!important}
+html[data-area=site] .qs-home .qs-h2{font-size:26px!important}
+html[data-area=site] .qs-home .qs-ch-top .qs-h2,html[data-area=site] .qs-home #contact .qs-h2{font-size:32px!important}
+html[data-area=site] .qs-home .qs-h3{margin:0;font-size:20px;font-weight:600;line-height:1.4;color:var(--qs-ink)}
+html[data-area=site] .qs-home .qs-lead{font-size:17px!important;line-height:1.7!important}
+html[data-area=site] .qs-home .qs-head>div{gap:var(--qs-s2)}
+/* The kicker is a plain label with its amber bar (the bar keeps its motion). */
+html[data-area=site] .qs-home .qs-kicker{padding:0;border-radius:0;background:none;gap:var(--qs-s2);font-size:13px;font-weight:600;line-height:1.7;color:var(--qs-brand-deep)}
+html[data-area=site] .qs-home .qs-kicker::before{width:24px;height:2px;border-radius:2px;background:var(--qs-amber)}
+html[data-area=site] .qs-home .qs-dark .qs-kicker{background:none;color:#fff}
+html[data-area=site] .qs-home .qs-link{font-size:15px;font-weight:600}
+html[data-area=site] .qs-home .qs-btn{font-size:15px;font-weight:600}
+html[data-area=site] .qs-home .qs-btn.qs-cta-md{font-size:15px}
+html[data-area=site] .qs-home .qs-btn.qs-cta-lg{font-size:17px}
+
+/* ---------- 3. Hero stage: the booking panel floats over the photograph ---------- */
+html[data-area=site] .qs-home .qs-bp-tab{font-size:15px}
+html[data-area=site] .qs-home .qs-bp-tab{padding:16px;color:var(--qs-body)}
+html[data-area=site] .qs-home .qs-bp-tab[aria-selected=true]{color:var(--qs-ink)}
+html[data-area=site] .qs-home .qs-bp-body{gap:var(--qs-s5)}
+html[data-area=site] .qs-home .qs-bp-field{gap:var(--qs-s2)}
+html[data-area=site] .qs-home .qs-bp-field :is(input,select){height:48px;padding:0 12px;font-size:15px}
+html[data-area=site] .qs-home .qs-bp-swap{height:48px}
+html[data-area=site] .qs-home .qs-bp-note{font-size:15px}
+html[data-area=site] .qs-home .qs-bp-trip{background:rgba(29,39,51,.06)}
+html[data-area=site] .qs-home .qs-bp-trip button{font-size:15px;font-weight:500;padding:8px 16px}
+html[data-area=site] .qs-home .qs-bp-trip button.on{font-weight:600;box-shadow:none}
+html[data-area=site] .qs-home .qs-bp-pick-btn{height:40px;padding:0 12px;font-size:15px;font-weight:500}
+html[data-area=site] .qs-home .qs-bp-pop{padding:16px;box-shadow:0 16px 32px -16px rgba(29,39,51,.28)}
+html[data-area=site] .qs-home .qs-bp-pop-head b{font-size:17px;font-weight:600}
+html[data-area=site] .qs-home .qs-bp-count{padding:12px 0}
+html[data-area=site] .qs-home .qs-bp-count small{font-size:13px}
+html[data-area=site] .qs-home .qs-bp-step output{font-size:17px;font-weight:600}
+html[data-area=site] .qs-home .qs-bp-chips{gap:var(--qs-s2)}
+html[data-area=site] .qs-home .qs-bp-chips b{font-size:15px}
+html[data-area=site] .qs-home .qs-bp-chips button{padding:4px 12px;font-size:13px;font-weight:500}
+html[data-area=site] .qs-home .qs-bp-chips button.on{background:var(--qs-brand);border-color:var(--qs-brand)}
+@media (min-width:821px){
+  html[data-area=site] .qs-home .qh{height:min(84vh,800px);min-height:600px}
+  /* the copy panel is centred in the part of the photo the booking panel leaves free */
+  html[data-area=site] .qs-home .qh .qh-copy{top:calc(50% - 56px)}
+  html[data-area=site] .qs-home .qh .qh-foot{bottom:120px}
+  html[data-area=site] .qs-home .qs-bp-wrap{margin-top:-96px}
+  /* Frosted glass: the panel's upper part lies on the photograph, so the
+     picture shows through it. Fields stay solid white for typing. */
+  html[data-area=site] .qs-home .qs-bp{background:rgba(255,255,255,.88);border:1px solid rgba(255,255,255,.6);-webkit-backdrop-filter:blur(20px) saturate(1.3);backdrop-filter:blur(20px) saturate(1.3);box-shadow:0 0 0 1px rgba(29,39,51,.06),0 16px 32px -24px rgba(29,39,51,.3)}
+  html[data-area=site] .qs-home .qs-bp-tabs{border-bottom-color:rgba(29,39,51,.1)}
+  @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+    html[data-area=site] .qs-home .qs-bp{background:#fff;border-color:var(--qs-line)}
+  }
+}
+@media (max-width:820px){
+  /* phones: the panel sits on the plain page, so it is an ordinary solid block */
+  html[data-area=site] .qs-home .qs-bp{background:#fff;border-block:1px solid var(--qs-line)}
+  html[data-area=site] .qs-home .qs-bp-field :is(input,select){font-size:17px}   /* below 16px iOS zooms the page on focus */
+}
+
+/* ---------- 4. Problem and solution (HomeWhy) ---------- */
+html[data-area=site] .qs-home .qs-ps{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:var(--qs-s8);align-items:start}
+html[data-area=site] .qs-home .qs-ps-head{display:flex;flex-direction:column;gap:var(--qs-s3)}
+html[data-area=site] .qs-home .qs-ps-photo{margin-top:var(--qs-s4);aspect-ratio:3/2;border-radius:var(--qs-r)}
+html[data-area=site] .qs-home .qs-ps-list{list-style:none;margin:0;padding:0;border-top:1px solid var(--qs-line)}
+html[data-area=site] .qs-home .qs-ps-item{display:grid;grid-template-columns:44px minmax(0,1fr);gap:var(--qs-s4);padding:var(--qs-s5) 0;border-bottom:1px solid var(--qs-line)}
+html[data-area=site] .qs-home .qs-ps-icon,html[data-area=site] .qs-home .qs-fold-icon{display:grid;place-items:center;width:44px;height:44px;border-radius:var(--qs-r-xs);background:var(--qs-brand-soft);color:var(--qs-brand-deep)}
+html[data-area=site] .qs-home .qs-ps-text{display:flex;flex-direction:column;align-items:flex-start;gap:var(--qs-s2)}
+html[data-area=site] .qs-home .qs-ps-text h3{margin:0;font-size:20px;font-weight:600;line-height:1.5;color:var(--qs-ink)}
+html[data-area=site] .qs-home .qs-ps-text p{margin:0;font-size:17px;line-height:1.7;color:var(--qs-body)}
+html[data-area=site] .qs-home .qs-ps-go{display:inline-flex;align-items:center;gap:var(--qs-s1);margin-top:var(--qs-s1);font-size:15px;font-weight:600;color:var(--qs-brand-deep);text-decoration:none}
+html[data-area=site] .qs-home .qs-ps-go:hover{color:var(--qs-ink)}
+html[data-area=site] .qs-home .qs-ps-go svg{transition:transform .2s var(--qs-ease)}
+html[data-area=site] .qs-home .qs-ps-go:hover svg{transform:translateX(-4px)}
+html[data-area=site] .qs-home [dir=ltr] .qs-ps-go:hover svg{transform:translateX(4px)}
+
+/* ---------- 5. Services, folded tools, destinations ---------- */
+html[data-area=site] .qs-home .qs-svc-num{font-size:13px}
+html[data-area=site] .qs-home .qs-svc-row{padding-block:var(--qs-s5)}
+html[data-area=site] .qs-home .qs-svc-row:hover{box-shadow:none}
+html[data-area=site] .qs-home .qs-svc-text strong{font-size:20px;font-weight:600}
+html[data-area=site] .qs-home .qs-svc-text span{font-size:15px;line-height:1.7}
+html[data-area=site] .qs-home .qs-tools-in{display:flex;flex-direction:column;gap:var(--qs-s4)}
+html[data-area=site] .qs-home .qs-fold-group{display:flex;flex-direction:column;gap:var(--qs-s3)}
+/* a tool with nothing to show (no visas, no packages) removes its row, and the group with it */
+html[data-area=site] .qs-home .qs-fold:not(:has(.qs-fold-body>*)){display:none}
+html[data-area=site] .qs-home .qs-tools:not(:has(.qs-fold-body>*)){display:none}
+
+/* The fold: a native <details> drawn as the page's one card */
+html[data-area=site] .qs-home .qs-fold{background:#fff;border:1px solid var(--qs-line);border-radius:var(--qs-r);overflow:hidden;interpolate-size:allow-keywords;transition:border-color .2s var(--qs-ease)}
+html[data-area=site] .qs-home .qs-fold:hover{border-color:var(--qs-line-2)}
+html[data-area=site] .qs-home .qs-fold-sum{display:grid;grid-template-columns:44px minmax(0,1fr) 24px;align-items:center;gap:var(--qs-s4);padding:var(--qs-s5);cursor:pointer;list-style:none;outline-offset:-3px!important}
+html[data-area=site] .qs-home .qs-fold-sum::-webkit-details-marker{display:none}
+html[data-area=site] .qs-home .qs-fold-sum::marker{content:""}
+html[data-area=site] .qs-home .qs-fold-text{display:flex;flex-direction:column;gap:var(--qs-s1)}
+html[data-area=site] .qs-home .qs-fold-text strong{font-size:20px;font-weight:600;line-height:1.5;color:var(--qs-ink)}
+html[data-area=site] .qs-home .qs-fold-text span{font-size:15px;line-height:1.7;color:var(--qs-ink-2)}
+html[data-area=site] .qs-home .qs-fold-chev{color:var(--qs-ink-3);transition:transform .3s var(--qs-ease)}
+html[data-area=site] .qs-home .qs-fold[open] .qs-fold-chev{transform:rotate(180deg);color:var(--qs-ink)}
+html[data-area=site] .qs-home .qs-fold-body{padding:0 var(--qs-s5) var(--qs-s5)}
+html[data-area=site] .qs-home .qs-fold-body>*{border-top:1px solid var(--qs-line);padding-top:var(--qs-s5)}
+/* embedded tools: the fold is the card, so the tool drops its own frame */
+html[data-area=site] .qs-home .qs-fold :is(.qa-vc,.qa-tf){padding:0!important;border:0!important;border-radius:0!important;background:none!important;box-shadow:none!important}
+@media (prefers-reduced-motion:no-preference){
+  html[data-area=site] .qs-home .qs-fold::details-content{block-size:0;overflow:clip;transition:block-size .36s var(--qs-ease),content-visibility .36s allow-discrete}
+  html[data-area=site] .qs-home .qs-fold[open]::details-content{block-size:auto}
+  html[data-area=site] .qs-home .qs-fold[open] .qs-fold-body{animation:qs-fold-in .36s var(--qs-ease) both}
+}
+@keyframes qs-fold-in{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){
+  html[data-area=site] .qs-home :is(.qs-fold,.qs-fold-chev,.qs-ps-go svg){transition:none}
+}
+
+/* Trip finder and visa checker on the light card (qs.css painted the finder cyan) */
+html[data-area=site] .qs-home .qa-tf{background:#fff!important;border-radius:var(--qs-r)!important;padding:var(--qs-s6)!important}
+html[data-area=site] .qs-home .qa-tf-chip{border-radius:999px!important;font-weight:500!important}
+html[data-area=site] .qs-home .qa-tf-chip.on{color:#fff!important}
+html[data-area=site] .qs-home .qa-tf-card{border-radius:var(--qs-r-xs)!important}
+html[data-area=site] .qs-home .qa-vc h2,html[data-area=site] .qs-home .qa-tf h2{font-size:26px!important}
+
+/* Destinations: photo tiles; the gradient under the name is a legibility overlay */
+html[data-area=site] .qs-home .qs-dest-copy{padding:var(--qs-s5);gap:var(--qs-s1)}
+html[data-area=site] .qs-home .qs-dest-copy h3{font-size:26px;font-weight:600!important;line-height:1.35}
+html[data-area=site] .qs-home .qs-dest.lead .qs-dest-copy h3{font-size:32px}
+html[data-area=site] .qs-home .qs-dest-copy span{font-size:15px}
+html[data-area=site] .qs-home .qs-dest:hover{box-shadow:none}
+html[data-area=site] .qs-home .qs-skel{background:linear-gradient(90deg,#e9f6fb 25%,#f6fbfd 50%,#e9f6fb 75%);background-size:200% 100%}
+
+/* ---------- 6. Proof: agents band, voices, milestones, Instagram ---------- */
+html[data-area=site] .qs-home .qs-ch-proof{padding-top:0}
+/* brand bands: flat cyan; the headline stays charcoal (4.7:1 on the cyan, white is 3.2:1) */
+html[data-area=site] .qs-home .qs-dark{background:var(--qs-brand)!important}
+html[data-area=site] .qs-home .qs-dark .qs-h2{color:var(--qs-ink)}
+html[data-area=site] .qs-home .qs-dark .qs-lead{color:#fff;font-weight:500}
+html[data-area=site] .qs-home .qs-ch>.qs-agents{padding-block:var(--qs-s8) var(--qs-s6);margin-bottom:var(--qs-s6);background:var(--qs-brand)!important}
+html[data-area=site] .qs-home .qs-agents .qs-head{margin-bottom:var(--qs-s4)}
+html[data-area=site] .qs-home .qs-agents .qpw{padding:var(--qs-s4) 0 0}
+/* One card: white, hairline, no coloured top edge */
+html[data-area=site] .qs-home .qs-voice{gap:var(--qs-s4);padding:var(--qs-s5);background:#fff;border:1px solid var(--qs-line)!important;border-radius:var(--qs-r)}
+html[data-area=site] .qs-home .qs-voice:hover{border-color:var(--qs-line-2)!important}
+html[data-area=site] .qs-home .qs-voice blockquote{font-size:17px;line-height:1.8}
+html[data-area=site] .qs-home .qs-voice-wa blockquote{padding:var(--qs-s4);background:var(--qs-paper);border-radius:var(--qs-r-xs);border-start-start-radius:4px;box-shadow:none}
+html[data-area=site] .qs-home .qs-voice-wa figcaption{font-size:13px;font-weight:500}
+html[data-area=site] .qs-home .qs-voice-src{gap:var(--qs-s2)}
+html[data-area=site] .qs-home .qs-miles-band{padding-block:0 var(--qs-s6)}
+html[data-area=site] .qs-home .qs-miles{margin-top:0;padding-top:var(--qs-s5);border-top:1px solid var(--qs-line);gap:var(--qs-s5)}
+html[data-area=site] .qs-home .qs-mile .qs-photo{border-radius:var(--qs-r-xs)}
+html[data-area=site] .qs-home .qs-mile figcaption{gap:var(--qs-s1)}
+html[data-area=site] .qs-home .qs-ig-in{padding:var(--qs-s6);border:1px solid var(--qs-line);border-radius:var(--qs-r);background:var(--qs-paper);gap:var(--qs-s7)}
+html[data-area=site] .qs-home .qs-ig-copy{gap:var(--qs-s3)}
+html[data-area=site] .qs-home .qs-ig-topics li{padding:4px 12px;border-radius:999px;border-color:var(--qs-line);font-size:13px;line-height:1.7}
+html[data-area=site] .qs-home .qs-ig-card{padding:var(--qs-s6) var(--qs-s5);gap:var(--qs-s1)}
+html[data-area=site] .qs-home .qs-ig-mark{box-shadow:none;border:1px solid var(--qs-line)}
+html[data-area=site] .qs-home .qs-ig-handle{margin-top:var(--qs-s2);font-size:17px}
+html[data-area=site] .qs-home .qs-ig-name{font-size:13px}
+html[data-area=site] .qs-home .qs-ig-btn{margin-top:var(--qs-s3)}
+
+/* ---------- 7. Prices: stories, offers, departures, fares ---------- */
+html[data-area=site] .qs-home .qs-ch>.qs-st-band{padding-block:0 var(--qs-s4)}
+html[data-area=site] .qs-home .qs-st-row{gap:var(--qs-s4);padding:4px 4px 8px}
+/* story rings: one flat cyan ring, grey once seen */
+html[data-area=site] .qs-home .qs-st-ring-img{background:var(--qs-brand)}
+html[data-area=site] .qs-home .qs-st-ring.seen .qs-st-ring-img{background:var(--qs-line-2)}
+html[data-area=site] .qs-home .qs-st-ring-img :is(img,video){border-color:#f1f9fc}
+html[data-area=site] .qs-home .qs-st-name{font-weight:500}
+html[data-area=site] .qs-home .qa-offer h3{font-size:20px!important;font-weight:600!important}
+html[data-area=site] .qs-home .qs-db{box-shadow:none;padding:0 var(--qs-s5) var(--qs-s4)}
+html[data-area=site] .qs-home .qs-db-top{margin:0 calc(var(--qs-s5) * -1) var(--qs-s4);padding:var(--qs-s3) var(--qs-s5);background:var(--qs-brand)}
+html[data-area=site] .qs-home .qs-db-title{gap:var(--qs-s2);font-weight:600}
+html[data-area=site] .qs-home .qs-db-head{font-size:13px;font-weight:500;gap:var(--qs-s2)}
+html[data-area=site] .qs-home .qs-db-row{gap:var(--qs-s2);padding:0 4px}
+html[data-area=site] .qs-home .qs-db-rows{gap:var(--qs-s2)}
+html[data-area=site] .qs-home .qs-db-cell{padding:12px;font-weight:500;line-height:1.6}
+html[data-area=site] .qs-home .qs-db-price .qs-db-flap{font-weight:600}
+html[data-area=site] .qs-home .qs-db-st{font-size:13px}
+html[data-area=site] .qs-home .qs-db-pages{padding-top:var(--qs-s4)}
+html[data-area=site] .qs-home .qs-fb-code{font-size:20px}
+html[data-area=site] .qs-home .qs-fb-tag{font-size:13px}
+
+/* ---------- 8. Closing band and contact ---------- */
+html[data-area=site] .qs-home .qs-closing{padding-block:var(--qs-s8)}
+html[data-area=site] .qs-home .qs-closing-in{display:flex;align-items:center;justify-content:space-between;gap:var(--qs-s6);flex-wrap:wrap}
+html[data-area=site] .qs-home .qs-closing-copy{display:flex;flex-direction:column;gap:var(--qs-s2);max-width:640px}
+html[data-area=site] .qs-home .qs-closing-acts{display:flex;align-items:center;gap:var(--qs-s5);flex-wrap:wrap}
+html[data-area=site] .qs-home .qs-closing .qs-link{color:#fff;border-color:rgba(255,255,255,.5)}
+html[data-area=site] .qs-home .qs-closing .qs-link:hover{color:#fff;border-color:#fff}
+html[data-area=site] .qs-home .qs-closing .qs-cta:focus-visible{outline-color:#fff!important}
+html[data-area=site] .qs-home .qs-contact-copy{gap:var(--qs-s3)}
+html[data-area=site] .qs-home .qs-contact-list dt{font-size:13px;line-height:1.9}
+html[data-area=site] .qs-home .qs-contact-list dd{font-size:15px}
+html[data-area=site] .qs-home .qs-contact-list{border-top-color:var(--qs-line)}
+html[data-area=site] .qs-home .qs-contact-list>div{border-bottom-color:var(--qs-line)}
+
+/* ---------- 9. Story viewer (portalled to <body>, so not under .qs-home) ---------- */
+html[data-area=site] .qs-st-view .qs-st-who small{font-size:13px}
+html[data-area=site] .qs-st-view .qs-st-info h3{font-size:26px;font-weight:600}
+html[data-area=site] .qs-st-view .qs-st-price{font-size:26px;font-weight:600;gap:var(--qs-s2)}
+html[data-area=site] .qs-st-view .qs-st-acts{gap:var(--qs-s3)}
+html[data-area=site] .qs-st-view .qs-st-acts a{padding:0 20px;font-weight:600}
+html[data-area=site] .qs-st-view .qs-st-wa,html[data-area=site] .qs-st-view .qs-st-wa:hover{background:var(--qs-amber);color:var(--qs-ink)}
+
+/* ---------- 10. Narrower screens ---------- */
+@media (max-width:1100px){
+  html[data-area=site] .qs-home .qs-ps{gap:var(--qs-s7)}
+}
+@media (max-width:820px){
+  html[data-area=site] .qs-home .qs-ch{padding-block:var(--qs-s6)}
+  html[data-area=site] .qs-home .qs-ch>:is(.qs-band,.qs-st-band){padding-block:var(--qs-s5)}
+  html[data-area=site] .qs-home .qs-ch>.qa-sec{padding:var(--qs-s5) var(--qs-s4)!important}
+  html[data-area=site] .qs-home .qs-ch>.qs-ch-top{padding-bottom:var(--qs-s4)}
+  html[data-area=site] .qs-home #contact{padding-block:var(--qs-s7)}
+  html[data-area=site] .qs-home .qs-h2{font-size:20px!important}
+  html[data-area=site] .qs-home .qs-ch-top .qs-h2,html[data-area=site] .qs-home #contact .qs-h2{font-size:26px!important}
+  html[data-area=site] .qs-home .qs-lead{font-size:15px!important}
+  html[data-area=site] .qs-home .qs-ps{grid-template-columns:minmax(0,1fr);gap:var(--qs-s5)}
+  html[data-area=site] .qs-home .qs-ps-text h3{font-size:17px}
+  html[data-area=site] .qs-home .qs-ps-text p{font-size:15px}
+  html[data-area=site] .qs-home .qs-svc-text strong{font-size:17px}
+  html[data-area=site] .qs-home .qs-fold-sum{grid-template-columns:44px minmax(0,1fr) 20px;gap:var(--qs-s3);padding:var(--qs-s4)}
+  html[data-area=site] .qs-home .qs-fold-text strong{font-size:17px}
+  html[data-area=site] .qs-home .qs-fold-body{padding:0 var(--qs-s4) var(--qs-s4)}
+  html[data-area=site] .qs-home .qs-fold-body>*{padding-top:var(--qs-s4)}
+  html[data-area=site] .qs-home .qa-tf{padding:var(--qs-s5) var(--qs-s4)!important;margin-inline:0;border-radius:var(--qs-r)!important}
+  html[data-area=site] .qs-home .qs-dest-copy h3,html[data-area=site] .qs-home .qs-dest.lead .qs-dest-copy h3{font-size:20px!important}
+  html[data-area=site] .qs-home .qs-ch>.qs-agents{padding-block:var(--qs-s7) var(--qs-s5);margin-bottom:var(--qs-s5)}
+  html[data-area=site] .qs-home .qs-miles{margin-inline:0;padding-inline:0}
+  html[data-area=site] .qs-home .qs-ig-in{padding:var(--qs-s5) var(--qs-s4);gap:var(--qs-s5)}
+  html[data-area=site] .qs-home .qs-db{padding:0 var(--qs-s3) var(--qs-s3);border-radius:var(--qs-r)}
+  html[data-area=site] .qs-home .qs-db-top{margin:0 calc(var(--qs-s3) * -1) var(--qs-s3);padding:var(--qs-s3)}
+  html[data-area=site] .qs-home .qs-db-cell{padding:8px;font-size:13px}
+  html[data-area=site] .qs-home .qs-closing{padding-block:var(--qs-s7)}
+  html[data-area=site] .qs-home .qs-closing-acts{width:100%;flex-direction:column;align-items:stretch;gap:var(--qs-s4)}
+  html[data-area=site] .qs-home .qs-closing-acts .qs-link{align-self:center}
+  html[data-area=site] .qs-st-view .qs-st-info h3,html[data-area=site] .qs-st-view .qs-st-price{font-size:20px}
+}
+@media (max-width:820px){
+  html[data-area=site] .qs-home .qa-vc select{font-size:17px}   /* below 16px iOS zooms the page on focus */
+}
+/* No hero slides yet (the static cover shows instead): the panel only touches the cover's edge. */
+@media (min-width:821px){
+  html[data-area=site] .qs-home:not(:has(.qh)) .qs-bp-wrap{margin-top:-32px}
+}

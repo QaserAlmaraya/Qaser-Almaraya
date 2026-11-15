@@ -92,8 +92,8 @@ export default function PartnersWall() {
 .qpw-row:hover .qpw-track{animation-play-state:paused}
 .qpw-set{display:flex;align-items:stretch;gap:${GAP}px;padding-inline-end:${GAP}px;flex:none}
 /* Each logo keeps its real colours on its own white tile. */
-.qpw-tile{flex:none;display:grid;place-items:center;width:${TILE}px;height:72px;background:#fff;border-radius:6px;box-shadow:0 1px 2px rgba(10,31,40,.12);transition:transform .2s,box-shadow .2s}
-.qpw-tile:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(10,31,40,.22)}
+.qpw-tile{flex:none;display:grid;place-items:center;width:${TILE}px;height:72px;background:#fff;border-radius:12px;transition:transform .2s}
+.qpw-tile:hover{transform:translateY(-2px)}
 .qpw-tile img{display:block;width:calc(var(--w) * 1px);height:calc(var(--h) * 1px);object-fit:contain}
 .qpw-tile img.qpw-mono{filter:brightness(0);opacity:.78}
 @media(max-width:820px){.qpw{padding:16px 0 24px;gap:12px}.qpw-set{gap:12px;padding-inline-end:12px}.qpw-tile{width:112px;height:56px}.qpw-tile img{width:calc(var(--w) * .76px);height:calc(var(--h) * .76px)}}

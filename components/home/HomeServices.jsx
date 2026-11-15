@@ -38,7 +38,7 @@ function Row({ s, en, className, children }) {
 export default function HomeServices({ lang = 'ar' }) {
   const en = lang === 'en';
   return (
-    <section className="qs-band" data-no-i18n="" dir={en ? 'ltr' : 'rtl'}>
+    <section className="qs-band qs-ch-top qs-svc-band" data-no-i18n="" dir={en ? 'ltr' : 'rtl'}>
       <div className="qs-wrap qs-svc">
         <div className="qs-svc-head">
           <span className="qs-kicker">{en ? 'What we do' : 'خدماتنا'}</span>
