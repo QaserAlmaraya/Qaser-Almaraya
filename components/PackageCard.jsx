@@ -40,7 +40,7 @@ function FlightRow({ f, lang, selected, onSelect }) {
     <div
       style={{
         border: `1px solid ${selected ? 'var(--q-cyan,var(--qs-brand-deep,#049dc5))' : 'var(--q-line,var(--qs-line,#e6e9eb))'}`,
-        background: selected ? 'var(--q-cyan-soft,#eaf8fd)' : '#fff', borderRadius: 'var(--q-r-sm,8px)', padding: 14,
+        background: selected ? 'var(--q-cyan-soft,#eaf8fd)' : 'var(--qd-surface2,#fff)', borderRadius: 'var(--q-r-sm,8px)', padding: 14,
         display: 'flex', flexDirection: 'column', gap: 10,
       }}
     >
@@ -61,7 +61,7 @@ function FlightRow({ f, lang, selected, onSelect }) {
             onClick={(e) => { e.stopPropagation(); setLeg('out'); }}
             style={{
               flex: 1, cursor: 'pointer', fontFamily: 'inherit', padding: '6px 8px', borderRadius: 999, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 4,
-              border: `1px solid ${active === 'out' ? 'var(--q-cyan,var(--qs-brand-deep,#049dc5))' : 'var(--q-line,var(--qs-line,#e6e9eb))'}`, background: active === 'out' ? 'var(--q-cyan,#049dc5)' : '#fff', color: active === 'out' ? '#fff' : 'var(--qs-body,#3d4650)', fontSize: 13, fontWeight: 600,
+              border: `1px solid ${active === 'out' ? 'var(--q-cyan,var(--qs-brand-deep,#049dc5))' : 'var(--q-line,var(--qs-line,#e6e9eb))'}`, background: active === 'out' ? 'var(--q-cyan,#049dc5)' : 'var(--qd-surface2,#fff)', color: active === 'out' ? '#fff' : 'var(--qs-body,#3d4650)', fontSize: 13, fontWeight: 600,
             }}
           >
             <Icon name="plane-takeoff" size={12} />{lang === 'en' ? 'Departure' : 'ذهاب'}
@@ -71,7 +71,7 @@ function FlightRow({ f, lang, selected, onSelect }) {
             onClick={(e) => { e.stopPropagation(); setLeg('ret'); }}
             style={{
               flex: 1, cursor: 'pointer', fontFamily: 'inherit', padding: '6px 8px', borderRadius: 999, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 4,
-              border: `1px solid ${active === 'ret' ? 'var(--q-cyan,var(--qs-brand-deep,#049dc5))' : 'var(--q-line,var(--qs-line,#e6e9eb))'}`, background: active === 'ret' ? 'var(--q-cyan,#049dc5)' : '#fff', color: active === 'ret' ? '#fff' : 'var(--qs-body,#3d4650)', fontSize: 13, fontWeight: 600,
+              border: `1px solid ${active === 'ret' ? 'var(--q-cyan,var(--qs-brand-deep,#049dc5))' : 'var(--q-line,var(--qs-line,#e6e9eb))'}`, background: active === 'ret' ? 'var(--q-cyan,#049dc5)' : 'var(--qd-surface2,#fff)', color: active === 'ret' ? '#fff' : 'var(--qs-body,#3d4650)', fontSize: 13, fontWeight: 600,
             }}
           >
             <Icon name="plane-landing" size={12} />{lang === 'en' ? 'Return' : 'عودة'}
@@ -87,7 +87,7 @@ function FlightRow({ f, lang, selected, onSelect }) {
           </div>
           <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
             <div style={{ position: 'relative', width: '100%', height: 1, background: 'var(--q-line,var(--qs-line,#e6e9eb))', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Icon name="plane" size={16} style={{ color: 'var(--q-cyan,var(--qs-brand-deep,#049dc5))', background: '#fff', transform: active === 'ret' ? 'rotate(-90deg)' : 'rotate(90deg)' }} />
+              <Icon name="plane" size={16} style={{ color: 'var(--q-cyan,var(--qs-brand-deep,#049dc5))', background: 'var(--qd-surface,#fff)', transform: active === 'ret' ? 'rotate(-90deg)' : 'rotate(90deg)' }} />
             </div>
             {legData.duration ? <span style={{ fontSize: 13, color: 'var(--q-ink-2,var(--qs-ink-2,#5f666e))' }}>{legData.duration}</span> : null}
           </div>
@@ -109,7 +109,7 @@ function HotelRow({ h, lang, selected, onSelect }) {
       onClick={onSelect}
       style={{
         cursor: 'pointer', border: `1px solid ${selected ? 'var(--q-cyan,var(--qs-brand-deep,#049dc5))' : 'var(--q-line,var(--qs-line,#e6e9eb))'}`,
-        background: selected ? 'var(--q-cyan-soft,#eaf8fd)' : '#fff', borderRadius: 'var(--q-r-sm,8px)', padding: 12,
+        background: selected ? 'var(--q-cyan-soft,#eaf8fd)' : 'var(--qd-surface2,#fff)', borderRadius: 'var(--q-r-sm,8px)', padding: 12,
         display: 'flex', alignItems: 'center', gap: 12,
       }}
     >
@@ -204,7 +204,7 @@ export default function PackageCard({ title, destination, image, nights, groupTy
   const detailsLabel = en ? 'Package details' : 'تفاصيل الباقة';
 
   return (
-    <div dir={en ? 'ltr' : 'rtl'} className="qa-pkg-card" onPointerMove={(e) => panToPointer(e, e.currentTarget)} style={{ background: '#fff', border: '1px solid var(--q-line,var(--qs-line,#e6e9eb))', borderRadius: 'var(--q-r,12px)', overflow: 'hidden', display: 'flex', flexDirection: 'column', minWidth: 0, ...style }}>
+    <div dir={en ? 'ltr' : 'rtl'} className="qa-pkg-card" onPointerMove={(e) => panToPointer(e, e.currentTarget)} style={{ background: 'var(--qd-surface,#fff)', border: '1px solid var(--q-line,var(--qs-line,#e6e9eb))', borderRadius: 'var(--q-r,12px)', overflow: 'hidden', display: 'flex', flexDirection: 'column', minWidth: 0, ...style }}>
       {/* Image + text are one focusable region that opens the package. */}
       <button type="button" onClick={onDetails} aria-label={heading ? `${detailsLabel} — ${heading}` : detailsLabel} className="qa-pkg-link">
         <div className="qa-pkg-hero" style={{ position: 'relative', background: 'var(--q-surface-2,var(--qs-paper,#f6f8f9))', overflow: 'hidden' }}>
@@ -291,7 +291,7 @@ export default function PackageCard({ title, destination, image, nights, groupTy
                 style={{
                   flex: 1, cursor: 'pointer', fontFamily: 'inherit', padding: '8px 10px', borderRadius: 999,
                   border: `1px solid ${tab === 'flights' ? 'var(--q-cyan,var(--qs-brand-deep,#049dc5))' : 'var(--q-line,var(--qs-line,#e6e9eb))'}`,
-                  background: tab === 'flights' ? 'var(--q-cyan,#049dc5)' : '#fff', color: tab === 'flights' ? '#fff' : 'var(--qs-body,#3d4650)', fontSize: 13, fontWeight: 600,
+                  background: tab === 'flights' ? 'var(--q-cyan,#049dc5)' : 'var(--qd-surface2,#fff)', color: tab === 'flights' ? '#fff' : 'var(--qs-body,#3d4650)', fontSize: 13, fontWeight: 600,
                 }}
               >
                 {en ? 'Flights' : 'الرحلات'}
@@ -304,7 +304,7 @@ export default function PackageCard({ title, destination, image, nights, groupTy
                 style={{
                   flex: 1, cursor: 'pointer', fontFamily: 'inherit', padding: '8px 10px', borderRadius: 999,
                   border: `1px solid ${tab === 'hotels' ? 'var(--q-cyan,var(--qs-brand-deep,#049dc5))' : 'var(--q-line,var(--qs-line,#e6e9eb))'}`,
-                  background: tab === 'hotels' ? 'var(--q-cyan,#049dc5)' : '#fff', color: tab === 'hotels' ? '#fff' : 'var(--qs-body,#3d4650)', fontSize: 13, fontWeight: 600,
+                  background: tab === 'hotels' ? 'var(--q-cyan,#049dc5)' : 'var(--qd-surface2,#fff)', color: tab === 'hotels' ? '#fff' : 'var(--qs-body,#3d4650)', fontSize: 13, fontWeight: 600,
                 }}
               >
                 {en ? 'Hotels' : 'الفنادق'}

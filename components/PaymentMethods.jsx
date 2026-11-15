@@ -69,7 +69,7 @@ export default function PaymentMethods({ title, note, methods, defaultOpen = 'ca
         <div style={{ minWidth: 0, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', textAlign: 'start', justifyContent: 'center', gap: 10, padding: 24 }}>
           <span style={{ fontSize: 26, fontWeight: 600, color: 'var(--qs-brand-deep,#036f8c)' }}>شكراً لك!</span>
           {orderNo && (
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '8px 16px', borderRadius: 999, background: '#fff', border: '1px solid var(--qs-line-2,#bfe9f6)' }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '8px 16px', borderRadius: 999, background: 'var(--qd-surface,#fff)', border: '1px solid var(--qs-line-2,#bfe9f6)' }}>
               <span style={{ fontSize: 13, color: 'var(--qs-ink-2,#5f666e)' }}>رقم الطلب</span>
               <span dir="ltr" style={{ fontSize: 15, fontWeight: 600, letterSpacing: '.06em', color: 'var(--qs-brand-deep,#036f8c)' }}>{orderNo}</span>
             </span>
@@ -92,11 +92,11 @@ export default function PaymentMethods({ title, note, methods, defaultOpen = 'ca
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
         {list.map((m, i) => {
           const on = open === m.id;
-          const accent = m.warn ? '#c07f00' : '#049dc5';
+          const accent = m.warn ? 'var(--qd-ambertext,#c07f00)' : 'var(--qd-cyan,#049dc5)';
           return (
-            <div key={m.id} style={{ border: '1px solid ' + (on ? accent : 'var(--qs-line,#ececed)'), borderRadius: 'var(--tw-radius-sm,10px)', overflow: 'hidden', background: '#fff' }}>
-              <button onClick={() => setOpen(on ? '' : m.id)} style={{ width: '100%', boxSizing: 'border-box', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', border: 0, background: on ? (m.warn ? '#fef3dc' : 'var(--qs-brand-soft,#eaf8fd)') : 'var(--qs-paper,#f8f7f8)', fontFamily: 'inherit', textAlign: 'start' }}>
-                <span style={{ display: 'grid', placeItems: 'center', width: 34, height: 34, flex: 'none', borderRadius: '50%', background: '#fff', border: '1px solid var(--qs-line,#ececed)', color: accent }}>
+            <div key={m.id} style={{ border: '1px solid ' + (on ? accent : 'var(--qs-line,#ececed)'), borderRadius: 'var(--tw-radius-sm,10px)', overflow: 'hidden', background: 'var(--qd-surface,#fff)' }}>
+              <button onClick={() => setOpen(on ? '' : m.id)} style={{ width: '100%', boxSizing: 'border-box', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', border: 0, background: on ? (m.warn ? 'var(--qd-amberbg,#fef3dc)' : 'var(--qs-brand-soft,#eaf8fd)') : 'var(--qs-paper,#f8f7f8)', fontFamily: 'inherit', textAlign: 'start' }}>
+                <span style={{ display: 'grid', placeItems: 'center', width: 34, height: 34, flex: 'none', borderRadius: '50%', background: 'var(--qd-surface,#fff)', border: '1px solid var(--qs-line,#ececed)', color: accent }}>
                   <Icon name={m.icon} size={18} />
                 </span>
                 <span style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -113,7 +113,7 @@ export default function PaymentMethods({ title, note, methods, defaultOpen = 'ca
                       <span dir={/[0-9+]/.test(r[1][0]) ? 'ltr' : 'rtl'} style={{ fontSize: 15, fontWeight: 600, color: 'var(--qs-ink,#1d2733)', letterSpacing: /[0-9+]/.test(r[1][0]) ? '.04em' : 'normal' }}>{r[1]}</span>
                     </div>
                   ))}
-                  <p style={{ display: 'flex', gap: 8, margin: 0, padding: '12px 14px', borderRadius: 'var(--tw-radius-sm,10px)', background: m.warn ? '#fef3dc' : 'var(--qs-paper,#f8f7f8)', border: '1px solid ' + (m.warn ? '#fdd27c' : 'var(--qs-line,#ececed)'), fontSize: 13, lineHeight: 1.6, color: m.warn ? '#a06a00' : 'var(--qs-body,#3d4650)' }}>
+                  <p style={{ display: 'flex', gap: 8, margin: 0, padding: '12px 14px', borderRadius: 'var(--tw-radius-sm,10px)', background: m.warn ? 'var(--qd-amberbg,#fef3dc)' : 'var(--qs-paper,#f8f7f8)', border: '1px solid ' + (m.warn ? 'var(--qd-amberline,#fdd27c)' : 'var(--qs-line,#ececed)'), fontSize: 13, lineHeight: 1.6, color: m.warn ? 'var(--qd-ambertext,#a06a00)' : 'var(--qs-body,#3d4650)' }}>
                     <Icon name={m.warn ? 'alert-triangle' : 'info'} size={17} style={{ marginTop: 2, flex: 'none' }} />
                     <span>{m.body}</span>
                   </p>
@@ -130,14 +130,14 @@ export default function PaymentMethods({ title, note, methods, defaultOpen = 'ca
             <span style={{ fontSize: 13, color: 'var(--qs-body,#3d4650)' }}>{atOffice ? 'أكِّد اختيارك، وادفع المبلغ في المكتب خلال يوم واحد — لا حاجة لإرفاق أي ملف.' : 'صورة أو PDF لإشعار التحويل — حتى 5 ميغابايت.'}</span>
           </div>
           {confirmError && (
-            <p style={{ margin: 0, padding: '10px 14px', borderRadius: 'var(--tw-radius-sm,10px)', background: '#fdecef', border: '1px solid #f7c3cc', color: '#d2324f', fontSize: 13 }}>{confirmError}</p>
+            <p style={{ margin: 0, padding: '10px 14px', borderRadius: 'var(--tw-radius-sm,10px)', background: 'var(--qd-redbg,#fdecef)', border: '1px solid var(--qd-redline,#f7c3cc)', color: 'var(--qd-red,#d2324f)', fontSize: 13 }}>{confirmError}</p>
           )}
           {uploadError && (
-            <p style={{ margin: 0, padding: '10px 14px', borderRadius: 'var(--tw-radius-sm,10px)', background: '#fdecef', border: '1px solid #f7c3cc', color: '#d2324f', fontSize: 13 }}>{uploadError}</p>
+            <p style={{ margin: 0, padding: '10px 14px', borderRadius: 'var(--tw-radius-sm,10px)', background: 'var(--qd-redbg,#fdecef)', border: '1px solid var(--qd-redline,#f7c3cc)', color: 'var(--qd-red,#d2324f)', fontSize: 13 }}>{uploadError}</p>
           )}
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
             {atOffice ? null : (
-              <label htmlFor={uploadId} style={{ cursor: uploading ? 'not-allowed' : 'pointer', opacity: uploading ? 0.6 : 1, display: 'flex', alignItems: 'center', gap: 8, padding: '10px 16px', borderRadius: 999, background: '#fff', border: '1px solid var(--qs-brand-deep,#036f8c)', color: 'var(--qs-brand-deep,#036f8c)', fontSize: 15, fontWeight: 600 }}>
+              <label htmlFor={uploadId} style={{ cursor: uploading ? 'not-allowed' : 'pointer', opacity: uploading ? 0.6 : 1, display: 'flex', alignItems: 'center', gap: 8, padding: '10px 16px', borderRadius: 999, background: 'var(--qd-surface,#fff)', border: '1px solid var(--qs-brand-deep,#036f8c)', color: 'var(--qs-brand-deep,#036f8c)', fontSize: 15, fontWeight: 600 }}>
                 <Icon name={receiptUrl ? 'check' : 'upload'} size={17} />{uploading ? 'جارٍ الرفع...' : receiptUrl ? 'تغيير الملف' : 'اختر الملف'}
               </label>
             )}

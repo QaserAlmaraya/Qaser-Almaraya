@@ -1,0 +1,52 @@
+/* Dark mode fixes: packages pages. Every rule must start with html[data-area=site][data-theme=dark]. */
+
+/* ---------- /packages: search bar ---------- */
+html[data-area=site][data-theme=dark] .qa-search-field input{color-scheme:dark!important}
+html[data-area=site][data-theme=dark] .qa-search-field input::placeholder{color:#8793a0;opacity:1}
+
+/* ---------- /packages: filter pills, chips, drawer ---------- */
+html[data-area=site][data-theme=dark] .qa-pill:hover,
+html[data-area=site][data-theme=dark] .qa-filters-btn:hover{border-color:#45c3ec}
+html[data-area=site][data-theme=dark] .qa-pill.qa-pill-active{background:#049dc5;border-color:#049dc5;color:#fff}
+html[data-area=site][data-theme=dark] .qa-dest-chip:hover{background:#11313d;border-color:#45c3ec}
+html[data-area=site][data-theme=dark] .qa-fchip.on{background:#049dc5;border-color:#049dc5;color:#fff}
+html[data-area=site][data-theme=dark] .qa-drawer{border-inline-start:1px solid #27333f;box-shadow:none!important;color:#f1f5f8}
+html[data-area=site][data-theme=dark] .qa-drawer input{background:#141d27;color:#f1f5f8}
+html[data-area=site][data-theme=dark] .qa-drawer input::placeholder{color:#8793a0}
+
+/* ---------- Package card ---------- */
+html[data-area=site][data-theme=dark] .qa-pkg-card:hover{border-color:#1f5568;box-shadow:0 1px 2px rgba(0,0,0,.4),0 18px 40px -20px rgba(0,0,0,.7)}
+html[data-area=site][data-theme=dark] .qa-pkg-card:hover .qa-pkg-cta{box-shadow:none}
+html[data-area=site][data-theme=dark] .qa-pkg-cta:hover{background:#11313d}
+html[data-area=site][data-theme=dark] .qa-pkg-continue{background:#049dc5;border-color:#049dc5}
+
+/* ---------- Package detail: hero ---------- */
+html[data-area=site][data-theme=dark] .qs-pd-back{background:rgba(15,22,29,.78);color:#f1f5f8!important}
+html[data-area=site][data-theme=dark] .qs-pd-back:hover{background:#19232e}
+html[data-area=site][data-theme=dark] .qs-pd-badge{color:#1d2733}
+
+/* ---------- Package detail: booking box ---------- */
+html[data-area=site][data-theme=dark] .qs-pd-book{box-shadow:none!important}
+html[data-area=site][data-theme=dark] .qs-pd-tool:hover{border-color:#45c3ec}
+html[data-area=site][data-theme=dark] .qa-urg{box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
+html[data-area=site][data-theme=dark] .qa-urg-box{background:rgba(0,0,0,.24)!important}
+/* staff quote box: its dashed amber border must not switch the text to charcoal */
+html[data-area=site][data-theme=dark] .qs-pd-book [style*="dashed"]{--qs-ink:#f1f5f8;--qd-ink:#f1f5f8;--qs-body:#c9d2d9;--qd-body:#c9d2d9;color:#c9d2d9}
+html[data-area=site][data-theme=dark] .qs-pd-book :is(input,select,textarea){background:#141d27;color:#f1f5f8;border-color:#364656!important}
+html[data-area=site][data-theme=dark] .qs-pd-book :is(input,textarea)::placeholder{color:#8793a0}
+
+/* ---------- Package detail: hotel / flight choices ---------- */
+html[data-area=site][data-theme=dark] .qs-pd-block input[type=radio]{accent-color:#45c3ec}
+
+/* ---------- Phone booking bar ---------- */
+html[data-area=site][data-theme=dark] .qa-pkg-mbar{box-shadow:0 10px 28px -14px rgba(0,0,0,.7)}
+
+/* ---------- Booking form (/packages/[id]/book) ---------- */
+html[data-area=site][data-theme=dark] .qa-page:has(>.qa-sec>a[href^="/packages/"]) .qa-card :is(input,select){background:#141d27;color:#f1f5f8}
+
+/* ---------- Teal tint is kept for "selected"; plain panels go neutral ---------- */
+html[data-area=site][data-theme=dark] .qa-page>section[style*="--qs-brand-soft"]{background:#131c25!important;border-block:1px solid #27333f}
+html[data-area=site][data-theme=dark] .qa-page>section>div>div[style*="--qs-brand-soft"]{background:#19232e!important}
+html[data-area=site][data-theme=dark] .qs-pd .qr-close{background:#19232e;border:1px solid #27333f}
+/* open panel inside a package card: white labels need the deeper cyan */
+html[data-area=site][data-theme=dark] .qa-pkg-panel{--q-cyan:#049dc5}

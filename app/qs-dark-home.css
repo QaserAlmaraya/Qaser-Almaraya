@@ -1,0 +1,75 @@
+/* Dark mode fixes: home pages. Every rule must start with html[data-area=site][data-theme=dark]. */
+
+/* ---------- Hero, phone layout: the copy block under the artwork ---------- */
+@media (max-width:820px){
+  html[data-area=site][data-theme=dark] .qh{background:#0f161d;color:#f1f5f8}
+  html[data-area=site][data-theme=dark] .qh .qh-title{color:#f1f5f8}
+  html[data-area=site][data-theme=dark] .qh-accent{color:#45c3ec}
+  html[data-area=site][data-theme=dark] .qh-sub{color:#c9d2d9}
+  html[data-area=site][data-theme=dark] .qh-eyebrow{background:#19232e;border-color:#27333f;color:#45c3ec}
+  html[data-area=site][data-theme=dark] .qh-btn.sec{background:#19232e;border-color:#364656;color:#f1f5f8}
+  html[data-area=site][data-theme=dark] .qh-btn.sec:hover{background:#19232e;border-color:#45c3ec}
+}
+
+/* ---------- Tinted chapters: neutral charcoal, not teal ---------- */
+html[data-area=site][data-theme=dark] .qs-home .qs-ch-tint{background:#131c25}
+html[data-area=site][data-theme=dark] .qs-home .qs-st-ring-img :is(img,video){border-color:#131c25}
+html[data-area=site][data-theme=dark] .qs-home .qs-skel,
+html[data-area=site][data-theme=dark] .qa-offer-skel{background:linear-gradient(90deg,#19232e 25%,#1f2b38 50%,#19232e 75%);background-size:200% 100%}
+
+/* ---------- Package cards ---------- */
+html[data-area=site][data-theme=dark] .qa-offer{background:#19232e}
+html[data-area=site][data-theme=dark] .qa-offer-img{background:#141d27!important}
+
+/* ---------- Departures board ---------- */
+html[data-area=site][data-theme=dark] .qs-db-cell{background:#141d27}
+html[data-area=site][data-theme=dark] .qs-db-row:hover,
+html[data-area=site][data-theme=dark] .qs-db-row:focus-visible{background:#1f2b38}
+
+/* ---------- Fare board ---------- */
+html[data-area=site][data-theme=dark] .qs-fb-book{color:#1d2733!important}
+/* airline marks are drawn for white paper */
+html[data-area=site][data-theme=dark] .qs-fb-mark{background:#f4f7f9;border-color:#f4f7f9}
+html[data-area=site][data-theme=dark] .qs-fb-seg button[aria-pressed=true]{box-shadow:none}
+
+/* ---------- Trip finder (inside "plan before you book") ---------- */
+html[data-area=site][data-theme=dark] .qa-tf{background:#19232e}
+html[data-area=site][data-theme=dark] .qa-tf-chip{background:#141d27}
+html[data-area=site][data-theme=dark] .qa-tf-chip:hover{border-color:#45c3ec}
+html[data-area=site][data-theme=dark] .qa-tf-chip.on{background:#049dc5;border-color:#049dc5;color:#fff!important}
+html[data-area=site][data-theme=dark] .qa-tf-card{background:#141d27}
+
+/* ---------- Phone bottom bar ---------- */
+@media (max-width:820px){
+  html[data-area=site][data-theme=dark] .qa-mbar{background:rgba(25,35,46,.96);border-color:#27333f}
+  html[data-area=site][data-theme=dark] .qa-mbar-wab{border-color:#19232e;box-shadow:0 6px 14px -6px rgba(0,0,0,.6)}
+}
+
+/* ---------- Chat invitation ---------- */
+html[data-area=site][data-theme=dark] .qa-chat-label{border-color:#364656}
+html[data-area=site][data-theme=dark] .qa-chat-x{background:#27333f}
+html[data-area=site][data-theme=dark] .qa-chat-x:hover{background:#364656}
+
+/* ---------- Offer stories viewer: amber keeps charcoal text ---------- */
+html[data-area=site][data-theme=dark] .qs-st-view .qs-st-wa,
+html[data-area=site][data-theme=dark] .qs-st-view .qs-st-wa:hover{color:#1d2733}
+
+/* ---------- Phone bottom bar: the WhatsApp pulse without the green haze ---------- */
+@keyframes qd-wa-pulse{0%,100%{box-shadow:0 0 0 0 rgba(37,211,102,.35)}50%{box-shadow:0 0 0 8px rgba(37,211,102,0)}}
+@media (max-width:820px){
+  html[data-area=site][data-theme=dark] .qa-mbar-wab{animation-name:qd-wa-pulse}
+}
+
+/* ---------- Seasonal pieces (only shown in season) ---------- */
+html[data-area=site][data-theme=dark] .qa-ss-card{background:#19232e}
+html[data-area=site][data-theme=dark] .sd-music{background:#19232e;border-color:#364656;color:#45c3ec;box-shadow:0 6px 14px -8px rgba(0,0,0,.6)}
+html[data-area=site][data-theme=dark] .sd-music.on{background:#049dc5;border-color:#049dc5;color:#fff}
+
+/* ---------- Travel alert strip ---------- */
+html[data-area=site][data-theme=dark] .qs-alert{background:#3a2c0c}
+html[data-area=site][data-theme=dark] .qs-alert-text{text-decoration-color:#6b5216}
+html[data-area=site][data-theme=dark] .qs-alert-x:hover{background:rgba(255,255,255,.08)}
+
+/* ---------- Booking panel: the trip-type switch needs a visible track ---------- */
+html[data-area=site][data-theme=dark] .qs-home .qs-bp-trip{background:#0f161d}
+html[data-area=site][data-theme=dark] .qs-home .qs-bp-trip button.on{background:#27333f}

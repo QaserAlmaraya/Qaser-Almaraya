@@ -10,6 +10,11 @@ import './qs-routes.css';
 import './qs-motion-page.css';
 import './qs-motion-cards.css';
 import './qs-motion-globe.css';
+import './qs-dark.css';
+import './qs-dark-home.css';
+import './qs-dark-packages.css';
+import './qs-dark-visa.css';
+import './qs-dark-pages.css';
 import AreaMark from '../components/AreaMark';
 import MobileBottomBar from '../components/MobileBottomBar';
 import LiveChat from '../components/LiveChat';
@@ -19,6 +24,7 @@ import LangGuard from '../components/LangGuard';
 import TravelAlert from '../components/TravelAlert';
 import ScrollReveal from '../components/ScrollReveal';
 import SiteMotion from '../components/motion/SiteMotion';
+import { ThemeSync } from '../components/ThemeToggle';
 import { SITE_URL, DEFAULT_OG, ORG_JSON_LD } from '../lib/seo';
 
 export const viewport = {
@@ -43,7 +49,7 @@ export default function RootLayout({ children }) {
       <head>
         {/* Public site vs. dashboard: the redesign styles in app/qs.css apply only to
             data-area="site", so /admin and /staff keep their own look untouched. */}
-        <script dangerouslySetInnerHTML={{ __html: "if(/^\\/(admin|staff)(\\/|$)/.test(location.pathname))document.documentElement.setAttribute('data-area','admin')" }} />
+        <script dangerouslySetInnerHTML={{ __html: "if(/^\\/(admin|staff)(\\/|$)/.test(location.pathname))document.documentElement.setAttribute('data-area','admin');else try{if(localStorage.getItem('qs-theme')==='dark'&&!/^\\/links(\\/|$)/.test(location.pathname))document.documentElement.setAttribute('data-theme','dark')}catch(e){}" }} />
         <link rel="preload" href="/fonts/ibmplexsansarabic-arabic-400.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -65,6 +71,7 @@ export default function RootLayout({ children }) {
         <TravelAlert />
         <ScrollReveal />
         <SiteMotion />
+        <ThemeSync />
         {children}
         <MobileBottomBar />
         <LiveChat />

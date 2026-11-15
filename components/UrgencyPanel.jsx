@@ -37,7 +37,7 @@ export default function UrgencyPanel({ pkg, lang = 'ar' }) {
   }, [target]);
 
   if (!u || !u.label) return null;
-  const tone = u.soldOut ? { bg: '#1d2733', fg: '#fff', box: 'rgba(255,255,255,.12)' } : u.hot ? { bg: '#fdecef', fg: '#c02643', box: '#fff' } : { bg: '#fff4dc', fg: '#8a5a00', box: '#fff' };
+  const tone = u.soldOut ? { bg: 'var(--qd-surface2,#1d2733)', fg: '#fff', box: 'rgba(255,255,255,.12)' } : u.hot ? { bg: 'var(--qd-redbg,#fdecef)', fg: 'var(--qd-red,#c02643)', box: 'var(--qd-surface,#fff)' } : { bg: 'var(--qd-amberbg,#fff4dc)', fg: 'var(--qd-ambertext,#8a5a00)', box: 'var(--qd-surface,#fff)' };
   const c = target && now ? parts(target - now) : null;
   const units = en ? ['days', 'hrs', 'min', 'sec'] : ['يوم', 'ساعة', 'دقيقة', 'ثانية'];
 

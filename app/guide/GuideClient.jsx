@@ -44,7 +44,7 @@ export default function GuideClient({ iso = null }) {
                 <b style={{ fontSize: 20, fontWeight: 600, color: 'var(--qs-ink,#1d2733)' }}>{en ? `Planning a trip to ${name}?` : `تخطط لرحلة إلى ${name}؟`}</b>
                 <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 12 }}>
                   <CtaButton href={'/packages?q=' + encodeURIComponent(countryInfo(iso).ar)} label="الباقات" labelEn="Packages" lang={lang} />
-                  <Link href="/visa" className="qa-btn qa-btn-fit" style={{ padding: '10px 20px', fontSize: 15, background: '#fff', color: 'var(--qs-brand-deep,#036f8c)', border: '1px solid var(--qs-line-2,#bfe9f6)' }}>{en ? 'Visas' : 'التأشيرات'}</Link>
+                  <Link href="/visa" className="qa-btn qa-btn-fit" style={{ padding: '10px 20px', fontSize: 15, background: 'var(--qd-surface,#fff)', color: 'var(--qs-brand-deep,#036f8c)', border: '1px solid var(--qs-line-2,#bfe9f6)' }}>{en ? 'Visas' : 'التأشيرات'}</Link>
                   <button type="button" className="qa-btn" onClick={() => openWhatsApp(en ? `Hello, I would like to travel to ${name}.` : `مرحباً، أرغب بالسفر إلى ${name}.`)} style={{ padding: '10px 20px', fontSize: 15, background: '#25d366', color: '#fff' }}>{en ? 'Ask us on WhatsApp' : 'اسألنا على واتساب'}</button>
                 </div>
               </div>

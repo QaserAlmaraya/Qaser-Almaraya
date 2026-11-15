@@ -89,7 +89,7 @@ export default function CountryHero({ country, count, fastestDays, lang = 'ar', 
 .qch-chip{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);border-radius:var(--tw-radius-sm,10px);padding:8px 12px}
 .qch-chip span{font-size:13px;color:rgba(255,255,255,.75);display:block}
 .qch-chip b{font-size:15px;display:block;white-space:nowrap}
-.qch-pdf{align-self:flex-start;display:inline-flex;align-items:center;gap:8px;background:#fff;color:var(--qs-brand-deep,#036f8c);border:0;border-radius:999px;padding:12px 20px;font-weight:600;font-size:15px;cursor:pointer;font-family:inherit}
+.qch-pdf{align-self:flex-start;display:inline-flex;align-items:center;gap:8px;background:var(--qd-surface,#fff);color:var(--qs-brand-deep,#036f8c);border:0;border-radius:999px;padding:12px 20px;font-weight:600;font-size:15px;cursor:pointer;font-family:inherit}
 @media (max-width:860px){.qch-in{grid-template-columns:1fr}.qch-map{width:100%;opacity:.45}}
 `}</style>
       {info && <div dangerouslySetInnerHTML={{ __html: info.map }} style={{ display: 'contents' }} />}

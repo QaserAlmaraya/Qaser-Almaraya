@@ -27,7 +27,7 @@ html[data-area=site] .qm-gp{width:100%;max-width:520px;min-width:0;text-align:st
 html[data-area=site] .qm-gp-idle{display:flex;align-items:center;justify-content:center;gap:8px;margin:0;padding:4px 8px;font-size:14px;line-height:1.6;color:var(--qs-ink-2);text-align:center}
 html[data-area=site] .qm-gp-idle svg{flex:none;color:var(--qs-brand)}
 
-html[data-area=site] .qm-gp-card{display:flex;flex-direction:column;gap:16px;padding:16px;background:#fff;border:1px solid var(--qs-line);border-radius:var(--tw-radius,16px);box-shadow:var(--tw-pop-shadow,0 6px 20px rgba(1,42,55,.10));animation:qm-gp-in .25s var(--qs-ease) both}
+html[data-area=site] .qm-gp-card{display:flex;flex-direction:column;gap:16px;padding:16px;background:var(--qd-surface,#fff);border:1px solid var(--qs-line);border-radius:var(--tw-radius,16px);box-shadow:var(--tw-pop-shadow,0 6px 20px rgba(1,42,55,.10));animation:qm-gp-in .25s var(--qs-ease) both}
 @keyframes qm-gp-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 
 html[data-area=site] .qm-gp-head{display:flex;align-items:center;gap:12px}
@@ -36,13 +36,13 @@ html[data-area=site] .qm-gp-title{display:flex;flex-direction:column;gap:2px;min
 html[data-area=site] .qm-gp-title h2{margin:0;font-size:22px!important;color:var(--qs-ink)}
 html[data-area=site] .qm-gp-guide{align-self:flex-start;font-size:14px;font-weight:600;color:var(--qs-brand);text-decoration:underline;text-underline-offset:3px}
 html[data-area=site] .qm-gp-guide:hover{color:var(--qs-band-hover)}
-html[data-area=site] .qm-gp-close{flex:none;display:grid;place-items:center;width:36px;height:36px;padding:0;border:0;border-radius:50%;background:#f4fbfe;color:var(--qs-ink);cursor:pointer;transition:background .15s ease}
+html[data-area=site] .qm-gp-close{flex:none;display:grid;place-items:center;width:36px;height:36px;padding:0;border:0;border-radius:50%;background:var(--qd-surface2,#f4fbfe);color:var(--qs-ink);cursor:pointer;transition:background .15s ease}
 html[data-area=site] .qm-gp-close:hover{background:var(--qs-brand-soft)}
 
 html[data-area=site] .qm-gp-list{display:flex;flex-direction:column;gap:8px;margin:0;padding:0;list-style:none}
 /* Rows arrive one after another (60ms apart) once the card is in. */
 html[data-area=site] .qm-gp-list li{animation:qm-gp-in .25s var(--qs-ease) both;animation-delay:calc(80ms + var(--qm-i,0) * 60ms)}
-html[data-area=site] .qm-gp-row{display:flex;align-items:center;gap:12px;padding:8px;border-radius:12px;background:#f4fbfe;color:var(--qs-ink);text-decoration:none;transition:background .15s ease}
+html[data-area=site] .qm-gp-row{display:flex;align-items:center;gap:12px;padding:8px;border-radius:12px;background:var(--qd-surface2,#f4fbfe);color:var(--qs-ink);text-decoration:none;transition:background .15s ease}
 html[data-area=site] .qm-gp-row:hover{background:var(--qs-brand-soft);color:var(--qs-ink)}
 html[data-area=site] .qm-gp-thumb{flex:none;width:72px;height:72px;border-radius:8px;overflow:hidden;background:var(--qs-brand-soft)}
 html[data-area=site] .qm-gp-thumb img{display:block;width:100%;height:100%;object-fit:cover}
@@ -67,7 +67,7 @@ html[data-area=site] .qm-gp-wa,
 html[data-area=site] .qm-gp-ghost{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 20px;border-radius:999px;font-size:15px;font-weight:600;text-decoration:none;transition:background .15s ease,border-color .15s ease}
 html[data-area=site] .qm-gp-wa{background:var(--qs-amber);color:var(--qs-ink)}
 html[data-area=site] .qm-gp-wa:hover{background:var(--qs-amber-hover);color:var(--qs-ink)}
-html[data-area=site] .qm-gp-ghost{background:#fff;color:var(--qs-ink);border:1px solid var(--qs-line-2)}
+html[data-area=site] .qm-gp-ghost{background:var(--qd-surface,#fff);color:var(--qs-ink);border:1px solid var(--qs-line-2)}
 html[data-area=site] .qm-gp-ghost:hover{border-color:var(--qs-brand);color:var(--qs-ink)}
 
 html[data-area=site] .qm-gp :is(a,button):focus-visible{outline:2px solid var(--qs-brand);outline-offset:2px}

@@ -1,0 +1,30 @@
+/* Dark mode fixes: pages pages. Every rule must start with html[data-area=site][data-theme=dark]. */
+
+/* ---------- /guide: globe ----------
+   cobe paints a pale-sky sphere in WebGL, so its colours cannot come from a
+   token. Inverting the canvas and turning the hue back gives a deep navy
+   sphere with light land dots and no halo; the pins are DOM and stay amber. */
+html[data-area=site][data-theme=dark] .qs-globe{background:none}
+html[data-area=site][data-theme=dark] .qs-globe-canvas{filter:invert(1) hue-rotate(180deg) saturate(.7) brightness(.9)}
+html[data-area=site][data-theme=dark] .qs-globe-pin i{border-color:#0f161d;box-shadow:0 1px 3px rgba(0,0,0,.5)}
+html[data-area=site][data-theme=dark] .qs-globe-pin b{background:#2b3948;color:#fff}
+html[data-area=site][data-theme=dark] .qs-globe-pin:is(.home,.qm-sel) b{background:#0492b8}
+html[data-area=site][data-theme=dark] .qs-globe-pin.qm-sel i{box-shadow:0 0 0 3px rgba(69,195,236,.4),0 1px 3px rgba(0,0,0,.5)}
+html[data-area=site][data-theme=dark] .qm-gp-skel{background:linear-gradient(90deg,#141d27 25%,#1c2733 50%,#141d27 75%);background-size:200% 100%}
+html[data-area=site][data-theme=dark] :is(.qm-gp-guide,.qm-gp-all){color:var(--qd-cyan)}
+
+/* ---------- /flights: fares board ----------
+   Airline marks are coloured artwork made for a white ground: keep a small
+   white chip behind them instead of recolouring. */
+html[data-area=site][data-theme=dark] .qs-fb-mark{background:#fff;border-color:#fff}
+
+/* ---------- /news article: the page itself is the dark paper, not a card ---------- */
+html[data-area=site][data-theme=dark] div:has(>main>.qn-art-hero){background:var(--qs-paper)!important}
+/* The category chip on the article hero stays a white pill, so its text stays dark. */
+html[data-area=site][data-theme=dark] .qn-art-hero .qn-cat{color:#1d2733}
+html[data-area=site][data-theme=dark] .qn-art-hero .qn-cat.is-alert{color:#8a1f34}
+
+/* ---------- /guide/[iso]: weather chart ----------
+   Amber bars switch the text tokens to charcoal (amber rule in qs-dark.css),
+   but the degree label sits above the bar on the dark page, not on the amber. */
+html[data-area=site][data-theme=dark] .qa-gd-bar b{color:#c9d2d9}
