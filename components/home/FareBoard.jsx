@@ -6,13 +6,11 @@ import { getRate, loadRate } from '../../lib/currency';
 import { waLink } from '../../lib/whatsapp';
 import { ORIGINS, FARES_UPDATED, destinationsFrom } from '../../lib/flightFares';
 
-// "Fares from your city", laid out the way a customer decides: where am I
-// leaving from, what kind of ticket, where to, then which flight. The three
-// choices sit at the top; the destinations are a list; one destination shows
-// its flights as plain rows (airline, time, days, price, book). On wide
-// screens the flights sit beside the list, on phones they open under the row.
-// Seat availability and business fares are not in the flights sheet, so
-// business reads "on request" and every flight books through WhatsApp.
+// "Fares from your city" as a guided path (Owner, 16 Nov 2026: simpler and
+// guided): one question at a time, city, destination, then that destination's
+// flights as plain rows (airline, time, days, price, book). Seat availability
+// and business fares are not in the flights sheet, so business reads "on
+// request" and every flight books through WhatsApp.
 //
 // `initial` rows are shown before "show all"; `link` adds the header link to
 // the flights page (used on the homepage only).
@@ -157,7 +155,7 @@ function LiveSearch({ d, from, trip, cabin, en }) {
 function Flights({ d, from, trip, cabin, rate, en, slot = 'p' }) {
   const n = d.offers.length;
   const biz = cabin === 'biz';
-  const count = en ? n + (n === 1 ? ' flight' : ' flights') : (n === 1 ? 'رحلة واحدة' : n === 2 ? 'رحلتان' : n <= 10 ? n + ' رحلات' : n + ' رحلة');
+  const count = countText(n, en);
   const tripText = trip === 'round' ? (en ? 'Round trip' : 'ذهاب وعودة') : (en ? 'One way' : 'ذهاب فقط');
   const cabinText = biz ? (en ? 'Business' : 'رجال الأعمال') : (en ? 'Economy' : 'السياحية');
   return (
@@ -166,8 +164,6 @@ function Flights({ d, from, trip, cabin, rate, en, slot = 'p' }) {
         <b>{en ? from.en + ' to ' + d.place.en : 'من ' + from.ar + ' إلى ' + d.place.ar}</b>
         <span>{[count, tripText, cabinText].join(' · ')}</span>
       </p>
-      <LiveSearch d={d} from={from} trip={trip} cabin={cabin} en={en} />
-      <p className="qs-fb-listt">{en ? 'Weekly schedule and starting prices' : 'الجدول الأسبوعي والأسعار التقريبية'}</p>
       <ul>
         {d.offers.map((f, k) => {
           const legs = [{ id: 'go', name: en ? 'Departs' : 'الذهاب', time: f.time, days: en ? f.daysEn : f.daysAr }];
@@ -208,31 +204,65 @@ function Flights({ d, from, trip, cabin, rate, en, slot = 'p' }) {
           );
         })}
       </ul>
+      <details className="qs-fw-date">
+        <summary>
+          <Icon name="calendar-days" size={18} strokeWidth={2} />
+          <span>{en ? 'Have a travel date? See the seats available that day' : 'عندك تاريخ سفر محدد؟ شاهد المقاعد المتوفرة في ذلك اليوم'}</span>
+          <Icon name="chevron-down" size={18} strokeWidth={2} className="qs-fw-datechev" />
+        </summary>
+        <LiveSearch d={d} from={from} trip={trip} cabin={cabin} en={en} />
+      </details>
       <p className="qs-fb-help">{en ? 'Booking is completed on WhatsApp, or call ' : 'الحجز يكتمل عبر واتساب، أو اتصل على '}<a href="tel:6393">6393</a></p>
     </div>
   );
 }
 
+const countText = (n, en) => (en ? n + (n === 1 ? ' flight' : ' flights') : (n === 1 ? 'رحلة واحدة' : n === 2 ? 'رحلتان' : n <= 10 ? n + ' رحلات' : n + ' رحلة'));
+
+// The board is a short guided path, one question on screen at a time:
+// 1 where from, 2 where to, 3 the flights. Baghdad is chosen to begin with, so
+// most visitors start on question 2. Finished steps stay at the top as a
+// summary and can be pressed to change the answer.
 export default function FareBoard({ lang = 'ar', initial = 8, link = true }) {
   const en = lang === 'en';
   const [origin, setOrigin] = useState(ORIGINS[0].code);
   const [trip, setTrip] = useState('one');
-  const [open, setOpen] = useState('');
+  const [dest, setDest] = useState('');
+  const [step, setStep] = useState(2);
   const [all, setAll] = useState(false);
   const [cabin, setCabin] = useState('eco'); // 'eco' | 'biz'. The sheet has economy fares only.
   const [rate, setRate] = useState(getRate());
   // Amount last shown per price slot; see useRolledPrice.
   const [priceMemory] = useState(() => new Map());
+  const boxRef = useRef(null);
 
   useEffect(() => { let alive = true; loadRate().then((r) => { if (alive) setRate(r); }); return () => { alive = false; }; }, []);
 
   const from = ORIGINS.find((o) => o.code === origin) || ORIGINS[0];
   const dests = useMemo(() => destinationsFrom(origin, trip, rate), [origin, trip, rate]);
   const shown = all ? dests : dests.slice(0, initial);
-  // Beside the list there is always a destination on show: the chosen one, or the first.
-  const side = dests.find((d) => d.key === open) || dests[0];
+  const chosen = dests.find((d) => d.key === dest);
+  const at = step === 3 && !chosen ? 2 : step;
 
-  const pickOrigin = (code) => { setOrigin(code); setOpen(''); setAll(false); };
+  // After a step changes, bring the top of the board back into view when the
+  // visitor has scrolled past it (long lists on phones).
+  const go = (n) => {
+    setStep(n);
+    requestAnimationFrame(() => {
+      const el = boxRef.current;
+      if (!el) return;
+      const top = el.getBoundingClientRect().top;
+      if (top < 80) window.scrollTo({ top: window.scrollY + top - 96, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    });
+  };
+  const pickOrigin = (code) => { setOrigin(code); setDest(''); setAll(false); go(2); };
+  const pickDest = (key) => { setDest(key); go(3); };
+
+  const steps = [
+    { n: 1, label: en ? 'From' : 'من', value: en ? from.en : from.ar },
+    { n: 2, label: en ? 'To' : 'إلى', value: chosen ? (en ? chosen.place.en : chosen.place.ar) : '' },
+    { n: 3, label: en ? 'Flights' : 'الرحلات', value: '' },
+  ];
 
   return (
     <PriceMemory.Provider value={priceMemory}>
@@ -243,72 +273,96 @@ export default function FareBoard({ lang = 'ar', initial = 8, link = true }) {
             <span className="qs-kicker">{en ? 'Flights' : 'الطيران'}</span>
             <h2 className="qs-h2">{en ? 'Ticket prices from your city' : 'أسعار التذاكر من مدينتك'}</h2>
             <p className="qs-lead">{en
-              ? 'Choose your city and your destination to see the flights, their times and their prices.'
-              : 'اختر مدينتك ثم وجهتك لتشاهد الرحلات وأوقاتها وأسعارها.'}</p>
+              ? 'Three short steps: your city, your destination, then the flights and their prices.'
+              : 'ثلاث خطوات قصيرة: مدينتك، ثم وجهتك، ثم الرحلات وأسعارها.'}</p>
           </div>
           {link ? <Link href="/flights" className="qs-link">{en ? 'Flight booking' : 'حجز الطيران'}</Link> : null}
         </div>
 
-        <div className="qs-fb">
-          <div className="qs-fb-step">
-            <p className="qs-fb-q">{en ? 'Leaving from' : 'المغادرة من'}</p>
-            <div className="qs-fb-origins" role="tablist" aria-label={en ? 'Departure city' : 'مدينة المغادرة'}>
-              {ORIGINS.map((o) => (
-                <button key={o.code} type="button" role="tab" aria-selected={o.code === origin} className="qs-fb-origin" onClick={() => pickOrigin(o.code)}>{en ? o.en : o.ar}</button>
-              ))}
-            </div>
-          </div>
+        <div className="qs-fb qs-fw" ref={boxRef}>
+          <ol className="qs-fw-steps">
+            {steps.map((s) => {
+              const state = s.n === at ? 'now' : (s.n < at ? 'done' : 'next');
+              const body = (
+                <>
+                  <span className="qs-fw-num" aria-hidden="true">{state === 'done' ? <Icon name="check" size={14} strokeWidth={2.6} /> : s.n}</span>
+                  <span className="qs-fw-stept">
+                    <small>{s.label}</small>
+                    {s.value && s.n < at ? <b>{s.value}</b> : null}
+                  </span>
+                </>
+              );
+              return (
+                <li key={s.n} className={'qs-fw-stepi ' + state} aria-current={state === 'now' ? 'step' : undefined}>
+                  {state === 'done'
+                    ? <button type="button" onClick={() => go(s.n)} aria-label={(en ? 'Change: ' : 'تغيير: ') + s.label + ' ' + s.value}>{body}<span className="qs-fw-edit">{en ? 'Change' : 'تغيير'}</span></button>
+                    : <span className="qs-fw-stepin">{body}</span>}
+                </li>
+              );
+            })}
+          </ol>
 
-          <div className="qs-fb-bar">
-            <div className="qs-fb-opt">
-              <p className="qs-fb-q">{en ? 'Trip' : 'نوع الرحلة'}</p>
-              <div className="qs-fb-seg" role="group" aria-label={en ? 'Trip type' : 'نوع الرحلة'}>
-                <button type="button" aria-pressed={trip === 'one'} onClick={() => setTrip('one')}>{en ? 'One way' : 'ذهاب فقط'}</button>
-                <button type="button" aria-pressed={trip === 'round'} onClick={() => setTrip('round')}>{en ? 'Round trip' : 'ذهاب وعودة'}</button>
+          <div className="qs-fw-stage" aria-live="polite">
+            {at === 1 ? (
+              <div className="qs-fw-pane" key="s1">
+                <h3 className="qs-fw-ask">{en ? 'Where are you flying from?' : 'من أين تسافر؟'}</h3>
+                <div className="qs-fw-cities">
+                  {ORIGINS.map((o) => (
+                    <button key={o.code} type="button" className={'qs-fw-city' + (o.code === origin ? ' on' : '')} onClick={() => pickOrigin(o.code)}>
+                      <Icon name="plane-takeoff" size={20} strokeWidth={1.8} />
+                      <span>{en ? o.en : o.ar}</span>
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
-            <div className="qs-fb-opt">
-              <p className="qs-fb-q">{en ? 'Class' : 'الدرجة'}</p>
-              <div className="qs-fb-seg" role="group" aria-label={en ? 'Cabin class' : 'درجة السفر'}>
-                <button type="button" aria-pressed={cabin === 'eco'} onClick={() => setCabin('eco')}>{en ? 'Economy' : 'السياحية'}</button>
-                <button type="button" aria-pressed={cabin === 'biz'} onClick={() => setCabin('biz')}>{en ? 'Business' : 'رجال الأعمال'}</button>
-              </div>
-            </div>
-          </div>
+            ) : null}
 
-          <div className="qs-fb-body">
-            <div className="qs-fb-side">
-              <p className="qs-fb-q qs-fb-qlist">{en ? 'Going to' : 'الوجهة'}</p>
-              <ol className="qs-fb-list" key={origin}>
-                {shown.map((d) => {
-                  const isOpen = open === d.key;
-                  const n = d.offers.length;
-                  const sub = [en ? d.place.countryEn : d.place.countryAr, en ? n + (n === 1 ? ' flight' : ' flights') : (n === 1 ? 'رحلة واحدة' : n === 2 ? 'رحلتان' : n <= 10 ? n + ' رحلات' : n + ' رحلة')].join(' · ');
-                  return (
-                    <li key={d.key} className={'qs-fb-item' + (isOpen ? ' open' : '') + (side && side.key === d.key ? ' sel' : '')}>
-                      <button type="button" className="qs-fb-row" aria-expanded={isOpen} onClick={() => setOpen(isOpen ? '' : d.key)}>
+            {at === 2 ? (
+              <div className="qs-fw-pane" key={'s2' + origin}>
+                <h3 className="qs-fw-ask">{en ? 'Where do you want to go?' : 'إلى أين تريد السفر؟'}</h3>
+                <p className="qs-fw-hint">{en ? 'Press a destination to see its flights. Prices shown are one way.' : 'اضغط على الوجهة لتشاهد رحلاتها. الأسعار المعروضة للذهاب فقط.'}</p>
+                <ul className="qs-fw-dests">
+                  {shown.map((d) => (
+                    <li key={d.key}>
+                      <button type="button" className="qs-fw-dest" onClick={() => pickDest(d.key)}>
                         <span className="qs-fb-dest">
                           <span className="qs-fb-name">{en ? d.place.en : d.place.ar}</span>
-                          <small>{sub}</small>
+                          <small>{en ? d.place.countryEn : d.place.countryAr}</small>
                         </span>
-                        {cabin === 'biz' ? null : <Price value={d.from} en={en} label={en ? 'From' : 'يبدأ من'} slot={'d:' + d.key} />}
-                        <Icon name="chevron-down" size={18} strokeWidth={2} className="qs-fb-chev" />
+                        <Price value={d.from} en={en} label={en ? 'From' : 'يبدأ من'} slot={'d:' + d.key} />
+                        <Icon name={en ? 'chevron-right' : 'chevron-left'} size={18} strokeWidth={2} className="qs-fw-go" />
                       </button>
-                      {isOpen ? <div className="qs-fb-inline"><Flights d={d} from={from} trip={trip} cabin={cabin} rate={rate} en={en} slot="i" /></div> : null}
                     </li>
-                  );
-                })}
-              </ol>
-              {dests.length > initial ? (
-                <button type="button" className="qs-fb-more" onClick={() => setAll(!all)} aria-expanded={all}>
-                  {all ? (en ? 'Show fewer' : 'عرض أقل') : (en ? 'All ' + dests.length + ' destinations from ' + from.en : 'كل الوجهات من ' + from.ar + ' (' + dests.length + ')')}
-                  <Icon name={all ? 'chevron-up' : 'chevron-down'} size={18} strokeWidth={2} />
+                  ))}
+                </ul>
+                {dests.length > initial ? (
+                  <button type="button" className="qs-fw-all" onClick={() => setAll(!all)} aria-expanded={all}>
+                    {all ? (en ? 'Show fewer' : 'عرض أقل') : (en ? 'All ' + dests.length + ' destinations from ' + from.en : 'كل الوجهات من ' + from.ar + ' (' + dests.length + ')')}
+                    <Icon name={all ? 'chevron-up' : 'chevron-down'} size={18} strokeWidth={2} />
+                  </button>
+                ) : null}
+              </div>
+            ) : null}
+
+            {at === 3 && chosen ? (
+              <div className="qs-fw-pane" key={'s3' + chosen.key}>
+                <div className="qs-fw-opts">
+                  <div className="qs-fb-seg" role="group" aria-label={en ? 'Trip type' : 'نوع الرحلة'}>
+                    <button type="button" aria-pressed={trip === 'one'} onClick={() => setTrip('one')}>{en ? 'One way' : 'ذهاب فقط'}</button>
+                    <button type="button" aria-pressed={trip === 'round'} onClick={() => setTrip('round')}>{en ? 'Round trip' : 'ذهاب وعودة'}</button>
+                  </div>
+                  <div className="qs-fb-seg" role="group" aria-label={en ? 'Cabin class' : 'درجة السفر'}>
+                    <button type="button" aria-pressed={cabin === 'eco'} onClick={() => setCabin('eco')}>{en ? 'Economy' : 'السياحية'}</button>
+                    <button type="button" aria-pressed={cabin === 'biz'} onClick={() => setCabin('biz')}>{en ? 'Business' : 'رجال الأعمال'}</button>
+                  </div>
+                </div>
+                <Flights key={chosen.key + trip} d={chosen} from={from} trip={trip} cabin={cabin} rate={rate} en={en} slot="p" />
+                <button type="button" className="qs-fw-back" onClick={() => go(2)}>
+                  <Icon name={en ? 'chevron-left' : 'chevron-right'} size={18} strokeWidth={2} />
+                  {en ? 'Choose another destination' : 'اختر وجهة أخرى'}
                 </button>
-              ) : null}
-            </div>
-            <div className="qs-fb-panel" aria-live="polite">
-              {side ? <Flights key={side.key + trip} d={side} from={from} trip={trip} cabin={cabin} rate={rate} en={en} slot="p" /> : null}
-            </div>
+              </div>
+            ) : null}
           </div>
 
           <p className="qs-fb-note">
