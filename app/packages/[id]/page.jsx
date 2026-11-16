@@ -198,6 +198,7 @@ export default function PackageDetailPage() {
       adults,
       children,
       lines: totals.lines,
+      units: totals.units,
       grandTotal,
       travellerSummary: travellerSummary(lang === 'en'),
       selectedDate,

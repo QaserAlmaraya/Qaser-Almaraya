@@ -431,11 +431,11 @@ function CostsTab() {
                   <td style={tdStyle}>{v.country_ar || '—'}</td>
                   <td style={tdStyle}>{v.visa_type_ar || '—'}</td>
                   <td style={tdStyle}>{v.provider_name || '—'}</td>
-                  <td style={tdStyle}>{fmt(v.adult_price, v.cost_currency)}</td>
+                  <td style={tdStyle}>{fmt(v.adult_price, v.price_currency || 'IQD')}</td>
                   <td style={tdStyle}>{fmt(v.adult_cost, v.cost_currency)}</td>
-                  <td style={tdStyle}>{fmt(v.child_price, v.cost_currency)}</td>
+                  <td style={tdStyle}>{fmt(v.child_price, v.price_currency || 'IQD')}</td>
                   <td style={tdStyle}>{fmt(v.child_cost, v.cost_currency)}</td>
-                  <td style={{ ...tdStyle, fontWeight: 700, color: '#049dc5' }}>{fmt((Number(v.adult_price) || 0) - (Number(v.adult_cost) || 0), v.cost_currency)}</td>
+                  <td style={{ ...tdStyle, fontWeight: 700, color: '#049dc5' }}>{fmt(v.adult_margin_iqd, 'IQD')}</td>
                   <td style={tdStyle}>{v.active ? 'مفعّلة' : 'متوقفة'}</td>
                 </tr>
               ))}
@@ -468,11 +468,11 @@ function CostsTab() {
                 <tr key={p.id}>
                   <td style={tdStyle}>{p.title_ar || '—'}</td>
                   <td style={tdStyle}>{p.dest_ar || '—'}</td>
-                  <td style={tdStyle}>{fmt(p.price, p.cost_currency)}</td>
+                  <td style={tdStyle}>{fmt(p.price, p.price_currency || 'IQD')}</td>
                   <td style={tdStyle}>{fmt(p.adult_cost, p.cost_currency)}</td>
-                  <td style={tdStyle}>{fmt(p.child_price, p.cost_currency)}</td>
+                  <td style={tdStyle}>{fmt(p.child_price, p.price_currency || 'IQD')}</td>
                   <td style={tdStyle}>{fmt(p.child_cost, p.cost_currency)}</td>
-                  <td style={{ ...tdStyle, fontWeight: 700, color: '#049dc5' }}>{fmt((Number(p.price) || 0) - (Number(p.adult_cost) || 0), p.cost_currency)}</td>
+                  <td style={{ ...tdStyle, fontWeight: 700, color: '#049dc5' }}>{fmt(p.adult_margin_iqd, 'IQD')}</td>
                   <td style={tdStyle}>{p.active ? 'مفعّلة' : 'متوقفة'}</td>
                 </tr>
               ))}

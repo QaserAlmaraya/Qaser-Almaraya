@@ -3,6 +3,7 @@ import { sql, ensureSchema } from '../../../../lib/db';
 import { requireAuth } from '../../../../lib/session';
 import { getExchangeRate } from '../../../../lib/settings';
 import { withVisaSellPrices } from '../../../../lib/visaPricing';
+import { toIqd } from '../../../../lib/costMargin';
 
 // GET only — this route intentionally has no POST/PUT/DELETE. It exists so
 // staff accounts can see the internal cost side of visa pricing (what we pay
@@ -25,7 +26,16 @@ export async function GET(request) {
     LEFT JOIN providers p ON p.id = vc.provider_id
     ORDER BY c.name_ar ASC NULLS LAST, vt.name_ar ASC NULLS LAST, vc.id ASC
   `;
-  // A card priced in USD is shown here in IQD, like everywhere else.
+  // A card priced in USD is shown here in IQD, like everywhere else. The cost
+  // stays in its own currency for display, and the margin is worked out in
+  // IQD (cost converted with the same rate) so the two sides are comparable.
   const rate = await getExchangeRate();
-  return NextResponse.json(rows.map((r) => withVisaSellPrices(r, rate)));
+  return NextResponse.json(rows.map((r) => {
+    const v = withVisaSellPrices(r, rate);
+    return {
+      ...v,
+      price_currency: 'IQD',
+      adult_margin_iqd: (Number(v.adult_price) || 0) - toIqd(v.adult_cost, v.cost_currency, rate),
+    };
+  }));
 }
