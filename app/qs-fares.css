@@ -154,3 +154,80 @@ html[data-area=site] .qs-fb-note svg{flex:none;margin-top:4px;color:var(--qs-ink
   html[data-area=site] .qs-fb-mark{width:72px;height:36px}
   html[data-area=site] .qs-fb-note{padding:12px 16px}
 }
+
+/* ==========================================================================
+   Guided board (16 Nov 2026): one question at a time, in one centred column.
+   Steps strip on top, then the question of the current step.
+   ========================================================================== */
+html[data-area=site] .qs-fw{max-width:920px;margin-inline:auto;width:100%}
+html[data-area=site] .qs-fw-steps{list-style:none;margin:0;padding:16px 24px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;border-bottom:1px solid var(--qs-line);background:var(--qd-surface2,#f4fbfe)}
+html[data-area=site] .qs-fw-stepi{min-width:0}
+html[data-area=site] .qs-fw-stepi>button,html[data-area=site] .qs-fw-stepin{display:flex;align-items:center;gap:10px;width:100%;min-height:48px;padding:6px 10px;border:1px solid transparent;border-radius:12px;background:transparent;color:var(--qs-ink);font-family:inherit;text-align:start}
+html[data-area=site] .qs-fw-stepi>button{cursor:pointer;transition:background-color .15s var(--qs-ease),border-color .15s var(--qs-ease)}
+html[data-area=site] .qs-fw-stepi>button:hover{background:var(--qd-surface,#fff);border-color:var(--qs-line-2)}
+html[data-area=site] .qs-fw-stepi>button:focus-visible{outline:2px solid var(--qs-brand);outline-offset:2px}
+html[data-area=site] .qs-fw-num{flex:none;display:grid;place-items:center;width:28px;height:28px;border-radius:999px;border:1px solid var(--qs-line-2);background:var(--qd-surface,#fff);color:var(--qs-ink-2);font-size:13px;font-weight:600;line-height:1;font-variant-numeric:tabular-nums}
+html[data-area=site] .qs-fw-stepi.now .qs-fw-num{background:var(--qs-brand);border-color:var(--qs-brand);color:#fff}
+html[data-area=site] .qs-fw-stepi.done .qs-fw-num{background:var(--qs-brand-soft);border-color:transparent;color:var(--qs-brand-deep)}
+html[data-area=site] .qs-fw-stept{display:flex;flex-direction:column;min-width:0;flex:1}
+html[data-area=site] .qs-fw-stept small{font-size:13px;font-weight:400;line-height:1.5;color:var(--qs-ink-3)}
+html[data-area=site] .qs-fw-stepi.now .qs-fw-stept small{font-size:15px;font-weight:600;color:var(--qs-ink)}
+html[data-area=site] .qs-fw-stept b{font-size:15px;font-weight:600;line-height:1.5;color:var(--qs-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html[data-area=site] .qs-fw-edit{flex:none;font-size:13px;font-weight:500;color:var(--qs-brand-deep)}
+
+html[data-area=site] .qs-fw-pane{display:flex;flex-direction:column;gap:16px;padding:24px}
+html[data-area=site] .qs-fw-ask{margin:0;font-size:20px!important;font-weight:600;line-height:1.4!important;color:var(--qs-ink)}
+html[data-area=site] .qs-fw-hint{margin:-8px 0 0;font-size:13px!important;line-height:1.6!important;color:var(--qs-ink-2)}
+
+/* Step 1: cities */
+html[data-area=site] .qs-fw-cities{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+html[data-area=site] .qs-fw-city{display:flex;align-items:center;gap:10px;min-height:60px;padding:0 16px;border:1px solid var(--qs-line-2);border-radius:12px;background:var(--qd-surface,#fff);color:var(--qs-ink);font-family:inherit;font-size:17px;font-weight:600;line-height:1.4;cursor:pointer;transition:border-color .15s var(--qs-ease),background-color .15s var(--qs-ease)}
+html[data-area=site] .qs-fw-city svg{flex:none;color:var(--qs-ink-3)}
+html[data-area=site] .qs-fw-city:hover,html[data-area=site] .qs-fw-city.on{border-color:var(--qs-brand);background:var(--qd-surface2,#f4fbfe)}
+html[data-area=site] .qs-fw-city.on svg,html[data-area=site] .qs-fw-city:hover svg{color:var(--qs-brand)}
+
+/* Step 2: destinations */
+html[data-area=site] .qs-fw-dests{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+html[data-area=site] .qs-fw-dest{display:grid;grid-template-columns:minmax(0,1fr) auto 18px;align-items:center;gap:12px;width:100%;min-height:72px;padding:10px 16px;border:1px solid var(--qs-line);border-radius:12px;background:var(--qd-surface,#fff);color:var(--qs-ink);font-family:inherit;text-align:start;cursor:pointer;transition:border-color .15s var(--qs-ease),background-color .15s var(--qs-ease)}
+html[data-area=site] .qs-fw-dest:hover{border-color:var(--qs-brand);background:var(--qd-surface2,#f4fbfe)}
+html[data-area=site] .qs-fw-dest:focus-visible,html[data-area=site] .qs-fw-city:focus-visible,html[data-area=site] .qs-fw-all:focus-visible,html[data-area=site] .qs-fw-back:focus-visible{outline:2px solid var(--qs-brand);outline-offset:2px}
+html[data-area=site] .qs-fw-go{color:var(--qs-ink-3);transition:translate .2s var(--qs-ease),color .15s var(--qs-ease)}
+html[data-area=site] .qs-fw-dest:hover .qs-fw-go{color:var(--qs-brand)}
+html[data-area=site] .qs-fw-all{align-self:center;display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 20px;border:1px solid var(--qs-line-2);border-radius:999px;background:var(--qd-surface,#fff);color:var(--qs-ink);font-family:inherit;font-size:15px;font-weight:500;cursor:pointer}
+html[data-area=site] .qs-fw-all:hover{border-color:var(--qs-brand)}
+html[data-area=site] .qs-fw-all svg{color:var(--qs-ink-3)}
+
+/* Step 3: flights */
+html[data-area=site] .qs-fw-opts{display:flex;flex-wrap:wrap;gap:12px}
+html[data-area=site] .qs-fw-pane .qs-fb-leg{margin:0 0 12px}
+html[data-area=site] .qs-fw-date{margin-top:16px;border:1px solid var(--qs-line);border-radius:12px;background:var(--qd-surface2,#f4fbfe)}
+html[data-area=site] .qs-fw-date summary{display:flex;align-items:center;gap:10px;min-height:52px;padding:8px 16px;list-style:none;cursor:pointer;font-size:15px;font-weight:500;line-height:1.6;color:var(--qs-ink)}
+html[data-area=site] .qs-fw-date summary::-webkit-details-marker{display:none}
+html[data-area=site] .qs-fw-date summary>span{flex:1;min-width:0}
+html[data-area=site] .qs-fw-date summary svg{flex:none;color:var(--qs-brand)}
+html[data-area=site] .qs-fw-date summary .qs-fw-datechev{color:var(--qs-ink-3);transition:rotate .2s var(--qs-ease)}
+html[data-area=site] .qs-fw-date[open] summary .qs-fw-datechev{rotate:180deg}
+html[data-area=site] .qs-fw-date .qs-fb-live{margin:0;border:0;border-top:1px solid var(--qs-line);border-radius:0 0 12px 12px;background:transparent}
+html[data-area=site] .qs-fw-back{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 16px 0 12px;border:1px solid var(--qs-line-2);border-radius:999px;background:var(--qd-surface,#fff);color:var(--qs-ink);font-family:inherit;font-size:15px;font-weight:500;cursor:pointer}
+html[data-area=site] .qs-fw-back:hover{border-color:var(--qs-brand)}
+html[data-area=site] .qs-fw-back svg{color:var(--qs-ink-3)}
+
+@media (prefers-reduced-motion:no-preference){
+  html[data-area=site] .qs-fw-pane{animation:qs-fb-in .22s var(--qs-ease) both}
+  html[data-area=site] .qs-fw-dest:hover .qs-fw-go{translate:-3px 0}
+  html[data-area=site] .qs-fb-band[dir=ltr] .qs-fw-dest:hover .qs-fw-go{translate:3px 0}
+}
+@media (max-width:640px){
+  html[data-area=site] .qs-fw-steps{padding:10px 8px;gap:2px}
+  html[data-area=site] .qs-fw-stepi>button,html[data-area=site] .qs-fw-stepin{gap:6px;padding:6px 4px;min-height:44px}
+  html[data-area=site] .qs-fw-edit{display:none}
+  html[data-area=site] .qs-fw-num{width:24px;height:24px;font-size:12px}
+  html[data-area=site] .qs-fw-stept small,html[data-area=site] .qs-fw-stepi.now .qs-fw-stept small{font-size:12px}
+  html[data-area=site] .qs-fw-stept b{font-size:13px}
+  html[data-area=site] .qs-fw-pane{padding:16px;gap:12px}
+  html[data-area=site] .qs-fw-ask{font-size:18px!important}
+  html[data-area=site] .qs-fw-dests{grid-template-columns:minmax(0,1fr);gap:8px}
+  html[data-area=site] .qs-fw-cities{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  html[data-area=site] .qs-fw-opts .qs-fb-seg{width:100%}
+  html[data-area=site] .qs-fw-back{align-self:stretch;justify-content:center}
+}
