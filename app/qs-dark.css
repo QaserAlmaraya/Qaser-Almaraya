@@ -37,7 +37,24 @@ html[data-area=site][data-theme=dark] .qt-switch::before{inset-inline-start:50%}
 html[data-area=site]:not([data-theme=dark]) .qt-switch span:first-child,
 html[data-area=site][data-theme=dark] .qt-switch span:last-child{color:#1d2733}
 html[data-area=site] .qt-switch:focus-visible{outline:2px solid var(--qs-brand);outline-offset:2px}
-@media (max-width:1023px){html[data-area=site] .qn-header .qt-switch{display:none}}
+/* Phones: the switch stays in the header bar, next to the menu button. */
+@media (max-width:1023px){html[data-area=site] .qn-header .qt-switch{width:58px;height:34px;margin-inline-end:0;margin-inline-start:auto}
+  html[data-area=site] .qn-head .qa-burger{margin-inline-start:0!important}}
+/* Life in the switch: the knob stretches and springs, the sun spins out and the moon swings in. */
+html[data-area=site] .qt-switch::before{transition:inset-inline-start .5s cubic-bezier(.34,1.56,.64,1),background .4s,box-shadow .4s;box-shadow:0 0 0 0 rgba(250,171,24,0)}
+html[data-area=site] .qt-switch span svg{transition:transform .6s cubic-bezier(.34,1.56,.64,1),opacity .3s}
+html[data-area=site]:not([data-theme=dark]) .qt-switch span:last-child svg{transform:rotate(-70deg) scale(.7);opacity:.55}
+html[data-area=site][data-theme=dark] .qt-switch span:first-child svg{transform:rotate(90deg) scale(.7);opacity:.55}
+html[data-area=site][data-theme=dark] .qt-switch::before{background:#9fe3ff;box-shadow:0 0 14px 2px rgba(159,227,255,.45)}
+html[data-area=site]:not([data-theme=dark]) .qt-switch::before{box-shadow:0 0 14px 2px rgba(250,171,24,.45)}
+html[data-area=site] .qt-switch.qt-pop{animation:qt-squash .55s cubic-bezier(.34,1.56,.64,1)}
+@keyframes qt-squash{0%{transform:scale(1)}25%{transform:scale(.88,1.1)}60%{transform:scale(1.08,.94)}100%{transform:scale(1)}}
+/* The flying plane layer (built in ThemeToggle.jsx). */
+.qt-fx{position:fixed;inset:0;z-index:2147483000;pointer-events:none;overflow:hidden}
+.qt-fx svg{position:absolute;left:0;top:0}
+.qt-fx .qt-jet{overflow:visible;filter:drop-shadow(0 6px 14px rgba(0,0,0,.45));}
+.qt-fx .qt-ring{position:absolute;width:44px;height:44px;border:3px solid;border-radius:50%;box-sizing:border-box}
+@media (prefers-reduced-motion:reduce){.qt-fx{display:none}html[data-area=site] .qt-switch.qt-pop{animation:none}}
 /* Room for the switch: it sits close to the language button and the links tighten a little. */
 html[data-area=site] .qn-header .qt-switch{margin-inline-end:calc(var(--qs-s2) * -1)}
 html[data-area=site] .qn-header .qn-head{gap:var(--qs-s4)!important}
