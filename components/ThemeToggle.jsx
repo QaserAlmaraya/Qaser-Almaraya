@@ -21,21 +21,13 @@ function paint(theme, path) {
   else root.removeAttribute('data-theme');
 }
 
-// A plane seen from above, nose up, in units of its own half-length.
-const PLANE = [
-  [0, -1], [0.05, -0.93], [0.085, -0.78], [0.09, -0.3], [0.95, 0.16], [0.95, 0.3], [0.09, 0.14],
-  [0.08, 0.62], [0.36, 0.84], [0.36, 0.95], [0.05, 0.88], [0, 1],
-  [-0.05, 0.88], [-0.36, 0.95], [-0.36, 0.84], [-0.08, 0.62], [-0.09, 0.14], [-0.95, 0.3], [-0.95, 0.16],
-  [-0.09, -0.3], [-0.085, -0.78], [-0.05, -0.93],
-];
-const BODY = 0.085; // the widest circle around the centre that fits inside the plane
+// Airplane glyph: Phosphor Icons "airplane" (fill), MIT licence, nose up.
+// https://github.com/phosphor-icons/core
+const PLANE_PATH = 'M240,136v32a8,8,0,0,1-8,8,7.61,7.61,0,0,1-1.57-.16L156,161v23.73l17.66,17.65A8,8,0,0,1,176,208v24a8,8,0,0,1-11,7.43l-37-14.81L91,239.43A8,8,0,0,1,80,232V208a8,8,0,0,1,2.34-5.66L100,184.69V161L25.57,175.84A7.61,7.61,0,0,1,24,176a8,8,0,0,1-8-8V136a8,8,0,0,1,4.42-7.16L100,89.06V44a28,28,0,0,1,56,0V89.06l79.58,39.78A8,8,0,0,1,240,136Z';
 
-function planeAt(x, y, size, angle) {
-  const c = Math.cos(angle), s = Math.sin(angle);
-  return 'polygon(' + PLANE.map(([px, py]) =>
-    `${(x + (px * c - py * s) * size).toFixed(1)}px ${(y + (px * s + py * c) * size).toFixed(1)}px`).join(',') + ')';
-}
-
+// The change: a circle of the new look grows out of the switch. A plane rides
+// its edge towards the far corner, drawing a dashed contrail, while a band of
+// sunrise (going light) or dusk (going dark) light travels with the edge.
 function change(next, origin) {
   const run = () => {
     try { localStorage.setItem(KEY, next); } catch {}
@@ -48,91 +40,66 @@ function change(next, origin) {
 
   const w = window.innerWidth, h = window.innerHeight;
   const x0 = origin ? origin.x : w / 2, y0 = origin ? origin.y : 0;
-  const cx = w / 2, cy = h / 2;
-  // The plane leaves the switch, flies to the middle of the screen while it
-  // grows to a size you can read, then opens up until it covers the page.
-  const angle = Math.atan2(cy - y0, cx - x0) + Math.PI / 2;
-  const seen = Math.min(w, h) * 0.42;
-  const end = (Math.hypot(cx, cy) / BODY) * 1.05;
-  const frames = [];
-  const fly = 9, open = 7;
-  for (let i = 0; i <= fly; i++) {
-    const t = i / fly, e = 1 - Math.pow(1 - t, 2);
-    frames.push(planeAt(x0 + (cx - x0) * e, y0 + (cy - y0) * e, 16 + (seen - 16) * t * t, angle));
-  }
-  for (let i = 1; i <= open; i++) frames.push(planeAt(cx, cy, seen * Math.pow(end / seen, i / open), angle));
+  // Far corner: the circle has to reach it, and the plane flies towards it.
+  const fx = x0 < w / 2 ? w : 0, fy = y0 < h / 2 ? h : 0;
+  const R = Math.hypot(fx - x0, fy - y0) + 4;
+  const ang = Math.atan2(fy - y0, fx - x0);
+  const dur = 1200, ease = 'cubic-bezier(.55,.05,.25,1)';
 
   root.classList.add('qt-vt');
   const vt = document.startViewTransition(run);
-  const fx = flightFx(next, x0, y0, cx, cy, angle, seen, end, frames.length - 1, fly);
-  const done = () => { root.classList.remove('qt-vt'); fx(); };
+  const fxDone = flight(next === 'dark', x0, y0, R, ang, dur, ease);
+  const done = () => { root.classList.remove('qt-vt'); fxDone(); };
   vt.ready.then(() => {
-    const opts = { duration: 1300, easing: 'linear', pseudoElement: '::view-transition-new(root)', fill: 'both' };
-    root.animate({ clipPath: frames }, opts);
-    // Photos look the same in both modes, so the plane would vanish over them.
-    // Inside the plane the page is dimmed (going dark) or lit (going light)
-    // until it opens up, which keeps the shape readable on any background.
-    const tint = next === 'dark' ? 'brightness(.5) saturate(.8)' : 'brightness(1.55) saturate(.75)';
-    root.animate({ filter: [tint, tint, 'brightness(1) saturate(1)'], offset: [0, 0.62, 1] }, opts);
+    root.animate(
+      { clipPath: [`circle(0px at ${x0}px ${y0}px)`, `circle(${R}px at ${x0}px ${y0}px)`] },
+      { duration: dur, easing: ease, pseudoElement: '::view-transition-new(root)', fill: 'both' });
   }).catch(done);
   vt.finished.then(done, done);
 }
 
-// The visible plane that flies with the reveal: a white silhouette with a
-// glow, a dashed contrail drawn behind it and a ring that pops at the switch.
-// Everything lives in one fixed layer that removes itself when the change ends.
-function flightFx(next, x0, y0, cx, cy, angle, seen, end, steps, fly) {
+function flight(dark, x0, y0, R, ang, dur, ease) {
   const NS = 'http://www.w3.org/2000/svg';
-  const w = window.innerWidth, h = window.innerHeight;
   const layer = document.createElement('div');
-  layer.setAttribute('aria-hidden', 'true');
   layer.className = 'qt-fx';
-  const dark = next === 'dark';
-  const svg = document.createElementNS(NS, 'svg');
-  svg.setAttribute('width', w); svg.setAttribute('height', h);
-  svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
-  const line = document.createElementNS(NS, 'line');
-  line.setAttribute('x1', x0); line.setAttribute('y1', y0); line.setAttribute('x2', cx); line.setAttribute('y2', cy);
-  line.setAttribute('stroke', dark ? '#9fe3ff' : '#faab18');
-  line.setAttribute('stroke-width', '3'); line.setAttribute('stroke-linecap', 'round');
-  line.setAttribute('stroke-dasharray', '2 11');
-  const len = Math.hypot(cx - x0, cy - y0);
-  svg.appendChild(line);
-  const ring = document.createElement('i');
-  ring.className = 'qt-ring';
-  ring.style.cssText = `left:${x0}px;top:${y0}px;border-color:${dark ? '#9fe3ff' : '#faab18'}`;
+  layer.setAttribute('aria-hidden', 'true');
+  const o = { duration: dur, easing: ease, fill: 'both' };
+  const glow = dark ? 'rgba(140,170,255,.8)' : 'rgba(255,190,70,.85)';
+
+  // Light travelling with the circle's edge.
+  const band = document.createElement('i');
+  band.className = 'qt-band';
+  band.style.cssText = `left:${x0 - R}px;top:${y0 - R}px;width:${R * 2}px;height:${R * 2}px;box-shadow:inset 0 0 0 2px ${glow},inset 0 0 40px 10px ${glow},0 0 40px 14px ${glow}`;
+  band.animate([{ transform: 'scale(0)', opacity: 1 }, { transform: 'scale(1)', opacity: 1, offset: .82 }, { transform: 'scale(1)', opacity: 0 }], o);
+
+  // Contrail from the switch to the plane.
+  const trail = document.createElement('i');
+  trail.className = 'qt-trail';
+  trail.style.cssText = `left:${x0}px;top:${y0}px;width:${R}px;transform:rotate(${ang}rad)`;
+  trail.animate([
+    { clipPath: 'inset(0 100% 0 0)', opacity: 1 },
+    { clipPath: 'inset(0 0% 0 0)', opacity: 1, offset: .82 },
+    { clipPath: 'inset(0 0% 0 0)', opacity: 0 }], o);
+
+  // The plane: nose points along the flight.
+  const size = Math.max(46, Math.min(68, Math.min(window.innerWidth, window.innerHeight) * 0.12));
   const jet = document.createElementNS(NS, 'svg');
-  jet.setAttribute('viewBox', '-1 -1 2 2');
+  jet.setAttribute('viewBox', '0 0 256 256');
   jet.setAttribute('class', 'qt-jet');
-  const poly = document.createElementNS(NS, 'polygon');
-  poly.setAttribute('points', PLANE.map((q) => q.join(',')).join(' '));
-  poly.setAttribute('fill', '#fff');
-  poly.setAttribute('stroke', dark ? '#45c3ec' : '#faab18');
-  poly.setAttribute('stroke-width', '0.05');
-  jet.appendChild(poly);
-  jet.style.cssText = `width:${seen * 2}px;height:${seen * 2}px;left:${-seen}px;top:${-seen}px`;
-  layer.append(svg, ring, jet);
+  jet.style.cssText = `left:${-size / 2}px;top:${-size / 2}px;width:${size}px;height:${size}px;color:#faab18`;
+  const path = document.createElementNS(NS, 'path');
+  path.setAttribute('d', PLANE_PATH);
+  path.setAttribute('fill', 'currentColor');
+  jet.appendChild(path);
+  const at = (t) => `translate(${x0 + Math.cos(ang) * R * t}px,${y0 + Math.sin(ang) * R * t}px) rotate(${ang + Math.PI / 2}rad)`;
+  jet.animate([
+    { transform: at(0) + ' scale(.5)', opacity: 1 },
+    { transform: at(.82) + ' scale(1.15)', opacity: 1, offset: .82 },
+    { transform: at(1.04) + ' scale(1.3)', opacity: 0 }], o);
+
+  layer.append(band, trail, jet);
   document.body.appendChild(layer);
-  const total = 1300, tFly = total * (fly / steps);
-  const kf = [];
-  for (let i = 0; i <= fly; i++) {
-    const t = i / fly, e = 1 - Math.pow(1 - t, 2);
-    const sc = (16 + (seen - 16) * t * t) / seen;
-    kf.push({ transform: `translate(${x0 + (cx - x0) * e}px,${y0 + (cy - y0) * e}px) rotate(${angle}rad) scale(${sc})`, opacity: 1 });
-  }
-  const last = kf[kf.length - 1].transform;
-  kf.push({ transform: last.replace(/scale\([^)]*\)/, 'scale(1.35)'), opacity: 0 });
-  const opts = { duration: total, easing: 'linear', fill: 'both' };
-  const stops = fly + 1;
-  const offs = kf.map((_, i) => (i < stops ? (i / fly) * (tFly / total) : 1));
-  jet.animate(kf.map((k, i) => ({ ...k, offset: offs[i] })), opts);
-  line.animate([
-    { strokeDashoffset: 0, opacity: 0.9, offset: 0 },
-    { strokeDashoffset: -len / 4, opacity: 0.9, offset: tFly / total },
-    { strokeDashoffset: -len / 3, opacity: 0, offset: 1 },
-  ], opts);
-  ring.animate([{ transform: 'translate(-50%,-50%) scale(.3)', opacity: 0.9 }, { transform: 'translate(-50%,-50%) scale(3.2)', opacity: 0 }], { duration: 650, easing: 'ease-out', fill: 'both' });
-  return () => setTimeout(() => layer.remove(), 60);
+  return () => setTimeout(() => layer.remove(), 80);
 }
 
 export function ThemeSync() {
@@ -160,8 +127,11 @@ export default function ThemeToggle({ lang = 'ar', className = '' }) {
   };
   return (
     <button type="button" role="switch" aria-checked={dark} aria-label={label} title={label} data-no-i18n="" data-no-vt="" className={('qt-switch ' + className).trim()} onClick={onClick}>
-      <span aria-hidden="true"><Icon name="sun" size={17} strokeWidth={2} /></span>
-      <span aria-hidden="true"><Icon name="moon" size={16} strokeWidth={2} /></span>
+      <i className="qt-sky" aria-hidden="true" />
+      <i className="qt-orb" aria-hidden="true">
+        <Icon name="sun" size={17} strokeWidth={2} />
+        <Icon name="moon" size={15} strokeWidth={2} />
+      </i>
     </button>
   );
 }

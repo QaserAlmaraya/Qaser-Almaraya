@@ -29,50 +29,52 @@ html[data-area=site][data-theme=dark]{
 html[data-area=site][data-theme=dark] :is(.qa-amber,.q-btn-pri,.qs-btn-pri,.qa-headcta,[style*="#faab18"],[style*="250, 171, 24"]){
   --qs-ink:#1d2733;--qd-ink:#1d2733;--qs-body:#1d2733;--qd-body:#1d2733}
 
-/* ---------- The switch (components/ThemeToggle.jsx) ---------- */
-html[data-area=site] .qt-switch{flex:none;position:relative;display:inline-flex;align-items:center;gap:2px;height:36px;width:64px;padding:3px;border-radius:999px;border:1px solid var(--qs-line-2);background:var(--qs-surface,#fff);cursor:pointer;font-family:inherit}
-html[data-area=site] .qt-switch span{position:relative;z-index:1;flex:1;display:inline-flex;align-items:center;justify-content:center;height:100%;color:var(--qs-ink-2);transition:color .25s var(--qs-ease)}
-html[data-area=site] .qt-switch::before{content:"";position:absolute;top:3px;bottom:3px;inset-inline-start:3px;width:calc(50% - 3px);border-radius:999px;background:var(--qs-amber,#faab18);transition:inset-inline-start .35s var(--qs-ease)}
-html[data-area=site][data-theme=dark] .qt-switch::before{inset-inline-start:50%}
-html[data-area=site]:not([data-theme=dark]) .qt-switch span:first-child,
-html[data-area=site][data-theme=dark] .qt-switch span:last-child{color:#1d2733}
+/* ---------- The switch (components/ThemeToggle.jsx) ----------
+   A small sky: day = pale blue with a cloud and the sun, night = deep blue with
+   stars and the moon. The orb slides with a spring, the icons swap with a turn. */
+html[data-area=site] .qt-switch{flex:none;position:relative;display:inline-flex;align-items:center;height:36px;width:68px;padding:0;border-radius:999px;border:1px solid rgba(29,39,51,.14);overflow:hidden;cursor:pointer;font-family:inherit;background:#bfe6f7;transition:background .6s var(--qs-ease),border-color .6s}
+html[data-area=site][data-theme=dark] .qt-switch{background:#16233f;border-color:rgba(159,227,255,.25)}
+html[data-area=site] .qt-sky{position:absolute;inset:0;pointer-events:none;border-radius:inherit}
+/* cloud (day) */
+html[data-area=site] .qt-sky::before{content:"";position:absolute;width:15px;height:6px;border-radius:6px;background:#fff;inset-inline-end:9px;bottom:7px;box-shadow:-7px -4px 0 -1px #fff,-14px 1px 0 -1px #fff,-30px -9px 0 -1px rgba(255,255,255,.85);transition:transform .6s var(--qs-ease),opacity .45s}
+html[data-area=site][data-theme=dark] .qt-sky::before{transform:translateY(16px);opacity:0}
+/* stars (night) */
+html[data-area=site] .qt-sky::after{content:"";position:absolute;width:2px;height:2px;border-radius:50%;background:#fff;inset-inline-start:34%;top:9px;box-shadow:9px 7px 0 0 #fff,19px -2px 0 -.4px #cfe8ff,-5px 13px 0 -.4px #fff,24px 15px 0 -.4px #fff,-9px 3px 0 -.6px #cfe8ff;opacity:0;transform:translateY(-14px);transition:transform .6s var(--qs-ease),opacity .5s}
+html[data-area=site][data-theme=dark] .qt-sky::after{opacity:1;transform:none;animation:qt-twinkle 2.6s ease-in-out infinite}
+@keyframes qt-twinkle{50%{opacity:.55}}
+html[data-area=site] .qt-orb{position:absolute;top:3px;inset-inline-start:3px;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#faab18;color:#1d2733;box-shadow:0 0 0 3px rgba(250,171,24,.28),0 0 16px 3px rgba(250,171,24,.5);transition:inset-inline-start .6s cubic-bezier(.34,1.45,.64,1),background .5s,box-shadow .5s}
+html[data-area=site][data-theme=dark] .qt-orb{inset-inline-start:calc(100% - 31px);background:#e9f1ff;box-shadow:0 0 0 3px rgba(159,227,255,.2),0 0 16px 3px rgba(159,227,255,.45)}
+html[data-area=site] .qt-orb svg{grid-area:1/1;transition:transform .6s cubic-bezier(.34,1.45,.64,1),opacity .35s}
+html[data-area=site]:not([data-theme=dark]) .qt-orb svg:last-child{transform:rotate(-120deg) scale(.4);opacity:0}
+html[data-area=site][data-theme=dark] .qt-orb svg:first-child{transform:rotate(120deg) scale(.4);opacity:0}
 html[data-area=site] .qt-switch:focus-visible{outline:2px solid var(--qs-brand);outline-offset:2px}
-/* Phones: the switch stays in the header bar, next to the menu button. */
-@media (max-width:1023px){html[data-area=site] .qn-header .qt-switch{width:58px;height:34px;margin-inline-end:0;margin-inline-start:auto}
-  html[data-area=site] .qn-head .qa-burger{margin-inline-start:0!important}}
-/* Life in the switch: the knob stretches and springs, the sun spins out and the moon swings in. */
-html[data-area=site] .qt-switch::before{transition:inset-inline-start .5s cubic-bezier(.34,1.56,.64,1),background .4s,box-shadow .4s;box-shadow:0 0 0 0 rgba(250,171,24,0)}
-html[data-area=site] .qt-switch span svg{transition:transform .6s cubic-bezier(.34,1.56,.64,1),opacity .3s}
-html[data-area=site]:not([data-theme=dark]) .qt-switch span:last-child svg{transform:rotate(-70deg) scale(.7);opacity:.55}
-html[data-area=site][data-theme=dark] .qt-switch span:first-child svg{transform:rotate(90deg) scale(.7);opacity:.55}
-html[data-area=site][data-theme=dark] .qt-switch::before{background:#9fe3ff;box-shadow:0 0 14px 2px rgba(159,227,255,.45)}
-html[data-area=site]:not([data-theme=dark]) .qt-switch::before{box-shadow:0 0 14px 2px rgba(250,171,24,.45)}
 html[data-area=site] .qt-switch.qt-pop{animation:qt-squash .55s cubic-bezier(.34,1.56,.64,1)}
-@keyframes qt-squash{0%{transform:scale(1)}25%{transform:scale(.88,1.1)}60%{transform:scale(1.08,.94)}100%{transform:scale(1)}}
-/* The flying plane layer (built in ThemeToggle.jsx). */
-.qt-fx{position:fixed;inset:0;z-index:2147483000;pointer-events:none;overflow:hidden}
-.qt-fx svg{position:absolute;left:0;top:0}
-.qt-fx .qt-jet{overflow:visible;filter:drop-shadow(0 6px 14px rgba(0,0,0,.45));}
-.qt-fx .qt-ring{position:absolute;width:44px;height:44px;border:3px solid;border-radius:50%;box-sizing:border-box}
-@media (prefers-reduced-motion:reduce){.qt-fx{display:none}html[data-area=site] .qt-switch.qt-pop{animation:none}}
+@keyframes qt-squash{0%{transform:scale(1)}25%{transform:scale(.9,1.1)}60%{transform:scale(1.08,.94)}100%{transform:scale(1)}}
+@media (max-width:1023px){html[data-area=site] .qn-header .qt-switch{width:60px;height:34px;margin-inline-end:0;margin-inline-start:auto}
+  html[data-area=site] .qn-header .qt-orb{width:26px;height:26px}
+  html[data-area=site][data-theme=dark] .qn-header .qt-orb{inset-inline-start:calc(100% - 29px)}
+  html[data-area=site] .qn-head .qa-burger{margin-inline-start:0!important}}
 /* Room for the switch: it sits close to the language button and the links tighten a little. */
 html[data-area=site] .qn-header .qt-switch{margin-inline-end:calc(var(--qs-s2) * -1)}
 html[data-area=site] .qn-header .qn-head{gap:var(--qs-s4)!important}
 html[data-area=site] .qn-header .qn-nav{gap:var(--qs-s1) 12px!important}
-html[data-area=site] .qn-menu .qt-switch{height:48px;width:92px;border-color:var(--qs-line-dark);background:transparent}
-html[data-area=site] .qn-menu .qt-switch span{color:#fff}
-html[data-area=site]:not([data-theme=dark]) .qn-menu .qt-switch span:first-child,
-html[data-area=site][data-theme=dark] .qn-menu .qt-switch span:last-child{color:#1d2733}
+html[data-area=site] .qn-menu .qt-switch{height:48px;width:92px}
+html[data-area=site] .qn-menu .qt-orb{width:40px;height:40px;top:3px}
+html[data-area=site][data-theme=dark] .qn-menu .qt-orb{inset-inline-start:calc(100% - 43px)}
 
-/* ---------- The change itself: the new look arrives inside a plane ----------
-   qt-vt is on <html> only while the switch animation runs. The outgoing page
-   holds still and the incoming one is clipped to a growing plane (JS drives
-   the clip-path on ::view-transition-new). */
+/* ---------- The change itself: a circle of the new look grows out of the switch ----------
+   qt-vt is on <html> only while it runs. The old page holds still, JS drives the
+   clip-path on ::view-transition-new, and .qt-fx (plane, contrail, edge light) sits on top. */
 html.qt-vt::view-transition-old(root),html.qt-vt::view-transition-new(root){animation:none;mix-blend-mode:normal}
 html.qt-vt::view-transition-image-pair(root){isolation:auto}
 html.qt-vt::view-transition-old(root){z-index:1}
 html.qt-vt::view-transition-new(root){z-index:2}
 html.qt-vt *{view-transition-name:none!important}
+.qt-fx{position:fixed;inset:0;z-index:2147483000;pointer-events:none;overflow:hidden}
+.qt-fx .qt-band{position:absolute;border-radius:50%;transform-origin:50% 50%}
+.qt-fx .qt-trail{position:absolute;height:5px;margin-top:-2.5px;transform-origin:0 50%;background:repeating-linear-gradient(90deg,rgba(255,255,255,.95) 0 9px,transparent 9px 20px);-webkit-mask-image:linear-gradient(90deg,transparent,#000 70%);mask-image:linear-gradient(90deg,transparent,#000 70%);filter:drop-shadow(0 0 4px rgba(0,0,0,.35))}
+.qt-fx .qt-jet{position:absolute;overflow:visible;filter:drop-shadow(0 4px 10px rgba(0,0,0,.5))}
+@media (prefers-reduced-motion:reduce){.qt-fx{display:none}html[data-area=site] .qt-switch.qt-pop{animation:none}html[data-area=site] .qt-orb,html[data-area=site] .qt-orb svg,html[data-area=site] .qt-sky::before,html[data-area=site] .qt-sky::after{transition:none;animation:none}}
 
 /* ---------- Shared chrome ---------- */
 html[data-area=site][data-theme=dark] header:has(.qa-head){
