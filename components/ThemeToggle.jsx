@@ -21,21 +21,9 @@ function paint(theme, path) {
   else root.removeAttribute('data-theme');
 }
 
-// A plane seen from above, nose up, in units of its own half-length.
-const PLANE = [
-  [0, -1], [0.05, -0.93], [0.085, -0.78], [0.09, -0.3], [0.95, 0.16], [0.95, 0.3], [0.09, 0.14],
-  [0.08, 0.62], [0.36, 0.84], [0.36, 0.95], [0.05, 0.88], [0, 1],
-  [-0.05, 0.88], [-0.36, 0.95], [-0.36, 0.84], [-0.08, 0.62], [-0.09, 0.14], [-0.95, 0.3], [-0.95, 0.16],
-  [-0.09, -0.3], [-0.085, -0.78], [-0.05, -0.93],
-];
-const BODY = 0.085; // the widest circle around the centre that fits inside the plane
-
-function planeAt(x, y, size, angle) {
-  const c = Math.cos(angle), s = Math.sin(angle);
-  return 'polygon(' + PLANE.map(([px, py]) =>
-    `${(x + (px * c - py * s) * size).toFixed(1)}px ${(y + (px * s + py * c) * size).toFixed(1)}px`).join(',') + ')';
-}
-
+// The change: a black hole opens at the switch and a circle of the new look
+// grows out of it, with a band of warm (going light) or cool (going dark)
+// light travelling on its edge.
 function change(next, origin) {
   const run = () => {
     try { localStorage.setItem(KEY, next); } catch {}
@@ -48,33 +36,58 @@ function change(next, origin) {
 
   const w = window.innerWidth, h = window.innerHeight;
   const x0 = origin ? origin.x : w / 2, y0 = origin ? origin.y : 0;
-  const cx = w / 2, cy = h / 2;
-  // The plane leaves the switch, flies to the middle of the screen while it
-  // grows to a size you can read, then opens up until it covers the page.
-  const angle = Math.atan2(cy - y0, cx - x0) + Math.PI / 2;
-  const seen = Math.min(w, h) * 0.42;
-  const end = (Math.hypot(cx, cy) / BODY) * 1.05;
-  const frames = [];
-  const fly = 9, open = 7;
-  for (let i = 0; i <= fly; i++) {
-    const t = i / fly, e = 1 - Math.pow(1 - t, 2);
-    frames.push(planeAt(x0 + (cx - x0) * e, y0 + (cy - y0) * e, 16 + (seen - 16) * t * t, angle));
-  }
-  for (let i = 1; i <= open; i++) frames.push(planeAt(cx, cy, seen * Math.pow(end / seen, i / open), angle));
+  // Far corner: the circle has to reach it, and the plane flies towards it.
+  const fx = x0 < w / 2 ? w : 0, fy = y0 < h / 2 ? h : 0;
+  const R = Math.hypot(fx - x0, fy - y0) + 4;
+  const ang = Math.atan2(fy - y0, fx - x0);
+  const dur = 1200, ease = 'cubic-bezier(.55,.05,.25,1)';
 
   root.classList.add('qt-vt');
   const vt = document.startViewTransition(run);
-  const done = () => root.classList.remove('qt-vt');
+  const fxDone = flight(next === 'dark', x0, y0, R, ang, dur, ease);
+  const done = () => { root.classList.remove('qt-vt'); fxDone.end(); };
   vt.ready.then(() => {
-    const opts = { duration: 1300, easing: 'linear', pseudoElement: '::view-transition-new(root)', fill: 'both' };
-    root.animate({ clipPath: frames }, opts);
-    // Photos look the same in both modes, so the plane would vanish over them.
-    // Inside the plane the page is dimmed (going dark) or lit (going light)
-    // until it opens up, which keeps the shape readable on any background.
-    const tint = next === 'dark' ? 'brightness(.5) saturate(.8)' : 'brightness(1.55) saturate(.75)';
-    root.animate({ filter: [tint, tint, 'brightness(1) saturate(1)'], offset: [0, 0.62, 1] }, opts);
+    fxDone.play();
+    root.animate(
+      { clipPath: [`circle(0px at ${x0}px ${y0}px)`, `circle(${R}px at ${x0}px ${y0}px)`] },
+      { duration: dur, easing: ease, pseudoElement: '::view-transition-new(root)', fill: 'both' });
   }).catch(done);
   vt.finished.then(done, done);
+}
+
+function flight(dark, x0, y0, R, ang, dur, ease) {
+  const layer = document.createElement('div');
+  layer.className = 'qt-fx';
+  layer.setAttribute('aria-hidden', 'true');
+  const o = { duration: dur, easing: ease, fill: 'both' };
+  const glow = dark ? 'rgba(140,170,255,.8)' : 'rgba(255,190,70,.85)';
+
+  // Light travelling with the circle's edge.
+  const band = document.createElement('i');
+  band.className = 'qt-band';
+  band.style.cssText = `left:${x0 - R}px;top:${y0 - R}px;width:${R * 2}px;height:${R * 2}px;box-shadow:inset 0 0 0 2px ${glow},inset 0 0 40px 10px ${glow},0 0 40px 14px ${glow}`;
+  band.animate([{ transform: 'scale(0)', opacity: 1 }, { transform: 'scale(.82)', opacity: 1, offset: .82 }, { transform: 'scale(1)', opacity: 0 }], o);
+
+  // The black hole (white hole when going light): a dark core inside a turning
+  // accretion ring, born at the switch; it swells, then collapses.
+  const hole = document.createElement('i');
+  hole.className = 'qt-hole' + (dark ? '' : ' qt-white');
+  hole.style.cssText = `left:${x0}px;top:${y0}px`;
+  hole.animate([
+    { transform: 'translate(-50%,-50%) scale(.2)', opacity: 0 },
+    { transform: 'translate(-50%,-50%) scale(1)', opacity: 1, offset: .18 },
+    { transform: 'translate(-50%,-50%) scale(1.15)', opacity: 1, offset: .5 },
+    { transform: 'translate(-50%,-50%) scale(.1)', opacity: 0 }], { duration: dur, easing: 'ease-in-out', fill: 'both' });
+  const ring = document.createElement('i');
+  hole.appendChild(ring);
+  ring.animate([{ transform: 'rotate(0)' }, { transform: 'rotate(720deg)' }], { duration: dur, easing: 'linear', fill: 'both' });
+
+  layer.append(band, hole);
+  document.body.appendChild(layer);
+  // Held until the page snapshot is ready, so everything moves with the circle.
+  const anims = layer.getAnimations({ subtree: true });
+  anims.forEach((a) => a.pause());
+  return { play: () => anims.forEach((a) => a.play()), end: () => setTimeout(() => layer.remove(), 80) };
 }
 
 export function ThemeSync() {
@@ -95,13 +108,18 @@ export default function ThemeToggle({ lang = 'ar', className = '' }) {
   const en = lang === 'en';
   const label = en ? (dark ? 'Switch to light mode' : 'Switch to dark mode') : (dark ? 'الوضع النهاري' : 'الوضع الليلي');
   const onClick = (e) => {
+    const b = e.currentTarget;
+    b.classList.remove('qt-pop'); void b.offsetWidth; b.classList.add('qt-pop');
     const r = e.currentTarget.getBoundingClientRect();
     change(dark ? 'light' : 'dark', { x: r.left + r.width / 2, y: r.top + r.height / 2 });
   };
   return (
     <button type="button" role="switch" aria-checked={dark} aria-label={label} title={label} data-no-i18n="" data-no-vt="" className={('qt-switch ' + className).trim()} onClick={onClick}>
-      <span aria-hidden="true"><Icon name="sun" size={17} strokeWidth={2} /></span>
-      <span aria-hidden="true"><Icon name="moon" size={16} strokeWidth={2} /></span>
+      <i className="qt-sky" aria-hidden="true" />
+      <i className="qt-orb" aria-hidden="true">
+        <Icon name="sun" size={17} strokeWidth={2} />
+        <Icon name="moon" size={15} strokeWidth={2} />
+      </i>
     </button>
   );
 }
