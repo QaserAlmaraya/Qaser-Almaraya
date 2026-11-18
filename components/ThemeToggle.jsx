@@ -21,13 +21,9 @@ function paint(theme, path) {
   else root.removeAttribute('data-theme');
 }
 
-// Airplane glyph: Phosphor Icons "airplane" (fill), MIT licence, nose up.
-// https://github.com/phosphor-icons/core
-const PLANE_PATH = 'M240,136v32a8,8,0,0,1-8,8,7.61,7.61,0,0,1-1.57-.16L156,161v23.73l17.66,17.65A8,8,0,0,1,176,208v24a8,8,0,0,1-11,7.43l-37-14.81L91,239.43A8,8,0,0,1,80,232V208a8,8,0,0,1,2.34-5.66L100,184.69V161L25.57,175.84A7.61,7.61,0,0,1,24,176a8,8,0,0,1-8-8V136a8,8,0,0,1,4.42-7.16L100,89.06V44a28,28,0,0,1,56,0V89.06l79.58,39.78A8,8,0,0,1,240,136Z';
-
-// The change: a circle of the new look grows out of the switch. A plane rides
-// its edge towards the far corner, drawing a dashed contrail, while a band of
-// sunrise (going light) or dusk (going dark) light travels with the edge.
+// The change: a black hole opens at the switch and a circle of the new look
+// grows out of it, with a band of warm (going light) or cool (going dark)
+// light travelling on its edge.
 function change(next, origin) {
   const run = () => {
     try { localStorage.setItem(KEY, next); } catch {}
@@ -60,7 +56,6 @@ function change(next, origin) {
 }
 
 function flight(dark, x0, y0, R, ang, dur, ease) {
-  const NS = 'http://www.w3.org/2000/svg';
   const layer = document.createElement('div');
   layer.className = 'qt-fx';
   layer.setAttribute('aria-hidden', 'true');
@@ -74,7 +69,7 @@ function flight(dark, x0, y0, R, ang, dur, ease) {
   band.animate([{ transform: 'scale(0)', opacity: 1 }, { transform: 'scale(.82)', opacity: 1, offset: .82 }, { transform: 'scale(1)', opacity: 0 }], o);
 
   // The black hole (white hole when going light): a dark core inside a turning
-  // accretion ring, born at the switch; it swells, then collapses once the plane is out.
+  // accretion ring, born at the switch; it swells, then collapses.
   const hole = document.createElement('i');
   hole.className = 'qt-hole' + (dark ? '' : ' qt-white');
   hole.style.cssText = `left:${x0}px;top:${y0}px`;
@@ -87,33 +82,7 @@ function flight(dark, x0, y0, R, ang, dur, ease) {
   hole.appendChild(ring);
   ring.animate([{ transform: 'rotate(0)' }, { transform: 'rotate(720deg)' }], { duration: dur, easing: 'linear', fill: 'both' });
 
-  // The plane is pulled out of the hole: it spirals outwards, nose along its path.
-  const size = Math.max(46, Math.min(68, Math.min(window.innerWidth, window.innerHeight) * 0.12));
-  const jet = document.createElementNS(NS, 'svg');
-  jet.setAttribute('viewBox', '0 0 256 256');
-  jet.setAttribute('class', 'qt-jet');
-  jet.style.cssText = `left:${-size / 2}px;top:${-size / 2}px;width:${size}px;height:${size}px;color:#faab18`;
-  const path = document.createElementNS(NS, 'path');
-  path.setAttribute('d', PLANE_PATH);
-  path.setAttribute('fill', 'currentColor');
-  jet.appendChild(path);
-  const spin = Math.PI * 0.8 * (Math.sin(ang) * Math.cos(ang) > 0 ? 1 : -1);
-  const pos = (t) => {
-    const r = R * t, a = ang - spin * (1 - t) * (1 - t);
-    return [x0 + Math.cos(a) * r, y0 + Math.sin(a) * r];
-  };
-  const N = 28, kf = [];
-  for (let i = 0; i <= N; i++) {
-    const t = (i / N) * 1.0;
-    const [x, y] = pos(Math.max(t, 0.001));
-    const [nx, ny] = pos(Math.min(t + 0.01, 1.01));
-    const rot = Math.atan2(ny - y, nx - x) + Math.PI / 2;
-    const sc = 0.45 + 0.7 * t;
-    kf.push({ transform: `translate(${x}px,${y}px) rotate(${rot}rad) scale(${sc})`, opacity: t > 0.86 ? Math.max(0, 1 - (t - 0.86) / 0.14) : 1, offset: t });
-  }
-  jet.animate(kf, o);
-
-  layer.append(band, hole, jet);
+  layer.append(band, hole);
   document.body.appendChild(layer);
   // Held until the page snapshot is ready, so everything moves with the circle.
   const anims = layer.getAnimations({ subtree: true });
