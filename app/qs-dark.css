@@ -70,9 +70,16 @@ html.qt-vt::view-transition-image-pair(root){isolation:auto}
 html.qt-vt::view-transition-old(root){z-index:1}
 html.qt-vt::view-transition-new(root){z-index:2}
 html.qt-vt *{view-transition-name:none!important}
+/* The effects layer is its own live group, so the circle does not clip the plane. */
+html.qt-vt body>.qt-fx.qt-fx{view-transition-name:qt-fx!important}
+html.qt-vt::view-transition-group(qt-fx){z-index:3;animation:none}
+html.qt-vt::view-transition-old(qt-fx){display:none}
+html.qt-vt::view-transition-new(qt-fx){animation:none;mix-blend-mode:normal}
 .qt-fx{position:fixed;inset:0;z-index:2147483000;pointer-events:none;overflow:hidden}
 .qt-fx .qt-band{position:absolute;border-radius:50%;transform-origin:50% 50%}
-.qt-fx .qt-trail{position:absolute;height:5px;margin-top:-2.5px;transform-origin:0 50%;background:repeating-linear-gradient(90deg,rgba(255,255,255,.95) 0 9px,transparent 9px 20px);-webkit-mask-image:linear-gradient(90deg,transparent,#000 70%);mask-image:linear-gradient(90deg,transparent,#000 70%);filter:drop-shadow(0 0 4px rgba(0,0,0,.35))}
+.qt-fx .qt-hole{position:absolute;width:64px;height:64px;border-radius:50%;background:radial-gradient(circle,#000 0 36%,rgba(0,0,0,.0) 62%)}
+.qt-fx .qt-hole i{position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,rgba(255,190,70,0),#ffb84a 18%,#ff6a3d 32%,rgba(255,106,61,0) 50%,#7fd8ff 72%,rgba(127,216,255,0));-webkit-mask-image:radial-gradient(circle,transparent 0 38%,#000 44% 70%,transparent 74%);mask-image:radial-gradient(circle,transparent 0 38%,#000 44% 70%,transparent 74%);filter:blur(.4px) drop-shadow(0 0 8px rgba(255,170,70,.8))}
+.qt-fx .qt-hole.qt-white{background:radial-gradient(circle,#fff 0 36%,rgba(255,255,255,0) 62%)}
 .qt-fx .qt-jet{position:absolute;overflow:visible;filter:drop-shadow(0 4px 10px rgba(0,0,0,.5))}
 @media (prefers-reduced-motion:reduce){.qt-fx{display:none}html[data-area=site] .qt-switch.qt-pop{animation:none}html[data-area=site] .qt-orb,html[data-area=site] .qt-orb svg,html[data-area=site] .qt-sky::before,html[data-area=site] .qt-sky::after{transition:none;animation:none}}
 

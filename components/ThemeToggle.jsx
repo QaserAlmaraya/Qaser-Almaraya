@@ -49,8 +49,9 @@ function change(next, origin) {
   root.classList.add('qt-vt');
   const vt = document.startViewTransition(run);
   const fxDone = flight(next === 'dark', x0, y0, R, ang, dur, ease);
-  const done = () => { root.classList.remove('qt-vt'); fxDone(); };
+  const done = () => { root.classList.remove('qt-vt'); fxDone.end(); };
   vt.ready.then(() => {
+    fxDone.play();
     root.animate(
       { clipPath: [`circle(0px at ${x0}px ${y0}px)`, `circle(${R}px at ${x0}px ${y0}px)`] },
       { duration: dur, easing: ease, pseudoElement: '::view-transition-new(root)', fill: 'both' });
@@ -70,18 +71,23 @@ function flight(dark, x0, y0, R, ang, dur, ease) {
   const band = document.createElement('i');
   band.className = 'qt-band';
   band.style.cssText = `left:${x0 - R}px;top:${y0 - R}px;width:${R * 2}px;height:${R * 2}px;box-shadow:inset 0 0 0 2px ${glow},inset 0 0 40px 10px ${glow},0 0 40px 14px ${glow}`;
-  band.animate([{ transform: 'scale(0)', opacity: 1 }, { transform: 'scale(1)', opacity: 1, offset: .82 }, { transform: 'scale(1)', opacity: 0 }], o);
+  band.animate([{ transform: 'scale(0)', opacity: 1 }, { transform: 'scale(.82)', opacity: 1, offset: .82 }, { transform: 'scale(1)', opacity: 0 }], o);
 
-  // Contrail from the switch to the plane.
-  const trail = document.createElement('i');
-  trail.className = 'qt-trail';
-  trail.style.cssText = `left:${x0}px;top:${y0}px;width:${R}px;transform:rotate(${ang}rad)`;
-  trail.animate([
-    { clipPath: 'inset(0 100% 0 0)', opacity: 1 },
-    { clipPath: 'inset(0 0% 0 0)', opacity: 1, offset: .82 },
-    { clipPath: 'inset(0 0% 0 0)', opacity: 0 }], o);
+  // The black hole (white hole when going light): a dark core inside a turning
+  // accretion ring, born at the switch; it swells, then collapses once the plane is out.
+  const hole = document.createElement('i');
+  hole.className = 'qt-hole' + (dark ? '' : ' qt-white');
+  hole.style.cssText = `left:${x0}px;top:${y0}px`;
+  hole.animate([
+    { transform: 'translate(-50%,-50%) scale(.2)', opacity: 0 },
+    { transform: 'translate(-50%,-50%) scale(1)', opacity: 1, offset: .18 },
+    { transform: 'translate(-50%,-50%) scale(1.15)', opacity: 1, offset: .5 },
+    { transform: 'translate(-50%,-50%) scale(.1)', opacity: 0 }], { duration: dur, easing: 'ease-in-out', fill: 'both' });
+  const ring = document.createElement('i');
+  hole.appendChild(ring);
+  ring.animate([{ transform: 'rotate(0)' }, { transform: 'rotate(720deg)' }], { duration: dur, easing: 'linear', fill: 'both' });
 
-  // The plane: nose points along the flight.
+  // The plane is pulled out of the hole: it spirals outwards, nose along its path.
   const size = Math.max(46, Math.min(68, Math.min(window.innerWidth, window.innerHeight) * 0.12));
   const jet = document.createElementNS(NS, 'svg');
   jet.setAttribute('viewBox', '0 0 256 256');
@@ -91,15 +97,28 @@ function flight(dark, x0, y0, R, ang, dur, ease) {
   path.setAttribute('d', PLANE_PATH);
   path.setAttribute('fill', 'currentColor');
   jet.appendChild(path);
-  const at = (t) => `translate(${x0 + Math.cos(ang) * R * t}px,${y0 + Math.sin(ang) * R * t}px) rotate(${ang + Math.PI / 2}rad)`;
-  jet.animate([
-    { transform: at(0) + ' scale(.5)', opacity: 1 },
-    { transform: at(.82) + ' scale(1.15)', opacity: 1, offset: .82 },
-    { transform: at(1.04) + ' scale(1.3)', opacity: 0 }], o);
+  const spin = Math.PI * 0.8 * (Math.sin(ang) * Math.cos(ang) > 0 ? 1 : -1);
+  const pos = (t) => {
+    const r = R * t, a = ang - spin * (1 - t) * (1 - t);
+    return [x0 + Math.cos(a) * r, y0 + Math.sin(a) * r];
+  };
+  const N = 28, kf = [];
+  for (let i = 0; i <= N; i++) {
+    const t = (i / N) * 1.0;
+    const [x, y] = pos(Math.max(t, 0.001));
+    const [nx, ny] = pos(Math.min(t + 0.01, 1.01));
+    const rot = Math.atan2(ny - y, nx - x) + Math.PI / 2;
+    const sc = 0.45 + 0.7 * t;
+    kf.push({ transform: `translate(${x}px,${y}px) rotate(${rot}rad) scale(${sc})`, opacity: t > 0.86 ? Math.max(0, 1 - (t - 0.86) / 0.14) : 1, offset: t });
+  }
+  jet.animate(kf, o);
 
-  layer.append(band, trail, jet);
+  layer.append(band, hole, jet);
   document.body.appendChild(layer);
-  return () => setTimeout(() => layer.remove(), 80);
+  // Held until the page snapshot is ready, so everything moves with the circle.
+  const anims = layer.getAnimations({ subtree: true });
+  anims.forEach((a) => a.pause());
+  return { play: () => anims.forEach((a) => a.play()), end: () => setTimeout(() => layer.remove(), 80) };
 }
 
 export function ThemeSync() {
