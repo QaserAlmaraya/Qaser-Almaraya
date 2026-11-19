@@ -1,12 +1,16 @@
 import { NextResponse } from 'next/server';
 import { sql, ensureSchema } from '../../../../../../lib/db';
 import { requireAdmin } from '../../../../../../lib/session';
+import { getExchangeRate } from '../../../../../../lib/settings';
 
 export async function PUT(request, { params }) {
   if (!(await requireAdmin(request))) return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
   await ensureSchema();
   const { id } = await params;
   const b = await request.json();
+  // The dashboard shows (and sends back) prices at today's rate, so the saved
+  // IQD price belongs to today's rate (see lib/visaPricing.js).
+  const priceRate = await getExchangeRate();
   const rows = await sql`
     UPDATE visa_cards SET
       country_id = ${b.country_id || null},
@@ -17,6 +21,7 @@ export async function PUT(request, { params }) {
       adult_price = ${b.adult_price || 0},
       child_price = ${b.child_price || 0},
       price_currency = ${b.price_currency === 'USD' ? 'USD' : 'IQD'},
+      price_rate = ${priceRate},
       adult_cost = ${b.adult_cost || 0},
       child_cost = ${b.child_cost || 0},
       cost_currency = ${b.cost_currency || 'IQD'},
