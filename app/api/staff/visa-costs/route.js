@@ -19,7 +19,7 @@ export async function GET(request) {
       p.name AS provider_name,
       vc.adult_price, vc.child_price, vc.price_currency,
       vc.adult_cost, vc.child_cost,
-      vc.cost_currency, vc.active
+      vc.cost_currency, vc.price_rate, vc.active
     FROM visa_cards vc
     LEFT JOIN countries c ON c.id = vc.country_id
     LEFT JOIN visa_types vt ON vt.id = vc.visa_type_id
@@ -32,8 +32,9 @@ export async function GET(request) {
   const rate = await getExchangeRate();
   return NextResponse.json(rows.map((r) => {
     const v = withVisaSellPrices(r, rate);
+    const { price_rate, ...rest } = v;
     return {
-      ...v,
+      ...rest,
       price_currency: 'IQD',
       adult_margin_iqd: (Number(v.adult_price) || 0) - toIqd(v.adult_cost, v.cost_currency, rate),
     };
