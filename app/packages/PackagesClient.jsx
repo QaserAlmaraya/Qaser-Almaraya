@@ -13,6 +13,7 @@ import CtaButton from '../../components/CtaButton';
 import CompareToggle from '../../components/compare/CompareToggle';
 import CompareDock from '../../components/compare/CompareDock';
 import PriceCalcHost, { openPriceCalc } from '../../components/calc/PriceCalc';
+import { imgProps } from '../../lib/img';
 
 import Icon from '../../components/Icon';
 import { useLangToggle } from '../../lib/i18n';
@@ -704,7 +705,7 @@ export default function PackagesPage({ initialPackages = null }) {
                   <p style={{ margin: 0, fontSize: 15, lineHeight: 1.8, color: 'var(--qs-body,#3d4650)' }}>{nm(currentReview.text_ar, currentReview.text_en)}</p>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 'auto', position: 'relative', zIndex: 1 }}>
                     {currentReview.image_url ? (
-                      <img src={currentReview.image_url} alt="" style={{ width: 44, height: 44, borderRadius: '50%', objectFit: 'cover', flex: 'none' }} />
+                      <img {...imgProps(currentReview.image_url, '44px', [384])} alt="" loading="lazy" decoding="async" style={{ width: 44, height: 44, borderRadius: '50%', objectFit: 'cover', flex: 'none' }} />
                     ) : (
                       <span style={{ width: 44, height: 44, borderRadius: '50%', background: 'var(--qd-surface,#fff)', display: 'grid', placeItems: 'center', color: 'var(--qs-brand-deep,#049dc5)', fontWeight: 600, flex: 'none' }}>
                         {(nm(currentReview.name_ar, currentReview.name_en) || '?').charAt(0)}

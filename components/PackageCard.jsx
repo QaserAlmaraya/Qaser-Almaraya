@@ -115,7 +115,7 @@ function HotelRow({ h, lang, selected, onSelect }) {
     >
       {h.imageUrl ? (
         /* eslint-disable-next-line @next/next/no-img-element */
-        <img src={h.imageUrl} alt="" style={{ width: 56, height: 56, borderRadius: 'var(--q-r-sm,8px)', objectFit: 'cover', flex: 'none' }} />
+        <img {...imgProps(h.imageUrl, '56px', [384])} alt="" loading="lazy" decoding="async" style={{ width: 56, height: 56, borderRadius: 'var(--q-r-sm,8px)', objectFit: 'cover', flex: 'none' }} />
       ) : (
         <div style={{ width: 56, height: 56, borderRadius: 'var(--q-r-sm,8px)', background: 'var(--q-surface-2,var(--qs-paper,#f6f8f9))', display: 'grid', placeItems: 'center', flex: 'none' }}>
           <Icon name="building-2" size={20} style={{ color: 'var(--q-cyan,var(--qs-brand-deep,#049dc5))' }} />

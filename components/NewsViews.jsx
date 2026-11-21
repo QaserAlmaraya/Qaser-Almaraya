@@ -7,6 +7,7 @@ import SiteFooter from './SiteFooter';
 import NewsBody, { NEWS_BODY_CSS } from './NewsBody';
 import { useLangToggle } from '../lib/i18n';
 import { waLink } from '../lib/whatsapp';
+import { optimized } from '../lib/img';
 
 const CATS = {
   news: { ar: 'أخبار الشركة', en: 'Company news' },
@@ -67,7 +68,7 @@ function Card({ p, en }) {
   const cat = CATS[p.category] || CATS.news;
   return (
     <Link href={'/news/' + encodeURIComponent(p.slug)} className="qn-card">
-      <div className="img" style={{ backgroundImage: p.cover_url ? `url("${p.cover_url}")` : 'var(--tw-band-deep,#049dc5)' }} />
+      <div className="img" style={{ backgroundImage: p.cover_url ? `url("${optimized(p.cover_url, 828)}")` : 'var(--tw-band-deep,#049dc5)' }} />
       <div className="txt">
         <div className="qn-meta"><span className={'qn-cat' + (p.category === 'alert' ? ' is-alert' : '')}>{en ? cat.en : cat.ar}</span><span>{fmtDate(p.published_at, en)}</span><span>· {p.minutes} {en ? 'min read' : 'دقائق قراءة'}</span></div>
         <h3>{pick(en, p.title_ar, p.title_en)}</h3>
@@ -112,7 +113,7 @@ export function NewsIndexView({ posts, category }) {
           )}
           {first && (
             <Link href={'/news/' + encodeURIComponent(first.slug)} className="qn-feat">
-              <div className="img" style={{ backgroundImage: first.cover_url ? `url("${first.cover_url}")` : 'var(--tw-band-deep,#049dc5)' }} />
+              <div className="img" style={{ backgroundImage: first.cover_url ? `url("${optimized(first.cover_url, 1080)}")` : 'var(--tw-band-deep,#049dc5)' }} />
               <div className="txt">
                 <div className="qn-meta"><span className={'qn-cat' + (first.category === 'alert' ? ' is-alert' : '')}>{en ? (CATS[first.category] || CATS.news).en : (CATS[first.category] || CATS.news).ar}</span><span>{fmtDate(first.published_at, en)}</span><span>· {first.minutes} {en ? 'min read' : 'دقائق قراءة'}</span></div>
                 <h2>{pick(en, first.title_ar, first.title_en)}</h2>
@@ -143,7 +144,7 @@ export function NewsArticleView({ post, related }) {
       <style>{CSS}</style>
       <SiteHeader active="المدونة" />
       <main style={{ flex: 1 }} data-no-i18n="">
-        <section className={post.cover_url ? 'qn-art-hero has-cover' : 'qn-art-hero'} style={{ backgroundImage: post.cover_url ? `url("${post.cover_url}")` : undefined }}>
+        <section className={post.cover_url ? 'qn-art-hero has-cover' : 'qn-art-hero'} style={{ backgroundImage: post.cover_url ? `url("${optimized(post.cover_url, 1920)}")` : undefined }}>
           <div className="in">
             <Link href="/news" style={{ color: 'rgba(255,255,255,.85)', fontSize: 15, fontWeight: 600, textDecoration: 'none' }}>{en ? '← All posts' : '← كل المقالات'}</Link>
             <div className="qn-meta"><span className={'qn-cat' + (post.category === 'alert' ? ' is-alert' : '')}>{en ? cat.en : cat.ar}</span><span>{fmtDate(post.published_at, en)}</span><span>· {post.minutes} {en ? 'min read' : 'دقائق قراءة'}</span></div>
