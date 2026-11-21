@@ -6,6 +6,24 @@ import { useEffect, useRef, useState } from 'react';
 const SLIDE_MS = 7000;
 const FADE_MS = 1400;
 
+// The home-page hero video was uploaded in the dashboard to Vercel Blob (8 MB,
+// every visitor downloaded it from the Blob store). This is the same clip
+// re-encoded to 1.6 MB without sound (the hero is muted) and served with the
+// site itself, plus a poster frame so slow connections and data saver show a
+// photo. The dashboard's saved slide is not changed: it is matched by file name.
+const LOCAL_VIDEOS = {
+  'kling_20260925_VIDEO_skylo_and__5260_0-UG2lL2o1U7FJJCdJ7YleQkHPsEHZsF.mp4': {
+    url: '/media/hero-skylo.mp4',
+    poster: '/media/hero-skylo-poster.jpg',
+  },
+};
+function localVideo(s) {
+  if (!s || s.type !== 'video' || typeof s.url !== 'string') return s;
+  const name = s.url.split('?')[0].split('/').pop();
+  const local = LOCAL_VIDEOS[name];
+  return local ? { ...s, url: local.url, poster: s.poster || local.poster } : s;
+}
+
 /**
  * Destination hero: one photograph, one copy column, two actions.
  *
@@ -24,7 +42,8 @@ function Title({ text }) {
   return <>{t.slice(0, cut)} <span className="qh-accent">{t.slice(cut + 1)}</span></>;
 }
 
-export default function HeroCinematic({ slides: allSlides = [], kicker, title, subtitle, primary, secondary, lang = 'ar' }) {
+export default function HeroCinematic({ slides: savedSlides = [], kicker, title, subtitle, primary, secondary, lang = 'ar' }) {
+  const allSlides = savedSlides.map(localVideo);
   const [active, setActive] = useState(0);
   // Pause only while the browser tab is hidden (the hero owns the first
   // screen, so pausing on hover would stop it for good).
