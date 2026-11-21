@@ -6,6 +6,7 @@ import { COUNTRY_GEO } from '../lib/geoData';
 import { findCountryIso, routeMapSvg, distanceKm, BAGHDAD } from '../lib/visaPdf';
 import { destinationTz } from './WorldClocks';
 import { workDaysLabel } from '../lib/destinations';
+import { optimized } from '../lib/img';
 
 // Correct Arabic count: تأشيرة واحدة / تأشيرتان / 3 تأشيرات / 11 تأشيرة
 export function visaCountAr(n) {
@@ -70,7 +71,7 @@ export default function CountryHero({ country, count, fastestDays, lang = 'ar', 
   if (fastestDays) chips.push(['zap', en ? 'Fastest processing' : 'أسرع إصدار', workDaysLabel(fastestDays, lang)]);
 
   return (
-    <section className={photo ? 'qch' : 'qch qch-plain'} style={{ backgroundImage: photo ? `url("${photo}")` : undefined }}>
+    <section className={photo ? 'qch' : 'qch qch-plain'} style={{ backgroundImage: photo ? `url("${optimized(photo, 1920)}")` : undefined }}>
       <style>{`
 .qch{position:relative;width:100%;min-height:340px;background:var(--qs-brand-deep,#036f8c) center/cover no-repeat;color:#fff;overflow:hidden;isolation:isolate}
 .qch:before{content:"";position:absolute;inset:0;z-index:0;background:linear-gradient(90deg,rgba(2,40,54,.92) 0%,rgba(2,40,54,.78) 45%,rgba(2,40,54,.35) 100%),linear-gradient(to top,rgba(2,40,54,.55),transparent 60%)}

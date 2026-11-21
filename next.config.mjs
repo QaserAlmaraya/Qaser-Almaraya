@@ -23,11 +23,13 @@ const nextConfig = {
   // API routes (login, saving content, image uploads, database access),
   // which only run on a server.
   // Only the public site's lib/img.js asks for optimised copies (no page uses
-  // next/image). Blob files never change once uploaded, so copies are kept a month.
+  // next/image). Blob files never change once uploaded (each has a random
+  // suffix in its address), so optimised copies are kept a year: nothing goes
+  // back to the Blob store to refresh them.
   images: {
     remotePatterns: [{ protocol: 'https', hostname: '*.public.blob.vercel-storage.com' }],
     formats: ['image/webp'],
-    minimumCacheTTL: 2678400,
+    minimumCacheTTL: 31536000,
   },
   poweredByHeader: false,
   async redirects() {

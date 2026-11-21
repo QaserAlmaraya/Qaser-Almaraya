@@ -14,6 +14,7 @@ import MascotLoader from '../../../components/MascotLoader';
 import { printDoc, visaTableHtml, combinedDocsLine, esc } from '../../../lib/printDoc';
 import { useLangToggle } from '../../../lib/i18n';
 import { formatPrice, formatRawAmount } from '../../../lib/currency';
+import { optimized } from '../../../lib/img';
 import { flagSrc } from '../../../lib/flags';
 import { useProviderReveal } from '../../../lib/useProviderReveal';
 import { workDaysLabel } from '../../../lib/destinations';
@@ -143,7 +144,7 @@ export default function VisaDetailPage() {
             </div>
 
             <div className="qa-detail-main" style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
-              <div className="qa-detail-hero qr-vd-hero" style={{ position: 'relative', height: 260, borderRadius: 'var(--tw-radius,16px)', overflow: 'hidden', background: photo ? `url("${photo}") center/cover no-repeat, var(--tw-band-deep,#049dc5)` : 'var(--tw-band-deep,#049dc5)', display: 'flex', alignItems: 'flex-end', padding: 24 }}>
+              <div className="qa-detail-hero qr-vd-hero" style={{ position: 'relative', height: 260, borderRadius: 'var(--tw-radius,16px)', overflow: 'hidden', background: photo ? `url("${optimized(photo, 1200)}") center/cover no-repeat, var(--tw-band-deep,#049dc5)` : 'var(--tw-band-deep,#049dc5)', display: 'flex', alignItems: 'flex-end', padding: 24 }}>
                 {photo && (
                   <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(1,30,40,.78) 0%, rgba(1,30,40,.25) 55%, rgba(1,30,40,.05) 100%)' }} />
                 )}
