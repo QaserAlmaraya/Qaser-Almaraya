@@ -44,6 +44,10 @@ export default function HeroCinematic({ slides: allSlides = [], kicker, title, s
   // 4:5 photo crop, so a cartoon frame is never cut in half.
   const [vidRatios, setVidRatios] = useState({});
   const videoRefs = useRef([]);
+  // Video files that failed to load (storage paused, file removed, network).
+  // Such a slide is dropped from the rotation instead of showing an empty
+  // frame, and nothing asks for the file again until the page is reloaded.
+  const [badVideos, setBadVideos] = useState({});
 
   useEffect(() => {
     try { setReduced(window.matchMedia('(prefers-reduced-motion: reduce)').matches); } catch {}
@@ -60,7 +64,9 @@ export default function HeroCinematic({ slides: allSlides = [], kicker, title, s
   // In lite mode a video slide shows its poster photo; a video with no poster
   // is skipped, unless it is the only slide.
   const photoOnly = allSlides.filter((s) => s.type !== 'video' || s.poster);
-  const slides = (lite || reduced) && photoOnly.length ? photoOnly : allSlides;
+  const base = (lite || reduced) && photoOnly.length ? photoOnly : allSlides;
+  const playable = base.filter((s) => s.type !== 'video' || !badVideos[s.url]);
+  const slides = playable.length ? playable : base;
   const count = slides.length;
 
   // Auto-advance
@@ -87,7 +93,7 @@ export default function HeroCinematic({ slides: allSlides = [], kicker, title, s
   // Phones: a video keeps its own shape (within sane bounds); a photograph
   // keeps the deliberate 4:5 portrait crop.
   const showingVideo = current.type === 'video' && !reduced && !(lite && current.poster);
-  const r = showingVideo ? vidRatios[active] : null;
+  const r = showingVideo ? vidRatios[current.url] : null;
   const mobileRatio = r ? `${Math.min(Math.max(r, 0.62), 1.78)}` : '0.8';
 
   return (
@@ -176,8 +182,9 @@ html[data-area] .qh .qh-title{margin:0;color:#fff;font-family:var(--qs-sans,inhe
                 playsInline
                 onLoadedMetadata={(e) => {
                   const { videoWidth: w, videoHeight: h } = e.currentTarget;
-                  if (w && h) setVidRatios((m) => (m[i] ? m : { ...m, [i]: w / h }));
+                  if (w && h) setVidRatios((m) => (m[s.url] ? m : { ...m, [s.url]: w / h }));
                 }}
+                onError={() => setBadVideos((m) => (m[s.url] ? m : { ...m, [s.url]: true }))}
                 preload={ready ? (i === 0 ? 'auto' : 'metadata') : 'none'}
                 autoPlay={ready && i === 0}
               />
