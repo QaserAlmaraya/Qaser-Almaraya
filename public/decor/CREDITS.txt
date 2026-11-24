@@ -26,3 +26,5 @@ SOFTWARE.
 public/season/christmas.webp is composed from Microsoft Fluent Emoji 3D
 artwork (Christmas tree, Wrapped gift, Snowman without snow, Airplane,
 Sparkles, Snowflake), same MIT licence as above.
+public/assets/hero-skylo-passport-christmas.webp adds the hat cut from the
+Fluent Emoji 3D "Santa Claus" artwork (MIT) to Skylo's hero picture.
