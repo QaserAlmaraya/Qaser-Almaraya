@@ -5,6 +5,8 @@ import { activeSeason } from '../lib/seasons';
 import Reindeer from './Reindeer';
 
 // Full-page seasonal decoration on the public site (never on /admin):
+//   christmas → string of hanging trees, bells, gifts and stars, falling
+//              snowflakes, reindeer pulling a sled across the sky
 //   newyear  → string of hanging bells, stars and gifts, falling snowflakes,
 //              reindeer pulling a sled across the sky
 //   ramadan  → hanging crescents and stars, stars that glow once and fade
@@ -23,6 +25,7 @@ const art = (name) => '/decor/' + name + '.svg';
 
 // What hangs from the string at the top of the page, in turn.
 const HANG = {
+  christmas: ['christmas_tree', 'bell', 'wrapped_gift', 'glowing_star', 'christmas_tree', 'snowflake'],
   newyear: ['bell', 'glowing_star', 'wrapped_gift', 'bell', 'star'],
   ramadan: ['crescent_moon', 'glowing_star', 'star', 'crescent_moon', 'glowing_star'],
   eid_fitr: ['glowing_star', 'confetti_ball', 'star', 'party_popper'],
@@ -79,7 +82,7 @@ function Sleigh({ mobile }) {
   );
 }
 
-const KIND = { newyear: 'snow', ramadan: 'star', eid_fitr: 'confetti', eid_adha: 'confetti' };
+const KIND = { christmas: 'snow', newyear: 'snow', ramadan: 'star', eid_fitr: 'confetti', eid_adha: 'confetti' };
 const CONFETTI = ['#faab18', '#e0364f', '#34bbe1', '#11a36a', '#9b5de5', '#f5c451'];
 
 const CSS = `
@@ -121,7 +124,7 @@ const CSS = `
 `;
 
 // ── Background music ─────────────────────────────────────────────────────
-const MUSIC = { newyear: '/audio/season-newyear.mp3', ramadan: '/audio/season-ramadan.mp3', eid_fitr: '/audio/season-eid.mp3', eid_adha: '/audio/season-eid.mp3' };
+const MUSIC = { christmas: '/audio/season-newyear.mp3', newyear: '/audio/season-newyear.mp3', ramadan: '/audio/season-ramadan.mp3', eid_fitr: '/audio/season-eid.mp3', eid_adha: '/audio/season-eid.mp3' };
 const MUSIC_KEY = 'qa_season_music'; // 'off' once the visitor turns it off
 const VOLUME = 0.22;
 let player = null; // one shared player, kept across client-side page changes
@@ -252,7 +255,7 @@ export default function SeasonDecor() {
         {HANG[id] && <div className="sd-top" style={{ top }}><Garland id={id} width={width} mobile={mobile} /></div>}
         <div className="sd-layer">
           {parts.map((p, i) => <Particle key={i} kind={kind} p={p} />)}
-          {id === 'newyear' && <div className="sd-fly"><Sleigh mobile={mobile} /></div>}
+          {(id === 'newyear' || id === 'christmas') && <div className="sd-fly"><Sleigh mobile={mobile} /></div>}
         </div>
       </div>
       {MUSIC[id] && <div style={{ '--sd-head': head + 'px' }}><MusicButton id={id} /></div>}

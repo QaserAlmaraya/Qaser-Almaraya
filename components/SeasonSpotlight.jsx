@@ -8,16 +8,16 @@ import { formatPrice } from '../lib/currency';
 import { nightsLabel, destinationLabel } from '../lib/destinations';
 
 // Homepage seasonal banner + "season offers" strip. Appears by itself for
-// Ramadan, Eid al-Fitr, Eid al-Adha and New Year (and three weeks
+// Ramadan, Eid al-Fitr, Eid al-Adha, Christmas and New Year (and three weeks
 // before each, as "coming soon"); hidden the rest of the year.
-// Preview: add ?season=ramadan (eid_fitr, eid_adha, newyear, off).
+// Preview: add ?season=ramadan (eid_fitr, eid_adha, christmas, newyear, off).
 
 // Banner artwork: one photo per season designed in Canva (public/season/*.webp),
 // shaded on the text side so the Arabic/English copy stays readable. If the
 // photo is missing the card simply keeps its gradient.
-function Photo({ id, base }) {
+function Photo({ id, base, top }) {
   return (
-    <div className="qa-ss-photo" aria-hidden="true" style={{ '--ss-a': base, '--ss-b': base + 'c8', '--ss-c': base + '00' }}>
+    <div className={'qa-ss-photo' + (top ? ' qa-ss-top' : '')} aria-hidden="true" style={{ '--ss-a': base, '--ss-b': base + 'c8', '--ss-c': base + '00' }}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={'/season/' + id + '.webp'} alt="" draggable="false" decoding="async" onError={(e) => { e.currentTarget.parentNode.style.display = 'none'; }} />
       <span className="qa-ss-shade" />
@@ -63,11 +63,11 @@ export default function SeasonSpotlight({ lang = 'ar' }) {
 .qa-ss-card:hover{color:var(--qs-ink,#1d2733);transform:translateY(-2px)}
 .qa-ss-card img{width:84px;flex-shrink:0;object-fit:cover}
 .qa-ss .qa-btn{white-space:nowrap!important;min-height:0!important;line-height:1.3}
-@media (max-width:820px){.qa-ss .qa-btn{padding:12px 20px!important;font-size:15px!important}.qa-ss{padding:152px 16px 24px}.qa-ss h2{font-size:20px!important}.qa-ss-photo img{object-position:center 30%}.qa-ss-shade,[dir=ltr] .qa-ss-shade{background:linear-gradient(to bottom,var(--ss-c) 0px,var(--ss-c) 60px,var(--ss-b) 120px,var(--ss-a) 175px)}.qa-ss-grid{display:flex!important;flex-direction:column}}
+@media (max-width:820px){.qa-ss .qa-btn{padding:12px 20px!important;font-size:15px!important}.qa-ss{padding:152px 16px 24px}.qa-ss h2{font-size:20px!important}.qa-ss-photo img{object-position:center 30%}.qa-ss-shade,[dir=ltr] .qa-ss-shade{background:linear-gradient(to bottom,var(--ss-c) 0px,var(--ss-c) 60px,var(--ss-b) 120px,var(--ss-a) 175px)}.qa-ss-top img{bottom:auto;height:auto;aspect-ratio:1640/924;object-position:left top}.qa-ss-top .qa-ss-shade,[dir=ltr] .qa-ss-top .qa-ss-shade{background:linear-gradient(to bottom,var(--ss-c) 0px,var(--ss-c) 120px,var(--ss-b) 150px,var(--ss-a) 190px)}.qa-ss-grid{display:flex!important;flex-direction:column}}
 @media (prefers-reduced-motion:reduce){.qa-ss{animation:none}}
 `}</style>
       <div className="qa-ss" style={{ background: season.bg, color: season.fg }}>
-        <Photo id={season.id} base={season.base || '#036f8c'} />
+        <Photo id={season.id} base={season.base || '#036f8c'} top={season.photoTop} />
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8, position: 'relative', maxWidth: 620 }}>
           <span style={{ alignSelf: 'flex-start', fontSize: 13, fontWeight: 500, padding: '4px 12px', borderRadius: 999, background: 'rgba(255,255,255,.18)', border: '1px solid rgba(255,255,255,.3)' }}>{tx.strip}{active.preview ? (en ? ' · preview' : ' · معاينة') : ''}</span>
           <h2>{soon ? tx.soon + inDays : tx.title}</h2>
