@@ -3,34 +3,23 @@ import { useEffect, useState } from 'react';
 import HeroCinematic from './HeroCinematic';
 import { waLink } from '../lib/whatsapp';
 import { loadPackages } from '../lib/publicPackages';
-import { activeSeason } from '../lib/seasons';
 
 // Owner, 8 Nov 2026: the Skylo-with-passport artwork (no text on it) plays
 // right after the Skylo video. It is part of the code, not the dashboard
 // slides, so it ships with the site like any other change.
 const SKYLO_SLIDE = { type: 'image', url: '/assets/hero-skylo-passport.webp', posMobile: '25% 50%', builtIn: true };
-// During the Christmas season Skylo wears a Santa hat (same picture, hat
-// added; the hat is Microsoft Fluent Emoji 3D art, MIT).
-const SKYLO_XMAS = '/assets/hero-skylo-passport-christmas.webp';
 
-function withSkylo(list, xmas) {
-  if (!list.length || list.some((s) => s.url === SKYLO_SLIDE.url || s.url === SKYLO_XMAS)) return list;
+function withSkylo(list) {
+  if (!list.length || list.some((s) => s.url === SKYLO_SLIDE.url)) return list;
   const v = list.findIndex((s) => s.type === 'video');
   const at = v === -1 ? 0 : v + 1;
-  const skylo = xmas ? { ...SKYLO_SLIDE, url: SKYLO_XMAS } : SKYLO_SLIDE;
-  return [...list.slice(0, at), skylo, ...list.slice(at)];
+  return [...list.slice(0, at), SKYLO_SLIDE, ...list.slice(at)];
 }
 
 export default function HomeHero({ hero, lang = 'ar', onPrimary, children }) {
   const en = lang === 'en';
   const saved = (hero && Array.isArray(hero.slides) ? hero.slides : []).filter((s) => s && s.url);
   const [auto, setAuto] = useState(null);
-  const [xmas, setXmas] = useState(false);
-
-  useEffect(() => {
-    const a = activeSeason();
-    setXmas(!!(a && !a.soon && a.season.id === 'christmas'));
-  }, []);
 
   useEffect(() => {
     if (saved.length) return;
@@ -61,7 +50,7 @@ export default function HomeHero({ hero, lang = 'ar', onPrimary, children }) {
 
   const slides = withSkylo(saved.length
     ? saved.map((s) => ({ ...s, caption: en ? s.captionEn || s.captionAr : s.captionAr || s.captionEn }))
-    : auto || [], xmas);
+    : auto || []);
 
   // Placeholder matches the hero's new height so the page does not jump.
   if (!slides.length) return auto === null && !saved.length ? <div style={{ height: 'min(78vh,720px)', minHeight: 520, background: '#04161f' }} /> : children;

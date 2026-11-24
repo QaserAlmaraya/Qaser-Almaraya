@@ -5,8 +5,8 @@ import { activeSeason } from '../lib/seasons';
 import Reindeer from './Reindeer';
 
 // Full-page seasonal decoration on the public site (never on /admin):
-//   christmas → string of hanging trees, bells, gifts and stars, falling
-//              snowflakes, reindeer pulling a sled across the sky
+//   christmas → a string of warm fairy lights under the header that twinkle
+//              softly, and light snow over the hero only (no cartoon art)
 //   newyear  → string of hanging bells, stars and gifts, falling snowflakes,
 //              reindeer pulling a sled across the sky
 //   ramadan  → hanging crescents and stars, stars that glow once and fade
@@ -25,7 +25,6 @@ const art = (name) => '/decor/' + name + '.svg';
 
 // What hangs from the string at the top of the page, in turn.
 const HANG = {
-  christmas: ['christmas_tree', 'bell', 'wrapped_gift', 'glowing_star', 'christmas_tree', 'snowflake'],
   newyear: ['bell', 'glowing_star', 'wrapped_gift', 'bell', 'star'],
   ramadan: ['crescent_moon', 'glowing_star', 'star', 'crescent_moon', 'glowing_star'],
   eid_fitr: ['glowing_star', 'confetti_ball', 'star', 'party_popper'],
@@ -82,7 +81,39 @@ function Sleigh({ mobile }) {
   );
 }
 
-const KIND = { christmas: 'snow', newyear: 'snow', ramadan: 'star', eid_fitr: 'confetti', eid_adha: 'confetti' };
+// ── Christmas: fairy lights + soft snow ─────────────────────────────────
+// Bulbs alternate warm white, gold and brand cyan on a thin dark wire that
+// dips between pins. Each bulb glows and breathes at its own pace.
+const BULBS = ['#fff3d6', '#f5c451', '#7fd6f2', '#fff3d6', '#f5c451'];
+function Lights({ width, mobile }) {
+  const step = mobile ? 34 : 46;
+  const sag = mobile ? 9 : 12;
+  const n = Math.ceil(width / step) + 1;
+  const path = Array.from({ length: n }, (_, i) => `${i ? 'Q' : 'M0 1'}${i ? ` ${i * step - step / 2} ${sag * 2} ${i * step} 1` : ''}`).join(' ');
+  return (
+    <div className="xl-row" style={{ width: n * step }}>
+      <svg className="xl-wire" width={n * step} height={sag * 2 + 2} viewBox={`0 0 ${n * step} ${sag * 2 + 2}`} aria-hidden="true">
+        <path d={path} stroke="#2c3a33" strokeWidth="1.4" fill="none" strokeLinecap="round" />
+      </svg>
+      {Array.from({ length: n }, (_, i) => {
+        const c = BULBS[i % BULBS.length];
+        return (
+          <span key={i} className="xl-bulb" style={{ left: i * step + step / 2 - 4, top: sag - 1, '--xl-c': c, animationDuration: 2.6 + (i % 4) * 0.7 + 's', animationDelay: -(i % 7) * 0.45 + 's' }}>
+            <i />
+          </span>
+        );
+      })}
+    </div>
+  );
+}
+
+function SoftSnow({ parts }) {
+  return parts.map((p, i) => (
+    <span key={i} className="xl-flake" style={{ left: p.x + '%', width: p.size / 3.4, height: p.size / 3.4, opacity: p.o * 0.85, animationDuration: p.d * 1.6 + 's', animationDelay: p.delay * 1.6 + 's', '--sd-drift': p.drift + 'px', filter: p.size > 22 ? 'blur(1.2px)' : 'none' }} />
+  ));
+}
+
+const KIND = { newyear: 'snow', ramadan: 'star', eid_fitr: 'confetti', eid_adha: 'confetti' };
 const CONFETTI = ['#faab18', '#e0364f', '#34bbe1', '#11a36a', '#9b5de5', '#f5c451'];
 
 const CSS = `
@@ -120,7 +151,18 @@ const CSS = `
 .sd-eq i:nth-child(2){animation-delay:.3s}.sd-eq i:nth-child(3){animation-delay:.6s}
 @keyframes sd-eq{0%{height:2px}100%{height:8px}}
 @media (max-width:820px){.sd-music{left:10px;bottom:auto;top:calc(var(--sd-head,60px) + 10px);width:40px;height:40px}}
-@media print{.sd-top,.sd-layer,.sd-music{display:none!important}}
+@media print{.sd-top,.sd-layer,.sd-music,.xl-top,.xl-snow{display:none!important}}
+.xl-top{position:absolute;left:0;right:0;height:40px;overflow:hidden;pointer-events:none;z-index:39}
+.xl-row{position:relative;height:40px}
+.xl-wire{position:absolute;top:0;left:0;display:block}
+.xl-bulb{position:absolute;width:8px;height:12px;animation:xl-glow ease-in-out infinite alternate}
+.xl-bulb::before{content:"";position:absolute;left:2px;top:-2px;width:4px;height:4px;border-radius:1px;background:#3b4a42}
+.xl-bulb i{position:absolute;inset:0;border-radius:50% 50% 50% 50%/40% 40% 60% 60%;background:radial-gradient(circle at 35% 30%,#fff 0 18%,var(--xl-c) 55%);box-shadow:0 0 6px 2px var(--xl-c),0 0 16px 4px color-mix(in srgb,var(--xl-c) 45%,transparent)}
+@keyframes xl-glow{0%{opacity:.55;filter:saturate(.8)}100%{opacity:1;filter:saturate(1.15)}}
+.xl-snow{position:absolute;left:0;right:0;overflow:hidden;pointer-events:none;z-index:35}
+.xl-flake{position:absolute;top:-12px;border-radius:50%;background:#fff;animation:xl-fall linear infinite;will-change:transform}
+@keyframes xl-fall{0%{transform:translate3d(0,0,0)}50%{transform:translate3d(calc(var(--sd-drift,0px)/2),50vh,0)}100%{transform:translate3d(var(--sd-drift,0px),var(--xl-h,720px),0)}}
+@media (prefers-reduced-motion:reduce){.xl-snow{display:none}.xl-bulb{animation:none}}
 `;
 
 // ── Background music ─────────────────────────────────────────────────────
@@ -237,15 +279,21 @@ export default function SeasonDecor() {
       const h = document.querySelector('header');
       const top = h ? Math.round(h.getBoundingClientRect().bottom + window.scrollY) : 64;
       const head = h ? Math.round(h.getBoundingClientRect().height) : 60;
-      setState({ id, parts, top, head, width: window.innerWidth, mobile: window.innerWidth < 821 });
+      const hero = document.querySelector('.qh-media');
+      const hr = hero ? hero.getBoundingClientRect() : null;
+      const heroBox = hr ? { top: Math.round(hr.top + window.scrollY), h: Math.round(hr.height) } : null;
+      setState({ id, parts, top, head, heroBox, width: window.innerWidth, mobile: window.innerWidth < 821 });
     };
     measure();
+    // the hero mounts after its slides load: measure again shortly after
+    const t1 = setTimeout(measure, 1200);
+    const t2 = setTimeout(measure, 3500);
     window.addEventListener('resize', measure);
-    return () => window.removeEventListener('resize', measure);
+    return () => { clearTimeout(t1); clearTimeout(t2); window.removeEventListener('resize', measure); };
   }, []);
 
   if (!state) return null;
-  const { id, parts, top, head, width, mobile } = state;
+  const { id, parts, top, head, heroBox, width, mobile } = state;
   const kind = KIND[id];
 
   return createPortal(
@@ -253,10 +301,14 @@ export default function SeasonDecor() {
       <div aria-hidden="true" data-season-decor={id}>
         <style>{CSS}</style>
         {HANG[id] && <div className="sd-top" style={{ top }}><Garland id={id} width={width} mobile={mobile} /></div>}
-        <div className="sd-layer">
-          {parts.map((p, i) => <Particle key={i} kind={kind} p={p} />)}
-          {(id === 'newyear' || id === 'christmas') && <div className="sd-fly"><Sleigh mobile={mobile} /></div>}
-        </div>
+        {id === 'christmas' && <div className="xl-top" style={{ top }}><Lights width={width} mobile={mobile} /></div>}
+        {id === 'christmas' && heroBox && <div className="xl-snow" style={{ top: heroBox.top, height: heroBox.h, '--xl-h': heroBox.h + 20 + 'px' }}><SoftSnow parts={parts} /></div>}
+        {kind && (
+          <div className="sd-layer">
+            {parts.map((p, i) => <Particle key={i} kind={kind} p={p} />)}
+            {id === 'newyear' && <div className="sd-fly"><Sleigh mobile={mobile} /></div>}
+          </div>
+        )}
       </div>
       {MUSIC[id] && <div style={{ '--sd-head': head + 'px' }}><MusicButton id={id} /></div>}
     </>,
