@@ -69,7 +69,7 @@ export default function PackageDetailPage() {
     return () => io.disconnect();
   }, [pkg]);
   // Staff quote builder (only after Alt + Q with a logged-in staff session)
-  const { revealed: staffMode } = useProviderReveal();
+  const { providers: staffHints, revealed: staffMode } = useProviderReveal('/api/staff/package-hints');
   const [quote, setQuote] = useState({ customer: '', discountType: 'amount', discount: '', validUntil: '', note: '' });
 
   useEffect(() => {
@@ -396,6 +396,7 @@ export default function PackageDetailPage() {
               {staffMode && (
                 <div style={{ border: '2px dashed #faab18', background: 'var(--qd-amberbg,#fffaf0)', borderRadius: 'var(--tw-radius-sm,10px)', padding: 12, display: 'flex', flexDirection: 'column', gap: 8 }}>
                   <b style={{ fontSize: 15, color: 'var(--qd-ambertext,#8a5a00)' }}>عرض سعر مخصص (وضع الموظفين)</b>
+                  <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--qs-brand-deep,#036f8c)' }} dir="auto">المورد: {(staffHints && staffHints[pkg.id] && staffHints[pkg.id].supplier_name) || '—'}</span>
                   <input style={{ padding: '8px 10px', borderRadius: 'var(--tw-radius-xs,8px)', border: '1px solid var(--qs-line,#ececed)', fontFamily: 'inherit' }} placeholder="اسم العميل — مثال: أحمد علي" value={quote.customer} onChange={(e) => setQuote({ ...quote, customer: e.target.value })} />
                   <div style={{ display: 'flex', gap: 6 }}>
                     <select style={{ padding: '8px', borderRadius: 'var(--tw-radius-xs,8px)', border: '1px solid var(--qs-line,#ececed)', fontFamily: 'inherit' }} value={quote.discountType} onChange={(e) => setQuote({ ...quote, discountType: e.target.value })}>

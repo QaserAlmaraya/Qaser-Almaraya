@@ -159,7 +159,7 @@ function nightsText(nights, lang) {
   return `${n} ليلة`;
 }
 
-export default function PackageCard({ title, destination, image, nights, groupType, departs, price, includes = [], badge, onDetails, hotels = [], flights = [], lang = 'ar', style, urgency = null, priceFromLabel = false, onCalc = null, compareSlot = null }) {
+export default function PackageCard({ title, destination, image, nights, groupType, departs, price, includes = [], badge, onDetails, hotels = [], flights = [], lang = 'ar', style, urgency = null, priceFromLabel = false, onCalc = null, compareSlot = null, staffHint = null }) {
   const [open, setOpen] = useState(false);
   const panelId = useId();
   const [tab, setTab] = useState('flights');
@@ -229,6 +229,21 @@ export default function PackageCard({ title, destination, image, nights, groupTy
               }}
             >
               <Icon name={hotBadge.soldOut ? 'ban' : 'clock'} size={12} />{hotBadge.label}
+            </span>
+          ) : null}
+
+          {/* Staff only (Alt + Q on the live site): the supplier, drawn over the photo. Customers never receive this value. */}
+          {staffHint ? (
+            <span
+              dir="auto"
+              title="معلومات داخلية — تظهر لفريق العمل فقط"
+              style={{
+                position: 'absolute', bottom: 8, insetInlineStart: 8, zIndex: 2, maxWidth: 'calc(100% - 16px)', fontSize: 13, fontWeight: 600,
+                color: 'var(--qs-brand-deep,#036f8c)', background: 'rgba(255,255,255,.96)', borderRadius: 'var(--tw-radius-sm,10px)', padding: '4px 10px',
+                boxShadow: 'var(--tw-card-shadow,0 1px 3px rgba(29,39,51,.06))', wordBreak: 'break-word',
+              }}
+            >
+              {en ? 'Supplier: ' : 'المورد: '}{staffHint}
             </span>
           ) : null}
         </div>
