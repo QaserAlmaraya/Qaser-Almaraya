@@ -23,6 +23,7 @@ import { REGIONS, countryInfo, flagUrl, groupPackagesByCountry, packageCountries
 
 import { BUDGETS } from '../../lib/budgets';
 import { upcomingDates } from '../../lib/publicPackages';
+import { useProviderReveal } from '../../lib/useProviderReveal';
 
 // Month helpers for the filters.
 const MONTHS_AR = ['كانون الثاني', 'شباط', 'آذار', 'نيسان', 'أيار', 'حزيران', 'تموز', 'آب', 'أيلول', 'تشرين الأول', 'تشرين الثاني', 'كانون الأول'];
@@ -47,6 +48,8 @@ export default function PackagesPage({ initialPackages = null }) {
   const { lang } = useLangToggle();
   const t = T[lang] || T.ar;
   const nm = (ar, en) => (lang === 'en' && en ? en : ar);
+  // Staff only: Alt + Q reveals each package's supplier (server checks the session; nothing is fetched before).
+  const { providers: staffHints } = useProviderReveal('/api/staff/package-hints');
 
   const [packages, setPackages] = useState(Array.isArray(initialPackages) ? initialPackages : null);
   const [error, setError] = useState('');
@@ -621,6 +624,7 @@ export default function PackagesPage({ initialPackages = null }) {
                       onDetails={() => router.push(`/packages/${p.id}`)}
                       compareSlot={<CompareToggle id={p.id} title={nm(p.title_ar, p.title_en)} lang={lang} />}
                       onCalc={() => openPriceCalc(p)}
+                      staffHint={staffHints && staffHints[p.id] ? (staffHints[p.id].supplier_name || '—') : null}
                     />
                   ))}
                 </div>
